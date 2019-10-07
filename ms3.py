@@ -1,6 +1,10 @@
 """ Coding rules: Feel free to add!
 
-Docstrings in NumPy style for use with Sphinx with Napoleon extension. Rules:
+###############################################################################
+#                                  DOCSTRINGS
+###############################################################################
+
+NumPy style for use with Sphinx with Napoleon extension. Rules:
 
 Section                         #Line of ---- same length as title. No blank line underneath.
 -------
@@ -16,14 +20,27 @@ Example
     >>> other_example()
     'Result.'
 
+###############################################################################
+#                               STRING CREATION
+###############################################################################
+
 f-Strings avoid type conversion and make the code more readble:
     >>> print(f"The value of this integer is {some_integer_variable}, which is quite {'small' if some_integer_variable < 100 else 'big'}!")
     The value of this integer is 10, which is quite small!
+
+###############################################################################
+#                                   LOGGING
+###############################################################################
+
+Use logging.debug('Message') abundantly to easily follow the programs workflow.
+Use logging.info('Message') for messages that users would want to see in everyday use.
+
 """
 ###################
 #Internal libraries
 ###################
-import os, re
+import os, re, argparse, logging
+
 
 ###################
 #External libraries
@@ -76,22 +93,47 @@ class score(object):
         # Check Musescore version
         ms_version = self.score.find('programVersion').string
         if ms_version != NEWEST_MUSESCORE:
-            print(f"{self.filename} was created with MuseScore {ms_version}. Auto-conversion will be implemented in the future.")
+            logging.warning(f"{self.filename} was created with MuseScore {ms_version}. Auto-conversion will be implemented in the future.")
         # ToDo: Auto-conversion
 
         # Extract staves
         for staff in self.score.find('Part').find_next_siblings('Staff'):
-            id = int(staff['id'])
-            self.staff_nodes[id] = staff
-            self.measure_nodes[id] = {}
+            staff_id = int(staff['id'])
+            self.staff_nodes[staff_id] = staff
+            self.measure_nodes[staff_id] = {}
+            logging.debug(f"Stored staff with ID {staff_id}.")
 
         # Extract measures
         for staff_id, staff in self.staff_nodes.items():
             for i, measure in enumerate(staff.find_all('Measure')):
                 self.measure_nodes[staff_id][i] = measure
+                logging.debug(f"Stored the {i}th measure of staff {staff_id}.")
 
 
-
-S = score('/home/hentsche/Documents/phd/ADA/schubert_dances/scores/980/D980walzer02.mscx')
+S = score('./scores/980/D980walzer02.mscx')
 S.measure_nodes[1][0]
-print(f"The value of this integer is {some_integer_variable}, which is quite {'small' if some_integer_variable < 100 else 'big'}!")
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description = '''\
+-------------------------------------
+| Parser for MuseScore3 MSCX files. |
+-------------------------------------
+
+At the moment, this is just a skeleton. Later, the commandline can be used to
+quickly parse entire folders and store files with the computed data.''')
+    parser.add_argument('file',metavar='FILE',help='Absolute or relative path to the MSCX file you want to parse.')
+    parser.add_argument('-l','--logging',default='INFO',help="Set logging to one of the levels {DEBUG, INFO, WARNING, ERROR, CRITICAL}.")
+    args = parser.parse_args()
+
+    logging_levels = {
+        'DEBUG':    logging.DEBUG,
+        'INFO':     logging.INFO,
+        'WARNING':  logging.WARNING,
+        'ERROR':    logging.ERROR,
+        'CRITICAL':  logging.CRITICAL
+        }
+    logging.basicConfig(level=logging_levels[args.logging])
+    S = score(args.file)
+    print("Successfully parsed.")
