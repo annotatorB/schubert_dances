@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Essentially a very limited wrapper for FluidSynth, playing notes when requested.
+Essentially a very limited wrapper around FluidSynth, playing notes when requested.
 
 Authors:
   Gabriele  Cecchetti <gabriele.cecchetti@epfl.ch>
@@ -12,7 +12,8 @@ Usages:
   import synth
   import time
 
-  # Load the default FluidSynth library and a given SoundFont
+  # Load the default FluidSynth library and a given SoundFont file
+  # (Visit 'https://sites.google.com/site/soundfonts4u/' for piano soundfonts)
   piano = synth.FluidSynth().make("my_piano_soundfont.sf2")
 
   # Press a flat A4 then release it after 0.5 second
@@ -26,7 +27,7 @@ Usages:
     piano.press(synth.note_midi("A%d" % i))
     time.sleep(0.15)
 
-  # Play all the "blues" keys from C4 to C5 (included)
+  # Play all the "blues" notes from C4 to C5 (included)
   base  = synth.note_midi("C4")
   delta = (0, 3, 5, 6, 7, 10, 12)
   piano.press(base + delta[0])
