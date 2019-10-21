@@ -17,7 +17,7 @@ Usages:
   piano = synth.FluidSynth().make("my_piano_soundfont.sf2")
 
   # Press a flat A4 then release it after 0.5 second
-  key = synth.note_midi("A4") - 1
+  key = synth.note_midi("A4") - 1  # +1 makes sharp, -1 makes flat
   piano.press(key)
   time.sleep(0.5)
   piano.release(key)
@@ -26,6 +26,9 @@ Usages:
   for i in range(7, -1, -1):
     piano.press(synth.note_midi("A%d" % i))
     time.sleep(0.15)
+  time.sleep(2)
+  piano.silence()
+  time.sleep(0.5)
 
   # Play all the "blues" notes from C4 to C5 (included)
   base  = synth.note_midi("C4")
@@ -37,6 +40,9 @@ Usages:
   for d in reversed(delta[:-1]):
     time.sleep(0.1)
     piano.press(base + d)
+  time.sleep(2)
+  piano.silence()
+  time.sleep(0.5)
 """
 
 import ctypes
@@ -131,6 +137,8 @@ class FluidSynth:
       self._audio_driver = fluidsynth.new_fluid_audio_driver(self._settings, self._synth)
       if self._audio_driver is None:
         raise RuntimeError("Unable to create a new FluidSynth synth instance")
+      # Set of currently playing notes (for silence)
+      self._playing = set()
 
     def __del__(self):
       """ Destroy the managed instances.
@@ -156,6 +164,7 @@ class FluidSynth:
       """
       if self._fluidsynth.fluid_synth_noteon(self._synth, 0, key, vel) < 0:
         raise RuntimeError("Unable to play key %d with velocity %d" % (key, vel))
+      self._playing.add(key)
 
     def release(self, key):
       """ Stop playing a note.
@@ -164,7 +173,14 @@ class FluidSynth:
         key (int): MIDI number to stop playing
 
       """
-      self._fluidsynth.fluid_synth_noteoff(self._synth, 0, key)
+      self._fluidsynth.fluid_synth_noteoff(self._synth, 0, key) # Do not check as this can return -1 if waited long enough
+      self._playing.discard(key)
+
+    def silence(self):
+      """ Stop all playing notes.
+      """
+      for key in list(self._playing):
+        self.release(key)
 
   # Imported functions, map <function name> -> (<return type or 'None'>, (<input type>*))
   _imported = {
