@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ms3 module" href="ms3.html" />
     <link rel="prev" title="tools" href="modules.html" /> 
 </head>
 
@@ -81,8 +82,6 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="ms3.html">ms3 module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="play.html">play module</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">tools</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">coding_rules module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#docstrings">#                                  DOCSTRINGS</a></li>
@@ -166,12 +165,24 @@
 <p>Coding rules: Feel free to add!</p>
 <div class="section" id="docstrings">
 <h2>#                                  DOCSTRINGS<a class="headerlink" href="#docstrings" title="Permalink to this headline">¶</a></h2>
-<p>NumPy style for use with Sphinx with Napoleon extension. Rules:</p>
-<p>Parameters
-———-                      #Line of - same length as title. No blank line underneath.
-parameter1 : <code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>         #The colon after the parameter is separated by a space on each side.
-parameter2 : <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>         #The <code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code> notation is only for standard python objects and creates links.
-parameter3 : pd.DataFrame, optional</p>
+<p>NumPy style for use with Sphinx with Napoleon extension (Google style also possible). Rules:</p>
+<dl class="field-list simple">
+<dt class="field-odd">param parameter1</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">type parameter1</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code>         #The colon after the parameter is separated by a space on each side.</p>
+</dd>
+<dt class="field-odd">param parameter2</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">type parameter2</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>         #The <code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span></code> notation is only for standard python objects and creates links.</p>
+</dd>
+<dt class="field-odd">param parameter3</dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">type parameter3</dt>
+<dd class="field-even"><p>pd.DataFrame, optional</p>
+</dd>
+</dl>
 <p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">indented</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">call</span><span class="p">)</span>
 <span class="go">&#39;Indented result.&#39;</span>
@@ -192,7 +203,7 @@ by 3 blank lines.</p>
 <div class="section" id="string-creation">
 <h2>#                               STRING CREATION<a class="headerlink" href="#string-creation" title="Permalink to this headline">¶</a></h2>
 <dl>
-<dt>f-Strings avoid type conversion and make the code more readble:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;The value of this integer is </span><span class="si">{some_integer_variable}</span><span class="s2">, which is quite {&#39;small&#39; if some_integer_variable &lt; 100 else &#39;big&#39;}!&quot;</span><span class="p">)</span>
+<dt>f-Strings avoid type conversion and make the code more readable:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;The value of this integer is </span><span class="si">{some_integer_variable}</span><span class="s2">, which is quite {&#39;small&#39; if some_integer_variable &lt; 100 else &#39;big&#39;}!&quot;</span><span class="p">)</span>
 <span class="go">The value of this integer is 10, which is quite small!</span>
 </pre></div>
 </div>
@@ -213,6 +224,8 @@ Use logging.info(‘Message’) for messages that users would want to see in eve
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ms3.html" class="btn btn-neutral float-right" title="ms3 module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="modules.html" class="btn btn-neutral float-left" title="tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
