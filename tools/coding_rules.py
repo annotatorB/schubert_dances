@@ -4,10 +4,10 @@
 #                                  DOCSTRINGS
 ###############################################################################
 
-NumPy style for use with Sphinx with Napoleon extension. Rules:
+NumPy style for use with Sphinx with Napoleon extension (Google style also possible). Rules:
 
 Parameters
-----------                      #Line of - same length as title. No blank line underneath.
+----------
 parameter1 : :obj:`str`         #The colon after the parameter is separated by a space on each side.
 parameter2 : :obj:`int`         #The :obj:`type` notation is only for standard python objects and creates links.
 parameter3 : pd.DataFrame, optional
@@ -33,7 +33,7 @@ by 3 blank lines.
 #                               STRING CREATION
 ###############################################################################
 
-f-Strings avoid type conversion and make the code more readble:
+f-Strings avoid type conversion and make the code more readable:
     >>> print(f"The value of this integer is {some_integer_variable}, which is quite {'small' if some_integer_variable < 100 else 'big'}!")
     The value of this integer is 10, which is quite small!
 

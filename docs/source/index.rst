@@ -6,9 +6,6 @@ Welcome to Schubert Dances Project documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   coding_rules
-   ms3
-   play
    modules
 
 
