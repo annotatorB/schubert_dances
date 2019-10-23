@@ -5,6 +5,7 @@ Our custom-format, simplified sheet music class.
 
 import fractions
 import pandas
+import pathlib
 import pickle
 
 # ---------------------------------------------------------------------------- #
@@ -134,6 +135,11 @@ class Sheet:
         -----
         The behavior is undefined if the sheet is modified while using the returned value.
 
+        Bugs
+        ----
+        A (probably not representable) sheet with reordered sections in a repetition (e.g. ABCACB)
+        will not raise an error and be consistently output as in the first repetition (e.g. 𝄆 ABC 𝄇).
+
         """
         # Recover the position of each section instance, in first seen order
         poses = list()  # Cannot be a 'dict' as a DataFrame is not hashable
@@ -218,12 +224,15 @@ class Sheet:
 class Section(pandas.DataFrame):
     """ Section of notes storage class.
 
-    A section is merely a pandas.DataFrame.
+    A section is merely a pandas.DataFrame, augmented with a time signature.
+    It is to be though as "the ink on the paper" for a continuous segment of notes,
+    and absolutely not as a period; finding periods is left to subsequent analysis.
 
     Mandatory columns
     -----------------
     note : str
-        Note letter, one of {"A", "B", ..., "G"}.
+        Note letter, one of {"A", "B", ..., "G", "-"}.
+        "-" represents a silence, and the associated 'octave' and 'accidental' are to be ignored.
     octave : int
         Octave number, any integer.
     accidental : int
@@ -247,23 +256,30 @@ class Section(pandas.DataFrame):
 
     """
 
-    def __init__(self, signature, *args, **kwargs):
+    def __init__(self, signature, **kwargs):
         """ Section constructor.
 
         Parameters
         ----------
         signature : tuple of two positive int
             Time signature of the section.
-        *args, **kwargs
-            Arguments forwarded to the parent constructor.
+        **kwargs
+            Keyword arguments forwarded to the parent constructor.
+            Notes:
+            · If the 'columns' keyword argument is passed (expected a list),
+              the given values are appended to the list of mandatory columns.
+            · If the 'data' keyword argument is passed,
+              no 'columns' argument is forwarded by default and no check is made.
 
         """
         # Assertions
         assert isinstance(signature, tuple) and len(signature) == 2 and all(isinstance(x, int) and x > 0 for x in signature), "invalid time signature, expected a tuple of two positive int, got %r" % (signature,)
         # Parent constructor
-        super().__init__(*args, **kwargs)
+        if "data" not in kwargs:
+            kwargs["columns"] = ["note", "octave", "accidental", "start", "duration"] + kwargs.get("columns", list())
+        super().__init__(**kwargs)
         # Set the signature
-        self._signature = signature
+        self.__dict__["_signature"] = signature
 
     @property
     def signature():
@@ -291,7 +307,7 @@ class Section(pandas.DataFrame):
         """
         # Tuple of mandatory columns, with their respective type or value checker
         mandatories = (
-            ("note", lambda x: isinstance(x, str) and ord(x) >= ord("A") and ord(x) <= ord("G")),
+            ("note", lambda x: isinstance(x, str) and ((ord(x) >= ord("A") and ord(x) <= ord("G")) or x == "-")),
             ("octave", int),
             ("accidental", int),
             ("start", lambda x: isinstance(x, fractions.Fraction) and x >= 0),
@@ -310,14 +326,17 @@ class Section(pandas.DataFrame):
                     continue
                 # Assert data type
                 if isinstance(dtype, type):
-                    dtype = lambda x: isinstance(x, dtype)
-                if not self[name].apply(dtype).all():
+                    checker = lambda x: isinstance(x, dtype)
+                else:
+                    checker = dtype
+                if not self[name].apply(checker).all():
                     raise AssertionError("some row(s) for %s column %r do(es) not have a valid type/value" % (("mandatory" if mandatory else "optional"), name))
+        # TODO: Check that note starts are written by increasing order
 
 # ---------------------------------------------------------------------------- #
 # Load and save sheets
 
-def load(path):
+def load(path_or_fd):
     """ Load a sheet from a file.
 
     Parameters
@@ -331,19 +350,25 @@ def load(path):
         Loaded sheet instance.
 
     """
-    with open(str(path), "rb") as fd:
-        return pickle.load(fd, fix_imports=False)
+    if any(isinstance(path_or_fd, cls) for cls in (str, pathlib.PurePath)):
+        with open(str(path_or_fd), "rb") as fd:
+            return pickle.load(fd, fix_imports=False)
+    else:
+        return pickle.load(path_or_fd, fix_imports=False)
 
-def save(sheet, path):
+def save(sheet, path_or_fd):
     """ Save a sheet to a file.
 
     Parameters
     ----------
     sheet : Sheet
         Instance of the sheet to save.
-    path : str or pathlib.Path (or equivalent)
+    path_or_fd : str or pathlib.PurePath, or io.BytesIO (or equivalent)
         Path to the file to save to.
 
     """
-    with open(str(path), "wb") as fd:
-        pickle.dump(sheet, fd, pickle.HIGHEST_PROTOCOL, fix_imports=False)
+    if any(isinstance(path_or_fd, cls) for cls in (str, pathlib.PurePath)):
+        with open(str(path_or_fd), "wb") as fd:
+            pickle.dump(sheet, fd, pickle.HIGHEST_PROTOCOL, fix_imports=False)
+    else:
+        pickle.dump(sheet, path_or_fd, pickle.HIGHEST_PROTOCOL, fix_imports=False)
