@@ -181,7 +181,7 @@ class Score(object):
         (inclusive) boundaries of the section. That is to say, no measure count
         can appear in two different value tuples since every measure can be part
         of only one section.
-    sections : :obj:`dict` of `Section`
+    sections : :obj:`dict` of :obj:`Section`
         The sections of this score.
     staff_nodes : :obj:`dict` of :class:`bs4.element.Tag`
         Keys are staff IDs starting with 1, values are XML nodes.
