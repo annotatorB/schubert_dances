@@ -4,13 +4,9 @@
 #                                  DOCSTRINGS
 ###############################################################################
 
-NumPy style for use with Sphinx with Napoleon extension (Google style also possible). Rules:
-
-Parameters
-----------
-parameter1 : :obj:`str`
-parameter2 : :obj:`int`
-parameter3 : :obj:`pd.DataFrame`, optional
+NumPy style (https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard)
+or Google Style (https://google.github.io/styleguide/pyguide.html#Comments). Use
+rst identifiers for types, such as :obj:, :class: or :meth:.
 
 Example
 -------
