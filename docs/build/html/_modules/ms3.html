@@ -297,8 +297,8 @@
 <div class="viewcode-block" id="Score"><a class="viewcode-back" href="../ms3.html#ms3.Score">[docs]</a><span class="k">class</span> <span class="nc">Score</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Parser for MuseScore3 MSCX files.</span>
 
-<span class="sd">    NOTE: Measure count `mc` refers to the `mc`th measure node, whereas measure</span>
-<span class="sd">    number `mn` refers to the `mn`th measure in the score. The latter can consist</span>
+<span class="sd">    NOTE: Measure count ``mc`` refers to the `mc` th measure node, whereas measure</span>
+<span class="sd">    number ``mn`` refers to the `mn` th measure in the score. The latter can consist</span>
 <span class="sd">    of several measure nodes and can be split across sections.</span>
 
 <span class="sd">    Attributes</span>
@@ -320,7 +320,7 @@
 <span class="sd">        Keys are the counts of the measures that have a section break, values are</span>
 <span class="sd">        lists of the breaking elements {startRepeat, endRepeat, BarLine}</span>
 <span class="sd">    section_order : :obj:`list` of :obj:`int`:</span>
-<span class="sd">        List of section IDs representing in which the sections in `section_structure`</span>
+<span class="sd">        List of section IDs representing in which the sections in ``section_structure``</span>
 <span class="sd">        are presented and repeated.</span>
 <span class="sd">    section_structure : :obj:`list` of :obj:`tuple` of :obj:`int`</span>
 <span class="sd">        Keys are section IDs, values are a tuple of two measure counts, the</span>
@@ -337,7 +337,8 @@
 <span class="sd">        represented by lists of section IDs.</span>
 <span class="sd">    super_section_order : :obj:`list` of :obj:`int`</span>
 <span class="sd">        A more abstract version of section_order, using the keys from super_sections.</span>
-
+<span class="sd">    test : :obj:`pandas.DataFrame`</span>
+<span class="sd">        Mal schaun.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="p">):</span>

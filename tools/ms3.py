@@ -151,8 +151,8 @@ class Section(object):
 class Score(object):
     """ Parser for MuseScore3 MSCX files.
 
-    NOTE: Measure count `mc` refers to the `mc`th measure node, whereas measure
-    number `mn` refers to the `mn`th measure in the score. The latter can consist
+    NOTE: Measure count ``mc`` refers to the `mc` th measure node, whereas measure
+    number ``mn`` refers to the `mn` th measure in the score. The latter can consist
     of several measure nodes and can be split across sections.
 
     Attributes
@@ -174,7 +174,7 @@ class Score(object):
         Keys are the counts of the measures that have a section break, values are
         lists of the breaking elements {startRepeat, endRepeat, BarLine}
     section_order : :obj:`list` of :obj:`int`:
-        List of section IDs representing in which the sections in `section_structure`
+        List of section IDs representing in which the sections in ``section_structure``
         are presented and repeated.
     section_structure : :obj:`list` of :obj:`tuple` of :obj:`int`
         Keys are section IDs, values are a tuple of two measure counts, the
@@ -191,7 +191,8 @@ class Score(object):
         represented by lists of section IDs.
     super_section_order : :obj:`list` of :obj:`int`
         A more abstract version of section_order, using the keys from super_sections.
-
+    test : :obj:`pandas.DataFrame`
+        Mal schaun.
     """
 
     def __init__(self,file):

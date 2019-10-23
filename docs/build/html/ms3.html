@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="play module" href="play.html" />
-    <link rel="prev" title="Welcome to Schubert Dances Project documentation!" href="index.html" /> 
+    <link rel="prev" title="coding_rules module" href="coding_rules.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,9 +82,12 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ms3 module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="play.html">play module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">tools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coding_rules.html">coding_rules module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ms3 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="play.html">play module</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -130,6 +133,8 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
+          <li><a href="modules.html">tools</a> &raquo;</li>
+        
       <li>ms3 module</li>
     
     
@@ -155,10 +160,10 @@
 <dl class="class">
 <dt id="ms3.Score">
 <em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Score</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Parser for MuseScore3 MSCX files.</p>
-<p>NOTE: Measure count <cite>mc</cite> refers to the <cite>mc`th measure node, whereas measure
-number `mn</cite> refers to the <a href="#id1"><span class="problematic" id="id2">`</span></a>mn`th measure in the score. The latter can consist
+<p>NOTE: Measure count <code class="docutils literal notranslate"><span class="pre">mc</span></code> refers to the <cite>mc</cite> th measure node, whereas measure
+number <code class="docutils literal notranslate"><span class="pre">mn</span></code> refers to the <cite>mn</cite> th measure in the score. The latter can consist
 of several measure nodes and can be split across sections.</p>
 <dl class="attribute">
 <dt id="ms3.Score.dir">
@@ -166,7 +171,7 @@ of several measure nodes and can be split across sections.</p>
 <dd><p>Directory where the parsed file is stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -177,7 +182,7 @@ of several measure nodes and can be split across sections.</p>
 <dd><p>Absolute or relative path to the MSCX file you want to parse.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -188,7 +193,7 @@ of several measure nodes and can be split across sections.</p>
 <dd><p>Filename of the parsed file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -199,7 +204,7 @@ of several measure nodes and can be split across sections.</p>
 <dd><p>Count of the score’s last measure node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -211,7 +216,7 @@ of several measure nodes and can be split across sections.</p>
 measure counts (NOT measure numbers) and values are XML nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of bs4.BeautifulSoup</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> of bs4.BeautifulSoup</p>
 </dd>
 </dl>
 </dd></dl>
@@ -234,7 +239,7 @@ measure counts (NOT measure numbers) and values are XML nodes.</p>
 lists of the breaking elements {startRepeat, endRepeat, BarLine}</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -242,11 +247,11 @@ lists of the breaking elements {startRepeat, endRepeat, BarLine}</p>
 <dl class="attribute">
 <dt id="ms3.Score.section_order">
 <code class="sig-name descname">section_order</code><a class="headerlink" href="#ms3.Score.section_order" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of section IDs representing in which the sections in <cite>section_structure</cite>
+<dd><p>List of section IDs representing in which the sections in <code class="docutils literal notranslate"><span class="pre">section_structure</span></code>
 are presented and repeated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>:</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>:</p>
 </dd>
 </dl>
 </dd></dl>
@@ -260,7 +265,7 @@ can appear in two different value tuples since every measure can be part
 of only one section.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -271,7 +276,7 @@ of only one section.</p>
 <dd><p>The sections of this score.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of <cite>Section</cite></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> of <cite>Section</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -282,7 +287,7 @@ of only one section.</p>
 <dd><p>Keys are staff IDs starting with 1, values are XML nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of bs4.BeautifulSoup</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> of bs4.BeautifulSoup</p>
 </dd>
 </dl>
 </dd></dl>
@@ -295,7 +300,7 @@ i.e. sections that are grouped in the score by an englobing repetition,
 represented by lists of section IDs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -306,7 +311,18 @@ represented by lists of section IDs.</p>
 <dd><p>A more abstract version of section_order, using the keys from super_sections.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.test">
+<code class="sig-name descname">test</code><a class="headerlink" href="#ms3.Score.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mal schaun.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -321,7 +337,7 @@ represented by lists of section IDs.</p>
 <dl class="class">
 <dt id="ms3.Section">
 <em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Section</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">first_measure</em>, <em class="sig-param">last_measure</em>, <em class="sig-param">index</em>, <em class="sig-param">repeated</em>, <em class="sig-param">start_break</em>, <em class="sig-param">end_break</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Section" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Holds the properties of a section.</p>
 <dl class="attribute">
 <dt>
@@ -329,7 +345,7 @@ represented by lists of section IDs.</p>
 <dd><p>Measure counts of the section’s first and last measure nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -340,7 +356,7 @@ represented by lists of section IDs.</p>
 <dd><p>What causes the section breaks at either side.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,7 +367,7 @@ represented by lists of section IDs.</p>
 <dd><p>Index (running number) of this section.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -373,7 +389,7 @@ represented by lists of section IDs.</p>
 <dd><p>Whether or not this section is repeated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -384,7 +400,7 @@ represented by lists of section IDs.</p>
 <dd><p>Ranges of voltas. Default: empty list</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">range</span></code></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#range" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">range</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -423,10 +439,10 @@ represented by lists of section IDs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>L</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code>) – List of tuples in which you want elements with value <cite>search</cite>.</p></li>
-<li><p><strong>pos</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>) – In which position of the tuples to search.</p></li>
-<li><p><strong>search</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>) – What to look for.</p></li>
-<li><p><strong>add</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, opt) – How much you want to add to each index value.</p></li>
+<li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – List of tuples in which you want elements with value <cite>search</cite>.</p></li>
+<li><p><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – In which position of the tuples to search.</p></li>
+<li><p><strong>search</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a>) – What to look for.</p></li>
+<li><p><strong>add</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, opt) – How much you want to add to each index value.</p></li>
 </ul>
 </dd>
 </dl>
@@ -451,7 +467,7 @@ represented by lists of section IDs.</p>
         <a href="play.html" class="btn btn-neutral float-right" title="play module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Schubert Dances Project documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="coding_rules.html" class="btn btn-neutral float-left" title="coding_rules module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
