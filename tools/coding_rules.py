@@ -8,9 +8,9 @@ NumPy style for use with Sphinx with Napoleon extension (Google style also possi
 
 Parameters
 ----------
-parameter1 : :obj:`str`         #The colon after the parameter is separated by a space on each side.
-parameter2 : :obj:`int`         #The :obj:`type` notation is only for standard python objects and creates links.
-parameter3 : pd.DataFrame, optional
+parameter1 : :obj:`str`
+parameter2 : :obj:`int`
+parameter3 : :obj:`pd.DataFrame`, optional
 
 Example
 -------
