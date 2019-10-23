@@ -44,7 +44,8 @@ extensions = [
 ]
 
 intersphinx_mapping = {'python': ('https://docs.python.org/3', None),
-		       'pandas': (' http://pandas.pydata.org/pandas-docs/stable/', None)}
+		       'pandas': (' http://pandas.pydata.org/pandas-docs/stable/', None),
+		       'bs4': ('https://www.crummy.com/software/BeautifulSoup/bs4/doc/', '_intersphinx/bs4_objects.inv')}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

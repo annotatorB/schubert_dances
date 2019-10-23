@@ -267,7 +267,7 @@
 <span class="sd">        What causes the section breaks at either side.</span>
 <span class="sd">    index : :obj:`int`</span>
 <span class="sd">        Index (running number) of this section.</span>
-<span class="sd">    parent : `Score`</span>
+<span class="sd">    parent : :obj:`Score`</span>
 <span class="sd">        The parent `Score` object that is creating this section.</span>
 <span class="sd">    repeated : :obj:`bool`</span>
 <span class="sd">        Whether or not this section is repeated.</span>
@@ -311,10 +311,10 @@
 <span class="sd">        Filename of the parsed file.</span>
 <span class="sd">    last_node : :obj:`int`</span>
 <span class="sd">        Count of the score&#39;s last measure node.</span>
-<span class="sd">    measure_nodes : :obj:`dict` of :obj:`dict` of bs4.BeautifulSoup</span>
+<span class="sd">    measure_nodes : :obj:`dict` of :obj:`dict` of :class:`bs4.element.Tag`</span>
 <span class="sd">        Keys of the first dict are staff IDs, keys of each inner dict are incremental</span>
 <span class="sd">        measure counts (NOT measure numbers) and values are XML nodes.</span>
-<span class="sd">    score : bs4.BeautifulSoup</span>
+<span class="sd">    score : :class:`bs4.BeautifulSoup`</span>
 <span class="sd">        The complete XML structure of the parsed MSCX file.</span>
 <span class="sd">    section_breaks : :obj:`dict`</span>
 <span class="sd">        Keys are the counts of the measures that have a section break, values are</span>
@@ -329,7 +329,7 @@
 <span class="sd">        of only one section.</span>
 <span class="sd">    sections : :obj:`dict` of `Section`</span>
 <span class="sd">        The sections of this score.</span>
-<span class="sd">    staff_nodes : :obj:`dict` of bs4.BeautifulSoup</span>
+<span class="sd">    staff_nodes : :obj:`dict` of :class:`bs4.element.Tag`</span>
 <span class="sd">        Keys are staff IDs starting with 1, values are XML nodes.</span>
 <span class="sd">    super_sections : :obj:`dict` of :obj:`list`</span>
 <span class="sd">        This dictionary has augmenting keys standing for one of the super_sections,</span>

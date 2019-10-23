@@ -66,4 +66,4 @@ You should be good to go now. If you want to have your types rendered as links t
             'python': ('https://docs.python.org/3', None),
             'pandas': (' http://pandas.pydata.org/pandas-docs/stable/', None)}
 
-In order to link to other references, be sure to provide the link leading to an `objects.inv` file.
+In order to link to other references, be sure to provide the link leading to an `objects.inv` file. To link to BeautifulSoup, this trick had to be used, still in 2019: https://github.com/svenevs/exhale/tree/master/docs/_intersphinx

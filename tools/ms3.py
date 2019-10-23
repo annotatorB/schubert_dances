@@ -121,7 +121,7 @@ class Section(object):
         What causes the section breaks at either side.
     index : :obj:`int`
         Index (running number) of this section.
-    parent : `Score`
+    parent : :obj:`Score`
         The parent `Score` object that is creating this section.
     repeated : :obj:`bool`
         Whether or not this section is repeated.
@@ -165,10 +165,10 @@ class Score(object):
         Filename of the parsed file.
     last_node : :obj:`int`
         Count of the score's last measure node.
-    measure_nodes : :obj:`dict` of :obj:`dict` of bs4.BeautifulSoup
+    measure_nodes : :obj:`dict` of :obj:`dict` of :class:`bs4.element.Tag`
         Keys of the first dict are staff IDs, keys of each inner dict are incremental
         measure counts (NOT measure numbers) and values are XML nodes.
-    score : bs4.BeautifulSoup
+    score : :class:`bs4.BeautifulSoup`
         The complete XML structure of the parsed MSCX file.
     section_breaks : :obj:`dict`
         Keys are the counts of the measures that have a section break, values are
@@ -183,7 +183,7 @@ class Score(object):
         of only one section.
     sections : :obj:`dict` of `Section`
         The sections of this score.
-    staff_nodes : :obj:`dict` of bs4.BeautifulSoup
+    staff_nodes : :obj:`dict` of :class:`bs4.element.Tag`
         Keys are staff IDs starting with 1, values are XML nodes.
     super_sections : :obj:`dict` of :obj:`list`
         This dictionary has augmenting keys standing for one of the super_sections,
