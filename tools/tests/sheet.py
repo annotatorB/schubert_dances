@@ -31,4 +31,5 @@ def test_written_named(sections):
 
 test_written_named("ABCD")
 test_written_named("ABACD")
+test_written_named("ABBCDEDEF")
 test_written_named("ABCBDBCBEBCBFGHIGHJK")

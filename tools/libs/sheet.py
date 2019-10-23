@@ -16,11 +16,7 @@ class Sheet:
     Attributes
     ----------
     sections : list of pandas.DataFrame
-        List of sections with fixed time signature.
-        The order of the elements in this list matters,
-        as the index of each element are used in attribute 'repeats'.
-    repeats : list of pandas.DataFrame
-        List of sections to be repeated when playing the partition.
+        List of sections in played order, each possibly appearing several times.
 
     Notes
     -----
@@ -34,11 +30,10 @@ class Sheet:
 
     Examples
     --------
-    This illustrates how to build a sheet and repetitions of sections within that sheet.
-    From this procedure, it is:
-    - easy to playback a sheet, by just iterating stateless over 'sections' to playback each pointed Section.
-    - possible to iterate the sheet as it was, by iterating over 'sections' while remembering which sections where already seen,
-      and using this information to rebuild the positions of the original repeat bars and volta brackets (¹, ², ³, etc), e.g.:
+    These examples illustrate how to build a sheet with repetitions of sections.
+    Once the sheet and sections are built, it is then:
+    - easy to playback a sheet, by just iterating over the stored sections.
+    - possible to iterate over the sections as they (plausibly) were on paper, e.g.:
         - A B B C D E D E F => A 𝄆  B 𝄇 C 𝄆 D E 𝄇 F
         - A B C B D E       => A 𝄆  B C¹ 𝄇 D² E
         - A B C A D E A C F => 𝄆 A B¹ C¹³ D² E² 𝄇 F⁴
@@ -63,12 +58,12 @@ class Sheet:
     >>> for section in my_sheet.as_played():
     ...     pass
     ...
-    >>> # Iterate over the sections in written order
+    >>> # Iterate over the sections in (plausible) written order
     >>> for section, (voltas, rep_begin, rep_end) in my_sheet.as_written():
     ...     # As the structure is (𝄆 A B¹ 𝄇𝄆 C² 𝄇), the loop will iterate over:
     ...     # - A, ([], True, False)
     ...     # - B, ([1], False, True)
-    ...     # - C, ([-2], True, True)  <- volta value from previous iteration (if any) is noted as negative
+    ...     # - C, ([-2], True, True)  <- volta value from previous pair of repetition bars is noted as negative (if any)
     ...     pass
     ...
 
@@ -155,11 +150,11 @@ class Sheet:
         # Make the result tuple
         result = list()
         repeat = None  # Current controling repeat position block, if any
-        lvolta = None  # Last volta value from previous repetition
+        lvolta = 0     # Last volta value from previous repetition
         def consume_lvolta():
             nonlocal lvolta
-            volta  = list() if lvolta is None else [-lvolta]
-            lvolta = None
+            volta  = list() if lvolta == 0 else [-lvolta]
+            lvolta = 0
             return volta
         for idx, (sec, pos) in enumerate(poses):
             if repeat is None: # Outside any repetition
