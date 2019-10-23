@@ -21,6 +21,15 @@ Example
     'Result.'
 
 ###############################################################################
+#                               ORDER OF THINGS
+###############################################################################
+
+Helper functions on top, then the classes. Functions that need the original
+score file need to be methods of the class `Score` or of a class that gets
+a `Score` object as an argument, e.g. the class `Section`. Things are separated
+by 3 blank lines.
+
+###############################################################################
 #                               STRING CREATION
 ###############################################################################
 
@@ -57,8 +66,68 @@ NEWEST_MUSESCORE = '3.2.3'
 
 
 ################################################################################
-#                            HELPER FUNCTIONS
+#                     HELPER FUNCTIONS in alphabetical order
 ################################################################################
+
+def get_repeat_structure(section_breaks):
+    """Checks a list of (mc, break_tag_list)-tuples or the respective dict
+       for closure and returns repetition structure.
+
+    Example
+    -------
+        >>> check = {
+                     0: ['start'],
+                     8: ['endRepeat'],
+                     9: ['startRepeat'],
+                     12: ['Volta'],
+                     13: ['endRepeat'],
+                     14: ['Volta','startRepeat'],
+                     30: ['end']
+                    }
+        >>> get_repeat_structure(check)
+        [(0, 8), (9, 13)]
+        WARNING:Section begins with a volta: (14, ['Volta', 'startRepeat']). Trouble follows.
+        WARNING:Repeat structure so far: [(0, 8), (9, 13)]. Stack: [(14,)]. Closure missing.
+    """
+    stack, repeat_structure = [], []
+    iterate = list(section_breaks.items()) if section_breaks.__class__ == dict else\
+              list(section_breaks)         if section_breaks.__class__ != list else section_breaks
+    for i, (mc, break_tag_list) in enumerate(iterate):
+
+        # First measure can be beginning of a repeated section even without repeat sign
+        if i == 0 and mc == 0:
+            if 'endRepeat' in iterate[1][1]:
+                repeated = True
+            elif not 'startRepeat' in iterate[1][1] and 'endRepeat' in iterate[2][1]:
+                repeated = True
+            else:
+                repeated = False
+
+            if repeated:
+                stack.append((0,))
+                continue
+
+        if 'startRepeat' in break_tag_list:
+            if 'Volta' in break_tag_list:
+                logging.warning(f"Section begins with a volta: {iterate[i]}. Trouble follows.")
+            stack.append((mc,))
+        elif 'endRepeat' in break_tag_list:
+            if (len(stack) == 0) or (len(stack[-1]) != 1):
+                logging.warning(f"Correct up to {iterate[i-1]}, the following {iterate[i]} has no explicit beginning. Repeat structure so far: {repeat_structure}")
+                return repeat_structure
+            else:
+                section_start = stack.pop(-1)
+                repeat_structure.append(section_start + (mc,))
+
+    if len(stack) > 0:
+        logging.warning(f"Repeat structure so far: {repeat_structure}. Stack: {stack}. Closure missing.")
+        return repeat_structure
+    else:
+        logging.debug(f"Calculated consistent repeat structure {repeat_structure}.")
+        return repeat_structure
+
+
+
 def search_in_list_of_tuples(L, pos, search, add=0):
     """ Returns a list of indices.
 
@@ -77,7 +146,47 @@ def search_in_list_of_tuples(L, pos, search, add=0):
 
 
 
+def sort_dict(D):
+    """ Returns a new dictionary with sorted keys. """
+    return {k: D[k] for k in sorted(D)}
 
+
+
+
+################################################################################
+#                             SECTION CLASS
+################################################################################
+class Section(object):
+    """ Holds the properties of a section.
+
+    Attributes
+    ----------
+    first_measure, last_measure : :obj:`int`
+        Measure counts of the section's first and last measure nodes.
+    start_break, end_break : :obj:`str`
+        What causes the section breaks at either side.
+    index : :obj:`int`
+        Index (running number) of this section.
+    parent : `Score`
+        The parent `Score` object that is creating this section.
+    repeated : :opj:`bool`
+        Whether or not this section is repeated.
+    voltas : :obj:`list` of :obj:`range`
+        Ranges of voltas. Default: empty list
+
+    """
+
+    def __init__(self, parent, first_measure, last_measure, index, repeated, start_break, end_break):
+        self.first_measure, self.last_measure = first_measure, last_measure
+        self.index = index
+        self.repeated = repeated
+        self.start_break, self.end_break = start_break, end_break
+        self.voltas = []
+
+
+
+    def __repr__(self):
+        return f"{'Repeated s' if self.repeated else 'S'}ection from node {self.first_measure} ({', '.join(self.start_break) if self.start_break.__class__ == list else self.start_break}) to node {self.last_measure} ({', '.join(self.end_break) if self.end_break.__class__ == list else self.end_break}), {'with ' + str(len(self.voltas)) if len(self.voltas) > 0 else 'without'} voltas."
 
 
 
@@ -110,10 +219,24 @@ class Score(object):
     section_breaks : :obj:`dict`
         Keys are the counts of the measures that have a section break, values are
         lists of the breaking elements {startRepeat, endRepeat, BarLine}
+    section_order : :obj:`list` of :obj:`int`:
+        List of section IDs representing in which the sections in `section_structure`
+        are presented and repeated.
+    section_structure : :obj:`list` of :obj:`tuple` of :obj:`int`
+        Keys are section IDs, values are a tuple of two measure counts, the
+        (inclusive) boundaries of the section. That is to say, no measure count
+        can appear in two different value tuples since every measure can be part
+        of only one section.
     sections : :obj:`dict` of `Section`
         The sections of this score.
     staff_nodes : :obj:`dict` of bs4.BeautifulSoup
         Keys are staff IDs starting with 1, values are XML nodes.
+    super_sections : :obj:`dict` of :obj:`list`
+        This dictionary has augmenting keys standing for one of the super_sections,
+        i.e. sections that are grouped in the score by an englobing repetition,
+        represented by lists of section IDs.
+    super_section_order : :obj:`list` of :obj:`int`
+        A more abstract version of section_order, using the keys from super_sections.
 
     """
 
@@ -126,6 +249,10 @@ class Score(object):
         self.measure_nodes = {}
         self.section_breaks = defaultdict(list)
         self.sections = {}
+        self.section_structure = {}
+        self.section_order = []
+        self.super_sections = {}
+        self.super_section_order = []
 
         # Load file
         with open(self.file, 'r') as file:
@@ -145,7 +272,7 @@ class Score(object):
             logging.debug(f"Stored staff with ID {staff_id}.")
 
         # Extract measures
-        break_tags = ['startRepeat', 'endRepeat', 'BarLine', 'Volta']
+        break_tags = ['startRepeat', 'endRepeat', 'Volta', 'BarLine']
 
         for staff_id, staff in self.staff_nodes.items():
             for i, measure in enumerate(staff.find_all('Measure')):
@@ -167,98 +294,105 @@ class Score(object):
 
     def parse_section_breaks(self):
 
+        section_counter, super_counter = 0, 0
+
+        def create_section(f, t, repeated):
+            nonlocal section_counter, super_counter
+
+            section_breaks = {mc: break_tag_list for mc, break_tag_list in self.section_breaks.items() if f <= mc <= t}
+            mcs = list(section_breaks.keys())
+            if len(mcs) == 0:
+                SB, EB = 'startNormal', 'endNormal'
+            elif len(mcs) == 1:
+                k = mcs[0]
+                if k == f:
+                    SB = section_breaks[k]
+                    EB = 'endNormal'
+                elif k == t:
+                    SB = 'startNormal'
+                    EB = section_breaks[k]
+                else:
+                    print(f"NOT IMPLEMENTED. CHECK WHAT THIS ELEMENT IS: {section_breaks}")
+            else:
+                SB, EB = section_breaks[mcs[0]], section_breaks[mcs[-1]]
+
+            inner_breaks = [mc for mc, break_tag_list in section_breaks.items() if f < mc < t and 'BarLine' in break_tag_list]
+            L = len(inner_breaks)
+            if L > 0:
+
+                inner_breaks.append(t)
+                last_t = f-1
+                subsections = []
+                breaks = {}
+                for i, br in enumerate(inner_breaks):
+                    if i == 0:
+                        start_break = SB
+                        end_break = 'BarLine'
+                        breaks[br] = end_break
+                    elif i == L:
+                        start_break = breaks[last_t]
+                        end_break = EB
+                    else:
+                        start_break = breaks[last_t]
+                        end_break = 'BarLine'
+                        breaks[br] = end_break
+                    self.section_structure[section_counter] = (last_t+1, br)
+                    self.sections[section_counter] = Section(self, last_t+1, br, section_counter, repeated, start_break, end_break)
+                    subsections.append(section_counter)
+                    section_counter += 1
+                    last_t = br
+            else:
+                self.section_structure[section_counter] = (f,t)
+                self.sections[section_counter] = Section(self, f, t, section_counter, repeated, SB, EB)
+                subsections = [section_counter]
+                section_counter += 1
+
+            self.section_order.extend(subsections * (repeated + 1))
+            self.super_sections[super_counter] = subsections
+            self.super_section_order.extend([super_counter] * (repeated + 1))
+            super_counter += 1
+            logging.debug(f"Created {'repeated ' if repeated else ''}section from {f} to {t}.")
+
+
         self.section_breaks[0].append('start')
         self.section_breaks[self.last_node].append('end')
-        breaks = sorted(self.section_breaks.items())
-
-        section_start = 0
-        for splitpoint in search_in_list_of_tuples(breaks, 1, 'endRepeat', 1):
-            if splitpoint == len(breaks):
-                section = breaks[section_start:]
-            else:
-                voltas = search_in_list_of_tuples(breaks[:splitpoint], 1, 'Volta')
-                if len(voltas) > 0:
-                    while ('Volta' in breaks[splitpoint][1]) and (splitpoint < len(breaks)):
-                        splitpoint += 1
-                section = breaks[section_start:splitpoint]
-
-            S = Section()
-            next_mc = S.init(section, self, repeated=True)
-            self.add_section(S)
-            if next_mc <= self.last_node and breaks[splitpoint][0] != next_mc:
-                breaks.insert(splitpoint, (next_mc, ['after_volta']))
-            section_start = splitpoint
+        self.section_breaks = sort_dict(self.section_breaks)
+        breaks = list(self.section_breaks.items())
+        repeat_structure = get_repeat_structure(breaks)
 
 
+        last_to  = -1
+        for (i, (fro, to)) in enumerate(repeat_structure):
 
-    def add_section(self, section):
-        k = self.sections.keys()
-        if len(k) > 0:
-            next_key = max(k) + 1
-        else:
-            next_key = 0
-        section.index = next_key
-        self.sections[next_key] = section
+            if fro == last_to:
+                logging.error(f"Overlapping sections in measure count {fro}")
 
-S = Score('../scores/testscore.mscx')
-S.sections
+            elif fro != last_to+1:
+                create_section(last_to+1, fro-1, False)
 
-################################################################################
-#                             SECTION CLASS
-################################################################################
-class Section(object):
-    """ Holds the properties of a section.
-
-    Attributes
-    ----------
-    first_measure, last_measure : :obj:`int`
-        Measure counts of the section's first and last measure nodes.
-    first_break, last_break : :obj:`str`
-        What causes the section breaks at either side.
-    index : :obj:`int`
-        Index (running number) of this section.
-    subsections : :obj:`list` of :obj:`int`
-        Indices of smaller sections that are included in this one.
-    voltas : :obj:`list` of :obj:`range`
-        Ranges of voltas. Default: empty list
-    repeated : :opj:`bool`
-        Whether or not this section is repeated.
-    """
-
-    def __init__(self):
-        self.first_measure, self.last_measure, self.index = 0, 0, 0
-        self.first_break, self.last_break = '', ''
-        self.subsections, self.voltas = [], []
-        self.repeated = False
-
-    def init(self, breaks, parent_score, repeated=False):
-
-        if repeated:
-            self.repeated = True
-
-        self.first_measure, self.first_break = breaks[0]
-        voltas = search_in_list_of_tuples(breaks, 1, 'Volta')
-        if len(voltas) == 0:
-            self.last_measure, self.last_break   = breaks[-1]
-            following = self.last_measure + 1
-        else:
-            for volta in voltas:
-                mc = breaks[volta][0]
-                node = parent_score.measure_nodes[1][mc].find('Volta')
+            next_mc = to+1
+            if next_mc in self.section_breaks and 'Volta' in self.section_breaks[next_mc]:
+                node = self.measure_nodes[1][next_mc].find('Volta')
                 length = int(node.find_next('next').location.measures.string)
-                following = mc + length
-                self.voltas.append(range(mc, following))
-            self.last_measure = following - 1
-            self.last_break = breaks[-1][1]
+                to += length
 
-        self.first_break = list(set(self.first_break))
-        self.last_break = list(set(self.last_break))
-        return following
+            create_section(fro, to, True)
+            last_to = to
 
+        if last_to != self.last_node:
+            create_section(last_to+1, self.last_node, False)
 
 
-    def __repr__(self):
-        return f"{'Repeated s' if self.repeated else 'S'}ection from node {self.first_measure} ({', '.join(self.first_break)}) to node {self.last_measure} ({', '.join(self.last_break)}), {'with ' + str(len(self.voltas)) if len(self.voltas) > 0 else 'without'} voltas."
+
+
+
+
+# S = Score('../scores/testscore.mscx')
+# S.sections
+# S.section_structure
+# S.section_order
+# S.super_sections
+# S.super_section_order
 
 
 
