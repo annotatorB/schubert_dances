@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ms3 module &mdash; Schubert Dances 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="play module" href="play.html" />
+    <link rel="prev" title="Welcome to Schubert Dances Project documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Schubert Dances
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ms3 module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="play.html">play module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">tools</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Schubert Dances</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>ms3 module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ms3.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ms3">
+<span id="ms3-module"></span><h1>ms3 module<a class="headerlink" href="#module-ms3" title="Permalink to this headline">¶</a></h1>
+<p>MuseScore3 Parser</p>
+<dl class="class">
+<dt id="ms3.Score">
+<em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Score</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parser for MuseScore3 MSCX files.</p>
+<p>NOTE: Measure count <cite>mc</cite> refers to the <cite>mc`th measure node, whereas measure
+number `mn</cite> refers to the <a href="#id1"><span class="problematic" id="id2">`</span></a>mn`th measure in the score. The latter can consist
+of several measure nodes and can be split across sections.</p>
+<dl class="attribute">
+<dt id="ms3.Score.dir">
+<code class="sig-name descname">dir</code><a class="headerlink" href="#ms3.Score.dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Directory where the parsed file is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.file">
+<code class="sig-name descname">file</code><a class="headerlink" href="#ms3.Score.file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Absolute or relative path to the MSCX file you want to parse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.filename">
+<code class="sig-name descname">filename</code><a class="headerlink" href="#ms3.Score.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filename of the parsed file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.last_node">
+<code class="sig-name descname">last_node</code><a class="headerlink" href="#ms3.Score.last_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count of the score’s last measure node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.measure_nodes">
+<code class="sig-name descname">measure_nodes</code><a class="headerlink" href="#ms3.Score.measure_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keys of the first dict are staff IDs, keys of each inner dict are incremental
+measure counts (NOT measure numbers) and values are XML nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of bs4.BeautifulSoup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.score">
+<code class="sig-name descname">score</code><a class="headerlink" href="#ms3.Score.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>The complete XML structure of the parsed MSCX file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bs4.BeautifulSoup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.section_breaks">
+<code class="sig-name descname">section_breaks</code><a class="headerlink" href="#ms3.Score.section_breaks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keys are the counts of the measures that have a section break, values are
+lists of the breaking elements {startRepeat, endRepeat, BarLine}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.section_order">
+<code class="sig-name descname">section_order</code><a class="headerlink" href="#ms3.Score.section_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of section IDs representing in which the sections in <cite>section_structure</cite>
+are presented and repeated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.section_structure">
+<code class="sig-name descname">section_structure</code><a class="headerlink" href="#ms3.Score.section_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keys are section IDs, values are a tuple of two measure counts, the
+(inclusive) boundaries of the section. That is to say, no measure count
+can appear in two different value tuples since every measure can be part
+of only one section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.sections">
+<code class="sig-name descname">sections</code><a class="headerlink" href="#ms3.Score.sections" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sections of this score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of <cite>Section</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.staff_nodes">
+<code class="sig-name descname">staff_nodes</code><a class="headerlink" href="#ms3.Score.staff_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keys are staff IDs starting with 1, values are XML nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of bs4.BeautifulSoup</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.super_sections">
+<code class="sig-name descname">super_sections</code><a class="headerlink" href="#ms3.Score.super_sections" title="Permalink to this definition">¶</a></dt>
+<dd><p>This dictionary has augmenting keys standing for one of the super_sections,
+i.e. sections that are grouped in the score by an englobing repetition,
+represented by lists of section IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.super_section_order">
+<code class="sig-name descname">super_section_order</code><a class="headerlink" href="#ms3.Score.super_section_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>A more abstract version of section_order, using the keys from super_sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ms3.Score.parse_section_breaks">
+<code class="sig-name descname">parse_section_breaks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score.parse_section_breaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score.parse_section_breaks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ms3.Section">
+<em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Section</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">first_measure</em>, <em class="sig-param">last_measure</em>, <em class="sig-param">index</em>, <em class="sig-param">repeated</em>, <em class="sig-param">start_break</em>, <em class="sig-param">end_break</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Holds the properties of a section.</p>
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">first_measure, last_measure</code></dt>
+<dd><p>Measure counts of the section’s first and last measure nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">start_break, end_break</code></dt>
+<dd><p>What causes the section breaks at either side.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Section.index">
+<code class="sig-name descname">index</code><a class="headerlink" href="#ms3.Section.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Index (running number) of this section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Section.parent">
+<code class="sig-name descname">parent</code><a class="headerlink" href="#ms3.Section.parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parent <cite>Score</cite> object that is creating this section.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>Score</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Section.repeated">
+<code class="sig-name descname">repeated</code><a class="headerlink" href="#ms3.Section.repeated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not this section is repeated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Section.voltas">
+<code class="sig-name descname">voltas</code><a class="headerlink" href="#ms3.Section.voltas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ranges of voltas. Default: empty list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">range</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.get_repeat_structure">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">get_repeat_structure</code><span class="sig-paren">(</span><em class="sig-param">section_breaks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#get_repeat_structure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.get_repeat_structure" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Checks a list of (mc, break_tag_list)-tuples or the respective dict</dt><dd><p>for closure and returns repetition structure.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check</span> <span class="o">=</span> <span class="p">{</span>
+<span class="go">             0: [&#39;start&#39;],</span>
+<span class="go">             8: [&#39;endRepeat&#39;],</span>
+<span class="go">             9: [&#39;startRepeat&#39;],</span>
+<span class="go">             12: [&#39;Volta&#39;],</span>
+<span class="go">             13: [&#39;endRepeat&#39;],</span>
+<span class="go">             14: [&#39;Volta&#39;,&#39;startRepeat&#39;],</span>
+<span class="go">             30: [&#39;end&#39;]</span>
+<span class="go">            }</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_repeat_structure</span><span class="p">(</span><span class="n">check</span><span class="p">)</span>
+<span class="go">[(0, 8), (9, 13)]</span>
+<span class="go">WARNING:Section begins with a volta: (14, [&#39;Volta&#39;, &#39;startRepeat&#39;]). Trouble follows.</span>
+<span class="go">WARNING:Repeat structure so far: [(0, 8), (9, 13)]. Stack: [(14,)]. Closure missing.</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.search_in_list_of_tuples">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">search_in_list_of_tuples</code><span class="sig-paren">(</span><em class="sig-param">L</em>, <em class="sig-param">pos</em>, <em class="sig-param">search</em>, <em class="sig-param">add=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#search_in_list_of_tuples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.search_in_list_of_tuples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>L</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code>) – List of tuples in which you want elements with value <cite>search</cite>.</p></li>
+<li><p><strong>pos</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>) – In which position of the tuples to search.</p></li>
+<li><p><strong>search</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code>) – What to look for.</p></li>
+<li><p><strong>add</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, opt) – How much you want to add to each index value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.sort_dict">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">sort_dict</code><span class="sig-paren">(</span><em class="sig-param">D</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#sort_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.sort_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new dictionary with sorted keys.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="play.html" class="btn btn-neutral float-right" title="play module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Schubert Dances Project documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, TeamSchubert
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

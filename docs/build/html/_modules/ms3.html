@@ -1,0 +1,571 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ms3 &mdash; Schubert Dances 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Schubert Dances
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../coding_rules.html">coding_rules module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ms3.html">ms3 module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../play.html">play module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">tools</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Schubert Dances</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>ms3</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ms3</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;MuseScore3 Parser&quot;&quot;&quot;</span>
+<span class="c1">###################</span>
+<span class="c1">#Internal libraries</span>
+<span class="c1">###################</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">argparse</span><span class="o">,</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+
+
+<span class="c1">###################</span>
+<span class="c1">#External libraries</span>
+<span class="c1">###################</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="k">import</span> <span class="n">BeautifulSoup</span> <span class="k">as</span> <span class="n">bs</span>         <span class="c1"># python -m pip install beautifulsoup4</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#########</span>
+<span class="c1"># Globals</span>
+<span class="c1">#########</span>
+<span class="n">NEWEST_MUSESCORE</span> <span class="o">=</span> <span class="s1">&#39;3.2.3&#39;</span>
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                     HELPER FUNCTIONS in alphabetical order</span>
+<span class="c1">################################################################################</span>
+
+<div class="viewcode-block" id="get_repeat_structure"><a class="viewcode-back" href="../ms3.html#ms3.get_repeat_structure">[docs]</a><span class="k">def</span> <span class="nf">get_repeat_structure</span><span class="p">(</span><span class="n">section_breaks</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks a list of (mc, break_tag_list)-tuples or the respective dict</span>
+<span class="sd">       for closure and returns repetition structure.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">        &gt;&gt;&gt; check = {</span>
+<span class="sd">                     0: [&#39;start&#39;],</span>
+<span class="sd">                     8: [&#39;endRepeat&#39;],</span>
+<span class="sd">                     9: [&#39;startRepeat&#39;],</span>
+<span class="sd">                     12: [&#39;Volta&#39;],</span>
+<span class="sd">                     13: [&#39;endRepeat&#39;],</span>
+<span class="sd">                     14: [&#39;Volta&#39;,&#39;startRepeat&#39;],</span>
+<span class="sd">                     30: [&#39;end&#39;]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &gt;&gt;&gt; get_repeat_structure(check)</span>
+<span class="sd">        [(0, 8), (9, 13)]</span>
+<span class="sd">        WARNING:Section begins with a volta: (14, [&#39;Volta&#39;, &#39;startRepeat&#39;]). Trouble follows.</span>
+<span class="sd">        WARNING:Repeat structure so far: [(0, 8), (9, 13)]. Stack: [(14,)]. Closure missing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stack</span><span class="p">,</span> <span class="n">repeat_structure</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">iterate</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">section_breaks</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="k">if</span> <span class="n">section_breaks</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">==</span> <span class="nb">dict</span> <span class="k">else</span>\
+              <span class="nb">list</span><span class="p">(</span><span class="n">section_breaks</span><span class="p">)</span>         <span class="k">if</span> <span class="n">section_breaks</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">!=</span> <span class="nb">list</span> <span class="k">else</span> <span class="n">section_breaks</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">mc</span><span class="p">,</span> <span class="n">break_tag_list</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterate</span><span class="p">):</span>
+
+        <span class="c1"># First measure can be beginning of a repeated section even without repeat sign</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">mc</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;endRepeat&#39;</span> <span class="ow">in</span> <span class="n">iterate</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">repeated</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="s1">&#39;startRepeat&#39;</span> <span class="ow">in</span> <span class="n">iterate</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="s1">&#39;endRepeat&#39;</span> <span class="ow">in</span> <span class="n">iterate</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">repeated</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">repeated</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">repeated</span><span class="p">:</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,))</span>
+                <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="s1">&#39;startRepeat&#39;</span> <span class="ow">in</span> <span class="n">break_tag_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;Volta&#39;</span> <span class="ow">in</span> <span class="n">break_tag_list</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Section begins with a volta: </span><span class="si">{iterate[i]}</span><span class="s2">. Trouble follows.&quot;</span><span class="p">)</span>
+            <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">mc</span><span class="p">,))</span>
+        <span class="k">elif</span> <span class="s1">&#39;endRepeat&#39;</span> <span class="ow">in</span> <span class="n">break_tag_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Correct up to </span><span class="si">{iterate[i-1]}</span><span class="s2">, the following </span><span class="si">{iterate[i]}</span><span class="s2"> has no explicit beginning. Repeat structure so far: </span><span class="si">{repeat_structure}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">repeat_structure</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">section_start</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">repeat_structure</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section_start</span> <span class="o">+</span> <span class="p">(</span><span class="n">mc</span><span class="p">,))</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Repeat structure so far: </span><span class="si">{repeat_structure}</span><span class="s2">. Stack: </span><span class="si">{stack}</span><span class="s2">. Closure missing.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">repeat_structure</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Calculated consistent repeat structure </span><span class="si">{repeat_structure}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">repeat_structure</span></div>
+
+
+
+<div class="viewcode-block" id="search_in_list_of_tuples"><a class="viewcode-back" href="../ms3.html#ms3.search_in_list_of_tuples">[docs]</a><span class="k">def</span> <span class="nf">search_in_list_of_tuples</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">search</span><span class="p">,</span> <span class="n">add</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns a list of indices.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    L : :obj:`list` of :obj:`tuple`</span>
+<span class="sd">        List of tuples in which you want elements with value `search`.</span>
+<span class="sd">    pos : :obj:`int`</span>
+<span class="sd">        In which position of the tuples to search.</span>
+<span class="sd">    search : :obj:`object`</span>
+<span class="sd">        What to look for.</span>
+<span class="sd">    add : :obj:`int`, opt</span>
+<span class="sd">        How much you want to add to each index value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">add</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="k">if</span> <span class="n">search</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="n">pos</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="sort_dict"><a class="viewcode-back" href="../ms3.html#ms3.sort_dict">[docs]</a><span class="k">def</span> <span class="nf">sort_dict</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Returns a new dictionary with sorted keys. &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">D</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">D</span><span class="p">)}</span></div>
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                             SECTION CLASS</span>
+<span class="c1">################################################################################</span>
+<div class="viewcode-block" id="Section"><a class="viewcode-back" href="../ms3.html#ms3.Section">[docs]</a><span class="k">class</span> <span class="nc">Section</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Holds the properties of a section.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    first_measure, last_measure : :obj:`int`</span>
+<span class="sd">        Measure counts of the section&#39;s first and last measure nodes.</span>
+<span class="sd">    start_break, end_break : :obj:`str`</span>
+<span class="sd">        What causes the section breaks at either side.</span>
+<span class="sd">    index : :obj:`int`</span>
+<span class="sd">        Index (running number) of this section.</span>
+<span class="sd">    parent : `Score`</span>
+<span class="sd">        The parent `Score` object that is creating this section.</span>
+<span class="sd">    repeated : :obj:`bool`</span>
+<span class="sd">        Whether or not this section is repeated.</span>
+<span class="sd">    voltas : :obj:`list` of :obj:`range`</span>
+<span class="sd">        Ranges of voltas. Default: empty list</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">first_measure</span><span class="p">,</span> <span class="n">last_measure</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">repeated</span><span class="p">,</span> <span class="n">start_break</span><span class="p">,</span> <span class="n">end_break</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_measure</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_measure</span> <span class="o">=</span> <span class="n">first_measure</span><span class="p">,</span> <span class="n">last_measure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repeated</span> <span class="o">=</span> <span class="n">repeated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_break</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_break</span> <span class="o">=</span> <span class="n">start_break</span><span class="p">,</span> <span class="n">end_break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">voltas</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;{&#39;Repeated s&#39; if self.repeated else &#39;S&#39;}ection from node </span><span class="si">{self.first_measure}</span><span class="s2"> ({&#39;, &#39;.join(self.start_break) if self.start_break.__class__ == list else self.start_break}) to node </span><span class="si">{self.last_measure}</span><span class="s2"> ({&#39;, &#39;.join(self.end_break) if self.end_break.__class__ == list else self.end_break}), {&#39;with &#39; + str(len(self.voltas)) if len(self.voltas) &gt; 0 else &#39;without&#39;} voltas.&quot;</span></div>
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                             SCORE CLASS</span>
+<span class="c1">################################################################################</span>
+<div class="viewcode-block" id="Score"><a class="viewcode-back" href="../ms3.html#ms3.Score">[docs]</a><span class="k">class</span> <span class="nc">Score</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Parser for MuseScore3 MSCX files.</span>
+
+<span class="sd">    NOTE: Measure count `mc` refers to the `mc`th measure node, whereas measure</span>
+<span class="sd">    number `mn` refers to the `mn`th measure in the score. The latter can consist</span>
+<span class="sd">    of several measure nodes and can be split across sections.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dir : :obj:`str`</span>
+<span class="sd">        Directory where the parsed file is stored.</span>
+<span class="sd">    file : :obj:`str`</span>
+<span class="sd">        Absolute or relative path to the MSCX file you want to parse.</span>
+<span class="sd">    filename : :obj:`str`</span>
+<span class="sd">        Filename of the parsed file.</span>
+<span class="sd">    last_node : :obj:`int`</span>
+<span class="sd">        Count of the score&#39;s last measure node.</span>
+<span class="sd">    measure_nodes : :obj:`dict` of :obj:`dict` of bs4.BeautifulSoup</span>
+<span class="sd">        Keys of the first dict are staff IDs, keys of each inner dict are incremental</span>
+<span class="sd">        measure counts (NOT measure numbers) and values are XML nodes.</span>
+<span class="sd">    score : bs4.BeautifulSoup</span>
+<span class="sd">        The complete XML structure of the parsed MSCX file.</span>
+<span class="sd">    section_breaks : :obj:`dict`</span>
+<span class="sd">        Keys are the counts of the measures that have a section break, values are</span>
+<span class="sd">        lists of the breaking elements {startRepeat, endRepeat, BarLine}</span>
+<span class="sd">    section_order : :obj:`list` of :obj:`int`:</span>
+<span class="sd">        List of section IDs representing in which the sections in `section_structure`</span>
+<span class="sd">        are presented and repeated.</span>
+<span class="sd">    section_structure : :obj:`list` of :obj:`tuple` of :obj:`int`</span>
+<span class="sd">        Keys are section IDs, values are a tuple of two measure counts, the</span>
+<span class="sd">        (inclusive) boundaries of the section. That is to say, no measure count</span>
+<span class="sd">        can appear in two different value tuples since every measure can be part</span>
+<span class="sd">        of only one section.</span>
+<span class="sd">    sections : :obj:`dict` of `Section`</span>
+<span class="sd">        The sections of this score.</span>
+<span class="sd">    staff_nodes : :obj:`dict` of bs4.BeautifulSoup</span>
+<span class="sd">        Keys are staff IDs starting with 1, values are XML nodes.</span>
+<span class="sd">    super_sections : :obj:`dict` of :obj:`list`</span>
+<span class="sd">        This dictionary has augmenting keys standing for one of the super_sections,</span>
+<span class="sd">        i.e. sections that are grouped in the score by an englobing repetition,</span>
+<span class="sd">        represented by lists of section IDs.</span>
+<span class="sd">    super_section_order : :obj:`list` of :obj:`int`</span>
+<span class="sd">        A more abstract version of section_order, using the keys from super_sections.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">file</span><span class="p">):</span>
+
+        <span class="c1"># Initialize attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">staff_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sections</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_structure</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">super_sections</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">super_section_order</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Load file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">bs</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="s1">&#39;xml&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check Musescore version</span>
+        <span class="n">ms_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;programVersion&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">string</span>
+        <span class="k">if</span> <span class="n">ms_version</span> <span class="o">!=</span> <span class="n">NEWEST_MUSESCORE</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.filename}</span><span class="s2"> was created with MuseScore </span><span class="si">{ms_version}</span><span class="s2">. Auto-conversion will be implemented in the future.&quot;</span><span class="p">)</span>
+        <span class="c1"># ToDo: Auto-conversion</span>
+
+        <span class="c1"># Extract staves</span>
+        <span class="k">for</span> <span class="n">staff</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Part&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">find_next_siblings</span><span class="p">(</span><span class="s1">&#39;Staff&#39;</span><span class="p">):</span>
+            <span class="n">staff_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">staff</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">staff_nodes</span><span class="p">[</span><span class="n">staff_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">staff</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">[</span><span class="n">staff_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Stored staff with ID </span><span class="si">{staff_id}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Extract measures</span>
+        <span class="n">break_tags</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;startRepeat&#39;</span><span class="p">,</span> <span class="s1">&#39;endRepeat&#39;</span><span class="p">,</span> <span class="s1">&#39;Volta&#39;</span><span class="p">,</span> <span class="s1">&#39;BarLine&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">staff_id</span><span class="p">,</span> <span class="n">staff</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">staff_nodes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">measure</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">staff</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;Measure&#39;</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">[</span><span class="n">staff_id</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">measure</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Stored the </span><span class="si">{i}</span><span class="s2">th measure of staff </span><span class="si">{staff_id}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Detect section breaks</span>
+                <span class="n">breaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">measure</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">break_tags</span><span class="p">)]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">breaks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">breaks</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Found section break(s) </span><span class="si">{breaks}</span><span class="s2"> in the </span><span class="si">{i}</span><span class="s2">th measure of staff </span><span class="si">{staff_id}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Store last measure, presupposing that the first staff spreads throughout the piece.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_node</span> <span class="o">=</span>  <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_section_breaks</span><span class="p">()</span>
+
+
+
+<div class="viewcode-block" id="Score.parse_section_breaks"><a class="viewcode-back" href="../ms3.html#ms3.Score.parse_section_breaks">[docs]</a>    <span class="k">def</span> <span class="nf">parse_section_breaks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">section_counter</span><span class="p">,</span> <span class="n">super_counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+        <span class="k">def</span> <span class="nf">create_section</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">repeated</span><span class="p">):</span>
+            <span class="k">nonlocal</span> <span class="n">section_counter</span><span class="p">,</span> <span class="n">super_counter</span>
+
+            <span class="n">section_breaks</span> <span class="o">=</span> <span class="p">{</span><span class="n">mc</span><span class="p">:</span> <span class="n">break_tag_list</span> <span class="k">for</span> <span class="n">mc</span><span class="p">,</span> <span class="n">break_tag_list</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span> <span class="o">&lt;=</span> <span class="n">mc</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">}</span>
+            <span class="n">mcs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">section_breaks</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mcs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">SB</span><span class="p">,</span> <span class="n">EB</span> <span class="o">=</span> <span class="s1">&#39;startNormal&#39;</span><span class="p">,</span> <span class="s1">&#39;endNormal&#39;</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">mcs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">mcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">SB</span> <span class="o">=</span> <span class="n">section_breaks</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="n">EB</span> <span class="o">=</span> <span class="s1">&#39;endNormal&#39;</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="n">t</span><span class="p">:</span>
+                    <span class="n">SB</span> <span class="o">=</span> <span class="s1">&#39;startNormal&#39;</span>
+                    <span class="n">EB</span> <span class="o">=</span> <span class="n">section_breaks</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;NOT IMPLEMENTED. CHECK WHAT THIS ELEMENT IS: </span><span class="si">{section_breaks}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">SB</span><span class="p">,</span> <span class="n">EB</span> <span class="o">=</span> <span class="n">section_breaks</span><span class="p">[</span><span class="n">mcs</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">section_breaks</span><span class="p">[</span><span class="n">mcs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+            <span class="n">inner_breaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">mc</span> <span class="k">for</span> <span class="n">mc</span><span class="p">,</span> <span class="n">break_tag_list</span> <span class="ow">in</span> <span class="n">section_breaks</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">f</span> <span class="o">&lt;</span> <span class="n">mc</span> <span class="o">&lt;</span> <span class="n">t</span> <span class="ow">and</span> <span class="s1">&#39;BarLine&#39;</span> <span class="ow">in</span> <span class="n">break_tag_list</span><span class="p">]</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inner_breaks</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">L</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+
+                <span class="n">inner_breaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+                <span class="n">last_t</span> <span class="o">=</span> <span class="n">f</span><span class="o">-</span><span class="mi">1</span>
+                <span class="n">subsections</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">breaks</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">br</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inner_breaks</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">start_break</span> <span class="o">=</span> <span class="n">SB</span>
+                        <span class="n">end_break</span> <span class="o">=</span> <span class="s1">&#39;BarLine&#39;</span>
+                        <span class="n">breaks</span><span class="p">[</span><span class="n">br</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_break</span>
+                    <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="n">L</span><span class="p">:</span>
+                        <span class="n">start_break</span> <span class="o">=</span> <span class="n">breaks</span><span class="p">[</span><span class="n">last_t</span><span class="p">]</span>
+                        <span class="n">end_break</span> <span class="o">=</span> <span class="n">EB</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">start_break</span> <span class="o">=</span> <span class="n">breaks</span><span class="p">[</span><span class="n">last_t</span><span class="p">]</span>
+                        <span class="n">end_break</span> <span class="o">=</span> <span class="s1">&#39;BarLine&#39;</span>
+                        <span class="n">breaks</span><span class="p">[</span><span class="n">br</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_break</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">section_structure</span><span class="p">[</span><span class="n">section_counter</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">last_t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">br</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">section_counter</span><span class="p">]</span> <span class="o">=</span> <span class="n">Section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">br</span><span class="p">,</span> <span class="n">section_counter</span><span class="p">,</span> <span class="n">repeated</span><span class="p">,</span> <span class="n">start_break</span><span class="p">,</span> <span class="n">end_break</span><span class="p">)</span>
+                    <span class="n">subsections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section_counter</span><span class="p">)</span>
+                    <span class="n">section_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">last_t</span> <span class="o">=</span> <span class="n">br</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">section_structure</span><span class="p">[</span><span class="n">section_counter</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="n">section_counter</span><span class="p">]</span> <span class="o">=</span> <span class="n">Section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">section_counter</span><span class="p">,</span> <span class="n">repeated</span><span class="p">,</span> <span class="n">SB</span><span class="p">,</span> <span class="n">EB</span><span class="p">)</span>
+                <span class="n">subsections</span> <span class="o">=</span> <span class="p">[</span><span class="n">section_counter</span><span class="p">]</span>
+                <span class="n">section_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">section_order</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subsections</span> <span class="o">*</span> <span class="p">(</span><span class="n">repeated</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">super_sections</span><span class="p">[</span><span class="n">super_counter</span><span class="p">]</span> <span class="o">=</span> <span class="n">subsections</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">super_section_order</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">super_counter</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">repeated</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">super_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Created {&#39;repeated &#39; if repeated else &#39;&#39;}section from </span><span class="si">{f}</span><span class="s2"> to </span><span class="si">{t}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">last_node</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span> <span class="o">=</span> <span class="n">sort_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span><span class="p">)</span>
+        <span class="n">breaks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">repeat_structure</span> <span class="o">=</span> <span class="n">get_repeat_structure</span><span class="p">(</span><span class="n">breaks</span><span class="p">)</span>
+
+
+        <span class="n">last_to</span>  <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">fro</span><span class="p">,</span> <span class="n">to</span><span class="p">))</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">repeat_structure</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="n">fro</span> <span class="o">==</span> <span class="n">last_to</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Overlapping sections in measure count </span><span class="si">{fro}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">fro</span> <span class="o">!=</span> <span class="n">last_to</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">create_section</span><span class="p">(</span><span class="n">last_to</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">fro</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">next_mc</span> <span class="o">=</span> <span class="n">to</span><span class="o">+</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">next_mc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span> <span class="ow">and</span> <span class="s1">&#39;Volta&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">section_breaks</span><span class="p">[</span><span class="n">next_mc</span><span class="p">]:</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">measure_nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">next_mc</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Volta&#39;</span><span class="p">)</span>
+                <span class="n">length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">find_next</span><span class="p">(</span><span class="s1">&#39;next&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">measures</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+                <span class="n">to</span> <span class="o">+=</span> <span class="n">length</span>
+
+            <span class="n">create_section</span><span class="p">(</span><span class="n">fro</span><span class="p">,</span> <span class="n">to</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">last_to</span> <span class="o">=</span> <span class="n">to</span>
+
+        <span class="k">if</span> <span class="n">last_to</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_node</span><span class="p">:</span>
+            <span class="n">create_section</span><span class="p">(</span><span class="n">last_to</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_node</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div></div>
+
+
+
+
+
+
+<span class="c1"># S = Score(&#39;../scores/testscore.mscx&#39;)</span>
+<span class="c1"># S.sections</span>
+<span class="c1"># S.section_structure</span>
+<span class="c1"># S.section_order</span>
+<span class="c1"># S.super_sections</span>
+<span class="c1"># S.super_section_order</span>
+
+
+
+
+<span class="c1">################################################################################</span>
+<span class="c1">#                           COMMANDLINE USAGE</span>
+<span class="c1">################################################################################</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawDescriptionHelpFormatter</span><span class="p">,</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span><span class="se">\</span>
+<span class="s1">-------------------------------------</span>
+<span class="s1">| Parser for MuseScore3 MSCX files. |</span>
+<span class="s1">-------------------------------------</span>
+
+<span class="s1">At the moment, this is just a skeleton. Later, the commandline can be used to</span>
+<span class="s1">quickly parse entire folders and store files with the computed data.&#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span><span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;FILE&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;Absolute or relative path to the MSCX file you want to parse.&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span><span class="s1">&#39;--logging&#39;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Set logging to one of the levels {DEBUG, INFO, WARNING, ERROR, CRITICAL}.&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">logging_levels</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;DEBUG&#39;</span><span class="p">:</span>    <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+        <span class="s1">&#39;INFO&#39;</span><span class="p">:</span>     <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+        <span class="s1">&#39;WARNING&#39;</span><span class="p">:</span>  <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span>
+        <span class="s1">&#39;ERROR&#39;</span><span class="p">:</span>    <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span>
+        <span class="s1">&#39;CRITICAL&#39;</span><span class="p">:</span>  <span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span>
+        <span class="p">}</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging_levels</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">logging</span><span class="p">])</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Successfully parsed.&quot;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, TeamSchubert
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

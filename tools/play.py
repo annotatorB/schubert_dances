@@ -46,12 +46,13 @@ def cmdline_process():
     # Return checked command line
     return args
 
-# Parse and check command line
-try:
-    cmdline_args = cmdline_process()
-except Exception as err:
-    print("FATAL: parsing/checking of the command line failed: %s" % err)
-    exit(1)
+if __name__ == '__main__':
+    # Parse and check command line
+    try:
+        cmdline_args = cmdline_process()
+    except Exception as err:
+        print("FATAL: parsing/checking of the command line failed: %s" % err)
+        exit(1)
 
-# ---------------------------------------------------------------------------- #
-# Playback
+    # ---------------------------------------------------------------------------- #
+    # Playback
