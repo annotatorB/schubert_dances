@@ -1,0 +1,598 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>libs package &mdash; Schubert Dances 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ms3 module" href="ms3.html" />
+    <link rel="prev" title="coding_rules module" href="coding_rules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Schubert Dances
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="coding_rules.html">coding_rules module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">libs package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-libs.sheet">libs.sheet module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-libs.synth">libs.synth module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-libs">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ms3.html">ms3 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="play.html">play module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Schubert Dances</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">tools</a> &raquo;</li>
+        
+      <li>libs package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/libs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="libs-package">
+<h1>libs package<a class="headerlink" href="#libs-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-libs.sheet">
+<span id="libs-sheet-module"></span><h2>libs.sheet module<a class="headerlink" href="#module-libs.sheet" title="Permalink to this headline">¶</a></h2>
+<p>Our custom-format, simplified sheet music class.</p>
+<dl class="class">
+<dt id="libs.sheet.Section">
+<em class="property">class </em><code class="sig-prename descclassname">libs.sheet.</code><code class="sig-name descname">Section</code><span class="sig-paren">(</span><em class="sig-param">signature</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
+<p>Section of notes storage class.</p>
+<p>A section is merely a pandas.DataFrame, augmented with a time signature.
+It is to be though as “the ink on the paper” for a continuous segment of notes,
+and absolutely not as a period; finding periods is left to subsequent analysis.</p>
+<dl class="simple">
+<dt>note<span class="classifier">str</span></dt><dd><p>Note letter, one of {“A”, “B”, …, “G”, “-“}.
+“-” represents a silence, and the associated ‘octave’ and ‘accidental’ are to be ignored.</p>
+</dd>
+<dt>octave<span class="classifier">int</span></dt><dd><p>Octave number, any integer.</p>
+</dd>
+<dt>accidental<span class="classifier">int</span></dt><dd><p>Accidental value, in particular: -1 for flat, 0 for natural, 1 for sharp.</p>
+</dd>
+<dt>start<span class="classifier">fractions.Fraction</span></dt><dd><p>Non-negative start time point (in beats), relative to the beginning of the section.</p>
+</dd>
+<dt>duration<span class="classifier">fractions.Fraction</span></dt><dd><p>Positive duration (in beats).</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>velocity<span class="classifier">int in [1 .. 127]</span></dt><dd><p>Velocity at which the note must be played.</p>
+</dd>
+<dt>hand<span class="classifier">int</span></dt><dd><p>Which hand is supposed to play this note.
+(To be formalized, probably something like: 0 for unknown, -1 for left, 1 for right.)</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#libs.sheet.Sheet" title="libs.sheet.Sheet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sheet</span></code></a></dt><dd><p>sheet music storage class.</p>
+</dd>
+</dl>
+</div>
+<dl class="method">
+<dt id="libs.sheet.Section.assert_format">
+<code class="sig-name descname">assert_format</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Section.assert_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Section.assert_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assert that this instance follows the specified format.</p>
+<p>Optional columns are not checked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.8)"><strong>AssertionError</strong></a> – If the format is not followed, with an explanatory error message.
+    This is raised even when not in debug mode (i.e. ‘__debug__ == False’).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="libs.sheet.Section.signature">
+<em class="property">property </em><code class="sig-name descname">signature</code><a class="headerlink" href="#libs.sheet.Section.signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access the read-only signature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Time signature of the section.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>tuple of two positive int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="libs.sheet.Sheet">
+<em class="property">class </em><code class="sig-prename descclassname">libs.sheet.</code><code class="sig-name descname">Sheet</code><a class="reference internal" href="_modules/libs/sheet.html#Sheet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Sheet music storage class.</p>
+<dl class="attribute">
+<dt id="libs.sheet.Sheet.sections">
+<code class="sig-name descname">sections</code><a class="headerlink" href="#libs.sheet.Sheet.sections" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of sections in played order, each possibly appearing several times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list of pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>Compared to a standard music sheet:
+- repetitions of (contiguous) sections are specified separately.
+- many informative elements (like ties between notes) are optionally stored.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#libs.sheet.Section" title="libs.sheet.Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a></dt><dd><p>section storage class.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<p>These examples illustrate how to build a sheet with repetitions of sections.
+Once the sheet and sections are built, it is then:
+- easy to playback a sheet, by just iterating over the stored sections.
+- possible to iterate over the sections as they (plausibly) were on paper, e.g.:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A B B C D E D E F =&gt; A 𝄆  B 𝄇 C 𝄆 D E 𝄇 F</p></li>
+<li><p>A B C B D E       =&gt; A 𝄆  B C¹ 𝄇 D² E</p></li>
+<li><p>A B C A D E A C F =&gt; 𝄆 A B¹ C¹³ D² E² 𝄇 F⁴</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make a new sheet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">Sheet</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make three sections</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="n">sheet</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">signature</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Parse and fill the columns of the sections (see &#39;help(sheet.Section)&#39; for the format)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># ...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Optional validity asserts once the sections are built</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">section</span><span class="o">.</span><span class="n">assert_format</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make the repetition A-B-A-C-C</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">my_sheet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Iterate over the sections in playing order (i.e.: A-B-A-C-C)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">my_sheet</span><span class="o">.</span><span class="n">as_played</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Iterate over the sections in (plausible) written order</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">section</span><span class="p">,</span> <span class="p">(</span><span class="n">voltas</span><span class="p">,</span> <span class="n">rep_begin</span><span class="p">,</span> <span class="n">rep_end</span><span class="p">)</span> <span class="ow">in</span> <span class="n">my_sheet</span><span class="o">.</span><span class="n">as_written</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="c1"># As the structure is (𝄆 A B¹ 𝄇𝄆 C² 𝄇), the loop will iterate over:</span>
+<span class="gp">... </span>    <span class="c1"># - A, ([], True, False)</span>
+<span class="gp">... </span>    <span class="c1"># - B, ([1], False, True)</span>
+<span class="gp">... </span>    <span class="c1"># - C, ([-2], True, True)  &lt;- volta value from previous pair of repetition bars is noted as negative (if any)</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Save and load again the sheet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sheet</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">my_sheet</span><span class="p">,</span> <span class="s2">&quot;my_sheet.sht&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my_sheet.sht&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span><span class="o">.</span><span class="n">assert_format</span><span class="p">()</span>  <span class="c1"># Optional, checks both the sheet and its sections</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="libs.sheet.Sheet.append">
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">section</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Sheet.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Sheet.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append/repeat a section into the sheet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>section</strong> (<a class="reference internal" href="ms3.html#ms3.Section" title="ms3.Section"><em>Section</em></a>) – Section to append to the sheet.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The section passed as parameter, untouched</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="ms3.html#ms3.Section" title="ms3.Section">Section</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="libs.sheet.Sheet.as_played">
+<code class="sig-name descname">as_played</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Sheet.as_played"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Sheet.as_played" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list over the sections in played order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List over the sections in played order.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of Section</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The behavior is undefined if the sheet is modified while using the returned value.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="libs.sheet.Sheet.as_written">
+<code class="sig-name descname">as_written</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Sheet.as_written"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Sheet.as_written" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a list over the sections in written order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List over the sections in written order, with additional information.
+The additional tuple of information contains:
+- The list of voltas (positive integers) of the section
+- Whether the section is preceeded by a “begin” repetition bar
+- Whether the section is followed by an “end” repetition bar</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of tuple of (<a class="reference internal" href="ms3.html#ms3.Section" title="ms3.Section">Section</a>, tuple of (list of int, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a>))</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – When the notation to achieve the existing repetition is unknown.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The behavior is undefined if the sheet is modified while using the returned value.</p>
+<p>A (probably not representable) sheet with reordered sections in a repetition (e.g. ABCACB)
+will not raise an error and be consistently output as in the first repetition (e.g. 𝄆 ABC 𝄇).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="libs.sheet.Sheet.assert_format">
+<code class="sig-name descname">assert_format</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Sheet.assert_format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Sheet.assert_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assert that this instance follows the specified format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.8)"><strong>AssertionError</strong></a> – If the format is not followed, with an explanatory error message.
+    This is raised even when not in debug mode (i.e. ‘__debug__ == False’).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="libs.sheet.load">
+<code class="sig-prename descclassname">libs.sheet.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">path_or_fd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a sheet from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.8)"><em>pathlib.Path</em></a><em> (or </em><em>equivalent</em><em>)</em>) – Path to the file to load from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Loaded sheet instance.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#libs.sheet.Sheet" title="libs.sheet.Sheet">Sheet</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="libs.sheet.save">
+<code class="sig-prename descclassname">libs.sheet.</code><code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">sheet</em>, <em class="sig-param">path_or_fd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save a sheet to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheet</strong> (<a class="reference internal" href="#libs.sheet.Sheet" title="libs.sheet.Sheet"><em>Sheet</em></a>) – Instance of the sheet to save.</p></li>
+<li><p><strong>path_or_fd</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.PurePath" title="(in Python v3.8)"><em>pathlib.PurePath</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/io.html#io.BytesIO" title="(in Python v3.8)"><em>io.BytesIO</em></a><em> (or </em><em>equivalent</em><em>)</em>) – Path to the file to save to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-libs.synth">
+<span id="libs-synth-module"></span><h2>libs.synth module<a class="headerlink" href="#module-libs.synth" title="Permalink to this headline">¶</a></h2>
+<p>Essentially a very limited wrapper around FluidSynth, playing notes when requested.</p>
+<p class="rubric">Examples</p>
+<p>A working example, provided both libsynthfluid and “my_piano_soundfont.sf2”
+have been properly installed and downloaded.
+To download piano SoundFonts, see: <a class="reference external" href="https://sites.google.com/site/soundfonts4u/">https://sites.google.com/site/soundfonts4u/</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">synth</span><span class="o">,</span> <span class="nn">time</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load the default FluidSynth library and a given SoundFont file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">FluidSynth</span><span class="p">()</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;my_piano_soundfont.sf2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Press a flat A4 then release it after 0.5 second</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">key</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">note_midi</span><span class="p">(</span><span class="s2">&quot;A4&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># +1 makes sharp, -1 makes flat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Play all the A between A7 to A0 (included)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">synth</span><span class="o">.</span><span class="n">note_midi</span><span class="p">(</span><span class="s2">&quot;A</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Silence all currently playing notes after 2 seconds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">silence</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Play all the &quot;blues&quot; notes from C4 to C5 (included)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">base</span>  <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">note_midi</span><span class="p">(</span><span class="s2">&quot;C4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">delta</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">delta</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">delta</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+<span class="gp">... </span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">silence</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="libs.synth.FluidSynth">
+<em class="property">class </em><code class="sig-prename descclassname">libs.synth.</code><code class="sig-name descname">FluidSynth</code><span class="sig-paren">(</span><em class="sig-param">library='fluidsynth'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/synth.html#FluidSynth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.synth.FluidSynth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Wrapper to the FluidSynth library and some of its functions.</p>
+<dl class="method">
+<dt id="libs.synth.FluidSynth.make">
+<code class="sig-name descname">make</code><span class="sig-paren">(</span><em class="sig-param">soundfont</em>, <em class="sig-param">settings={'audio.driver': 'pulseaudio'}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/synth.html#FluidSynth.make"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.synth.FluidSynth.make" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a new instance manager with the given settings and SoundFont.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>soundfont</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.8)"><em>pathlib.Path</em></a><em> (or </em><em>equivalent</em><em>)</em>) – Path to the SoundFont file to use.</p></li>
+<li><p><strong>settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary of <cite>str</cite> -&gt; {<cite>str</cite>, <cite>float</cite>, <cite>int</cite>} to use as settings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance manager, ready to be used to play notes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FluidSynth._Instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="libs.synth.midi_note">
+<code class="sig-prename descclassname">libs.synth.</code><code class="sig-name descname">midi_note</code><span class="sig-paren">(</span><em class="sig-param">midi</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/synth.html#midi_note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.synth.midi_note" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the note name associated with the given MIDI number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>midi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – MIDI number.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Associated note name, international pitch notation without accidental.
+If a flat note was given, return the name of the note before.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#libs.synth.note_midi" title="libs.synth.note_midi"><code class="xref py py-func docutils literal notranslate"><span class="pre">note_midi()</span></code></a></dt><dd><p>for the opposite operation.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="libs.synth.note_midi">
+<code class="sig-prename descclassname">libs.synth.</code><code class="sig-name descname">note_midi</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/synth.html#note_midi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.synth.note_midi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the MIDI number associated with the given note name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Note name, format: /[ABCDEFG]-?[0-9]+/.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Associated MIDI number.
+Add/remove 1 to it for a sharp/flat note.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#libs.synth.midi_note" title="libs.synth.midi_note"><code class="xref py py-func docutils literal notranslate"><span class="pre">midi_note()</span></code></a></dt><dd><p>for the opposite operation.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-libs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-libs" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ms3.html" class="btn btn-neutral float-right" title="ms3 module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="coding_rules.html" class="btn btn-neutral float-left" title="coding_rules module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, TeamSchubert
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

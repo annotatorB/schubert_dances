@@ -1,0 +1,456 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>libs.synth &mdash; Schubert Dances 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Schubert Dances
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">tools</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Schubert Dances</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>libs.synth</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for libs.synth</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Essentially a very limited wrapper around FluidSynth, playing notes when requested.</span>
+
+<span class="sd">Examples</span>
+<span class="sd">--------</span>
+<span class="sd">A working example, provided both libsynthfluid and &quot;my_piano_soundfont.sf2&quot;</span>
+<span class="sd">have been properly installed and downloaded.</span>
+<span class="sd">To download piano SoundFonts, see: https://sites.google.com/site/soundfonts4u/</span>
+
+<span class="sd">&gt;&gt;&gt; import synth, time</span>
+
+<span class="sd">&gt;&gt;&gt; # Load the default FluidSynth library and a given SoundFont file</span>
+<span class="sd">&gt;&gt;&gt; piano = synth.FluidSynth().make(&quot;my_piano_soundfont.sf2&quot;)</span>
+
+<span class="sd">&gt;&gt;&gt; # Press a flat A4 then release it after 0.5 second</span>
+<span class="sd">&gt;&gt;&gt; key = synth.note_midi(&quot;A4&quot;) - 1  # +1 makes sharp, -1 makes flat</span>
+<span class="sd">&gt;&gt;&gt; piano.press(key)</span>
+<span class="sd">&gt;&gt;&gt; time.sleep(0.5)</span>
+<span class="sd">&gt;&gt;&gt; piano.release(key)</span>
+
+<span class="sd">&gt;&gt;&gt; # Play all the A between A7 to A0 (included)</span>
+<span class="sd">&gt;&gt;&gt; for i in range(7, -1, -1):</span>
+<span class="sd">...     piano.press(synth.note_midi(&quot;A%d&quot; % i))</span>
+<span class="sd">...     time.sleep(0.15)</span>
+<span class="sd">...</span>
+<span class="sd">&gt;&gt;&gt; # Silence all currently playing notes after 2 seconds</span>
+<span class="sd">&gt;&gt;&gt; time.sleep(2)</span>
+<span class="sd">&gt;&gt;&gt; piano.silence()</span>
+<span class="sd">&gt;&gt;&gt; time.sleep(0.5)</span>
+
+<span class="sd">&gt;&gt;&gt; # Play all the &quot;blues&quot; notes from C4 to C5 (included)</span>
+<span class="sd">&gt;&gt;&gt; base  = synth.note_midi(&quot;C4&quot;)</span>
+<span class="sd">&gt;&gt;&gt; delta = (0, 3, 5, 6, 7, 10, 12)</span>
+<span class="sd">&gt;&gt;&gt; piano.press(base + delta[0])</span>
+<span class="sd">&gt;&gt;&gt; for i in range(len(delta) - 1):</span>
+<span class="sd">...     time.sleep(0.05 * (delta[i + 1] - delta[i]) + 0.05)</span>
+<span class="sd">...     piano.press(base + delta[i + 1])</span>
+<span class="sd">...</span>
+<span class="sd">&gt;&gt;&gt; for d in reversed(delta[:-1]):</span>
+<span class="sd">...     time.sleep(0.1)</span>
+<span class="sd">...     piano.press(base + d)</span>
+<span class="sd">...</span>
+<span class="sd">&gt;&gt;&gt; time.sleep(2)</span>
+<span class="sd">&gt;&gt;&gt; piano.silence()</span>
+<span class="sd">&gt;&gt;&gt; time.sleep(0.5)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">ctypes.util</span>
+
+<span class="c1"># ---------------------------------------------------------------------------- #</span>
+<span class="c1"># Switch between note name and MIDI number</span>
+
+<div class="viewcode-block" id="note_midi"><a class="viewcode-back" href="../../libs.html#libs.synth.note_midi">[docs]</a><span class="k">def</span> <span class="nf">note_midi</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Compute the MIDI number associated with the given note name.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Note name, format: /[ABCDEFG]-?[0-9]+/.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Associated MIDI number.</span>
+<span class="sd">        Add/remove 1 to it for a sharp/flat note.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    midi_note : for the opposite operation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">note</span> <span class="o">=</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">12</span> <span class="k">if</span> <span class="n">note</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">11</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">note</span></div>
+
+<div class="viewcode-block" id="midi_note"><a class="viewcode-back" href="../../libs.html#libs.synth.midi_note">[docs]</a><span class="k">def</span> <span class="nf">midi_note</span><span class="p">(</span><span class="n">midi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Compute the note name associated with the given MIDI number.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    midi : int</span>
+<span class="sd">        MIDI number.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Associated note name, international pitch notation without accidental.</span>
+<span class="sd">        If a flat note was given, return the name of the note before.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    note_midi : for the opposite operation.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<span class="c1"># ---------------------------------------------------------------------------- #</span>
+<span class="c1"># FluidSynth library interface</span>
+
+<div class="viewcode-block" id="FluidSynth"><a class="viewcode-back" href="../../libs.html#libs.synth.FluidSynth">[docs]</a><span class="k">class</span> <span class="nc">FluidSynth</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Wrapper to the FluidSynth library and some of its functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">class</span> <span class="nc">_Instance</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Instance manager (settings, synth and audio driver), play notes on demand.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fluidsynth</span><span class="p">,</span> <span class="n">soundfont</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Instantiate the FluidSynth settings, synth and audio driver, then load the given SoundFont.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            fluidsynth : FluidSynth</span>
+<span class="sd">                Wrapper to the FluidSynth library to use.</span>
+
+<span class="sd">            See Also:</span>
+<span class="sd">            ---------</span>
+<span class="sd">            FluidSynth.make : for the remaining arguments.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Register the instance first</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fluidsynth</span> <span class="o">=</span> <span class="n">fluidsynth</span>
+            <span class="c1"># Make the settings</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="o">=</span> <span class="n">fluidsynth</span><span class="o">.</span><span class="n">new_fluid_settings</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_settings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to create a new FluidSynth settings instance&quot;</span><span class="p">)</span>
+            <span class="c1"># Set the settings</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Check &#39;val&#39; and select associated function</span>
+                <span class="bp">cls</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+                    <span class="n">post</span> <span class="o">=</span> <span class="s2">&quot;str&quot;</span>
+                    <span class="n">sval</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+                    <span class="n">post</span> <span class="o">=</span> <span class="s2">&quot;num&quot;</span>
+                    <span class="n">sval</span> <span class="o">=</span> <span class="n">val</span>
+                <span class="k">elif</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">:</span>
+                    <span class="n">post</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
+                    <span class="n">sval</span> <span class="o">=</span> <span class="n">val</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported FluidSynth setting value </span><span class="si">%r</span><span class="s2"> for key </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+                <span class="c1"># Set setting and check if error</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fluidsynth</span><span class="p">,</span> <span class="s2">&quot;fluid_settings_set</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">post</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="n">sval</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to set FluidSynth setting value </span><span class="si">%r</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">) for key </span><span class="si">%r</span><span class="s2">, error code </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">post</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">res</span><span class="p">))</span>
+            <span class="c1"># Make the synth with the settings</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_synth</span> <span class="o">=</span> <span class="n">fluidsynth</span><span class="o">.</span><span class="n">new_fluid_synth</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_synth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to create a new FluidSynth synth instance&quot;</span><span class="p">)</span>
+            <span class="n">soundfont</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">soundfont</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">fluidsynth</span><span class="o">.</span><span class="n">fluid_synth_sfload</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_synth</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">soundfont</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to load SoundFont </span><span class="si">%r</span><span class="s2"> into the FluidSynth synth instance, error code </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">soundfont</span><span class="p">,</span> <span class="n">res</span><span class="p">))</span>
+            <span class="c1"># Make the audio driver with the settings and synth</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_audio_driver</span> <span class="o">=</span> <span class="n">fluidsynth</span><span class="o">.</span><span class="n">new_fluid_audio_driver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_synth</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_audio_driver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to create a new FluidSynth synth instance&quot;</span><span class="p">)</span>
+            <span class="c1"># Set of currently playing notes (for silence)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_playing</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Destroy the managed instances.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># Get the library wrapper</span>
+            <span class="n">fluidsynth</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_fluidsynth&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">fluidsynth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># Nothing to do</span>
+                <span class="k">return</span>
+            <span class="c1"># Destroy the managed instances (in order)</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;audio_driver&quot;</span><span class="p">,</span> <span class="s2">&quot;synth&quot;</span><span class="p">,</span> <span class="s2">&quot;settings&quot;</span><span class="p">):</span>
+                <span class="n">instance</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">fluidsynth</span><span class="p">,</span> <span class="s2">&quot;delete_fluid_</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)(</span><span class="n">instance</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Start playing a note.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            key : int</span>
+<span class="sd">                MIDI number to start playing.</span>
+<span class="sd">            vel : int, optional</span>
+<span class="sd">                Velocity, i.e. number between 0 (= stop) and 127 (included).</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="n">vel</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fluidsynth</span><span class="o">.</span><span class="n">fluid_synth_noteon</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_synth</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">vel</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unable to play key </span><span class="si">%d</span><span class="s2"> with velocity </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">vel</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_playing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Stop playing a note.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            key : int</span>
+<span class="sd">                MIDI number to stop playing.</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fluidsynth</span><span class="o">.</span><span class="n">fluid_synth_noteoff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_synth</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="c1"># Do not check as this can return -1 if waited long enough</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_playing</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">silence</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Stop all playing notes.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_playing</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="c1"># Imported functions, map &lt;function name&gt; -&gt; (&lt;return type or &#39;None&#39;&gt;, (&lt;input type&gt;*))</span>
+    <span class="n">_imported</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;new_fluid_settings&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="p">()),</span>
+        <span class="s2">&quot;fluid_settings_setint&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">)),</span>
+        <span class="s2">&quot;fluid_settings_setnum&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_double</span><span class="p">)),</span>
+        <span class="s2">&quot;fluid_settings_setstr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">)),</span>
+        <span class="s2">&quot;delete_fluid_settings&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,)),</span>
+        <span class="s2">&quot;new_fluid_synth&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,)),</span>
+        <span class="s2">&quot;fluid_synth_sfload&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_char_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">)),</span>
+        <span class="s2">&quot;fluid_synth_noteon&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">)),</span>
+        <span class="s2">&quot;fluid_synth_noteoff&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">)),</span>
+        <span class="s2">&quot;delete_fluid_synth&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,)),</span>
+        <span class="s2">&quot;new_fluid_audio_driver&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">)),</span>
+        <span class="s2">&quot;delete_fluid_audio_driver&quot;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,)),</span> <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">library</span><span class="o">=</span><span class="s2">&quot;fluidsynth&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load the library and &quot;bind&quot; the imported functions.</span>
+
+<span class="sd">        Once loaded, the imported functions are available as members.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        library : str, optional</span>
+<span class="sd">            Name or path to the FluidSynth library.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Load library</span>
+        <span class="n">lib</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CDLL</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_library</span><span class="p">(</span><span class="n">library</span><span class="p">))</span>
+        <span class="c1"># Bind imported functions</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_imported</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Resolve parameters</span>
+            <span class="n">restype</span><span class="p">,</span> <span class="n">argtypes</span> <span class="o">=</span> <span class="n">params</span>
+            <span class="c1"># Resolve foreign function and bind name to it</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">CFUNCTYPE</span><span class="p">(</span><span class="n">restype</span><span class="p">,</span> <span class="o">*</span><span class="n">argtypes</span><span class="p">)((</span><span class="n">name</span><span class="p">,</span> <span class="n">lib</span><span class="p">)))</span>
+        <span class="c1"># Finalization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lib</span> <span class="o">=</span> <span class="n">lib</span>
+
+<div class="viewcode-block" id="FluidSynth.make"><a class="viewcode-back" href="../../libs.html#libs.synth.FluidSynth.make">[docs]</a>    <span class="k">def</span> <span class="nf">make</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soundfont</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;audio.driver&quot;</span><span class="p">:</span> <span class="s2">&quot;pulseaudio&quot;</span><span class="p">}):</span>
+        <span class="sd">&quot;&quot;&quot; Make a new instance manager with the given settings and SoundFont.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        soundfont : str or pathlib.Path (or equivalent)</span>
+<span class="sd">            Path to the SoundFont file to use.</span>
+<span class="sd">        settings : dict, optional</span>
+<span class="sd">            Dictionary of `str` -&gt; {`str`, `float`, `int`} to use as settings.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        FluidSynth._Instance</span>
+<span class="sd">            An instance manager, ready to be used to play notes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Forward the call</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_Instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soundfont</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, TeamSchubert
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
