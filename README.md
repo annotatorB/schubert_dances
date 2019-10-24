@@ -5,7 +5,7 @@ _A 150 word description of the project idea, goals, dataset used. What story you
 
 # Research questions
 
-* What recurring patterns and regularities 
+* What recurring patterns and regularities account for the fact that Schubert's dances are easy to grasp and intuitively appealing?
 
 # Dataset
 The dataset consists of the scores of all 394 dances, written by Franz Schubert (1797-1828), in MuseScore 3 XML format.
@@ -34,7 +34,7 @@ But no label exists (yet) at the section or chord levels.
 
 07.11
 * Decide on the inner representation of scores (we parse MuseScore 3 format to a cleaner, more usuable format).
-* Finish the tool able to playback parsed scores (for ).
+* Finish the tool able to playback parsed scores.
 
 14.11
 * First version of the parser, able to extract basic features such as:
