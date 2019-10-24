@@ -13,7 +13,7 @@ The dances include short pieces in triple meter, such as:
 * Waltzs
 * Minuets
 * Ländlers
-* Deutche
+* Deutsche
 * Cotillions
 
 And short pieces in binary meter, such as:
