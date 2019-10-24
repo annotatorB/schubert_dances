@@ -5,7 +5,11 @@ _A 150 word description of the project idea, goals, dataset used. What story you
 
 # Research questions and hypotheses
 
-* What recurring patterns and regularities make Schubert's dances so intuitively appealing and easy to grasp?
+* What recurring patterns and regularities make Schubert's dances so intuitively appealing and easy to grasp? Possible levels of investigation:
+  * rhythmic patterns
+  * melodic patterns
+  * harmonic makeup
+  * formal level
 * Are the different dance types musically distinguishable? Which features will a classifier use to distinguish the different dance types? Hypothetically, these features will include:
   * meter
   * melodic motives and shapes
