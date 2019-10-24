@@ -43,7 +43,7 @@ class Sheet:
     >>> my_sheet = sheet.Sheet()
 
     >>> # Make three sections
-    >>> A, B, C = (sheet.Section(signature=(4, 4)) for _ in range(3))
+    >>> A, B, C = (sheet.Section() for _ in range(3))
     >>> # Parse and fill the columns of the sections (see 'help(sheet.Section)' for the format)
     >>> # ...
     >>> # Optional validity asserts each section once they have been fully built
@@ -215,13 +215,13 @@ class Sheet:
                 raise AssertionError("section %d in member 'sections' is not a Section, it is a %s" % (i, type(section).__qualname__))
             section.assert_format()
 
-class Section(pandas.DataFrame):
+class Section:
     """ Section of notes storage class.
 
-    A section is merely a pandas.DataFrame, augmented with a time signature.
     It is to be though as "the ink on the paper" for a continuous segment of notes,
     and absolutely not as a period; finding periods is left to subsequent analysis.
 
+    The main purpose of a section is to hold notes, in attribute 'notes' (a pandas.DataFrame).
     Mandatory columns:
     - note (str)
         Note letter, one of {"A", "B", ..., "G"}.
@@ -229,11 +229,10 @@ class Section(pandas.DataFrame):
         Octave number, any integer.
     - accidental (int)
         Accidental value, in particular: -1 for flat, 0 for natural, 1 for sharp.
-    - start (:obj:`fractions.Fraction`)
+    - start (fractions.Fraction)
         Non-negative start time point (in beats), relative to the beginning of the section.
-    - duration (:obj:`fractions.Fraction`)
+    - duration (fractions.Fraction)
         Positive duration (in beats).
-
     Optional columns:
     - velocity (int in [1 .. 127])
         Velocity at which the note must be played.
@@ -241,11 +240,16 @@ class Section(pandas.DataFrame):
         Which hand (or more generally which voice) is supposed to play this note.
         (To be formalized, probably something like: 0 for unknown, -1 for left, 1 for right.)
 
-    A final silence (to play at the end of the section) is available in the member 'silence'.
+    A section is augmented with metadata, and there is two mandatory metadata:
+    - signature (tuple of two positive integers)
+        The time signature of this section.
+    - silence (fractions.Fraction)
+        A non-negative silence duration to play at the end of the section.
+    - tempo (float)
+        The tempo (in beats per minute) at which this section should be played.
 
-    Additional metadata can be stored, available in the member dictionary 'metadata'.
-    They can be used to specify details that do not directly impact the produced playback,
-    as for instance if the section begins (or ends) with a double bar, etc.
+    Additional metadata can be freely stored in the instance, as a new attribute.
+    For instance, whether the section begins with a double bar can be specified this way.
 
     See Also
     --------
@@ -253,17 +257,17 @@ class Section(pandas.DataFrame):
 
     """
 
-    def __init__(self, signature, silence=fractions.Fraction(0, 1), metadata=None, **kwargs):
+    def __init__(self, signature=(4, 4), silence=fractions.Fraction(0, 1), tempo=120, **kwargs):
         """ Section constructor.
 
         Parameters
         ----------
-        signature : tuple of two positive int
+        signature : tuple of two positive int, optional
             Time signature of the section.
         silence : :obj:`fractions.Fraction`, optional
-            Silence duration to play at the very end of the section
-        metadata : dict or NoneType, optional
-            Additional metadata dictionary, or None for none.
+            Non-negative silence duration to play at the very end of the section.
+        tempo : int or float, optional
+            Positive tempo (in beats per minute) at which this section should be played.
         **kwargs
             Keyword arguments forwarded to the parent constructor.
             Notes:
@@ -273,30 +277,14 @@ class Section(pandas.DataFrame):
               no 'columns' argument is forwarded by default and no check is made.
 
         """
-        # Assertions
-        assert isinstance(signature, tuple) and len(signature) == 2 and all(isinstance(x, int) and x > 0 for x in signature), "invalid time signature, expected a tuple of two positive int, got %r" % (signature,)
-        assert isinstance(silence, fractions.Fraction) and silence >= 0, "invalid silence duration, expected a non-negative fraction, got %r" % (silence,)
-        assert metadata is None or isinstance(metadata, dict), "invalid metadata, expected a dictionary or 'None', got %r" % (metadata,)
-        # Parent constructor
+        # Initialize the dataframe
         if "data" not in kwargs:
             kwargs["columns"] = ["note", "octave", "accidental", "start", "duration"] + kwargs.get("columns", list())
-        super().__init__(**kwargs)
-        # Set the signature
-        self.__dict__["_signature"] = signature
-        self.__dict__["silence"]    = silence
-        self.__dict__["metadata"]   = dict() if metadata is None else metadata
-
-    @property
-    def signature():
-        """ Access the read-only signature.
-
-        Returns
-        -------
-        tuple of two positive int
-            Time signature of the section.
-
-        """
-        return self._signature
+        self.notes = pandas.DataFrame(**kwargs)
+        # Set the metadata
+        self.signature = signature
+        self.silence   = silence
+        self.tempo     = tempo
 
     def assert_format(self):
         """ Assert that this instance follows the specified format.
@@ -310,6 +298,13 @@ class Section(pandas.DataFrame):
             This is raised even when not in debug mode (i.e. '__debug__ == False').
 
         """
+        # (Known) metadata assertions
+        if not (isinstance(self.signature, tuple) and len(self.signature) == 2 and all(isinstance(x, int) and x > 0 for x in self.signature)):
+            raise AssertionError("invalid time signature, expected a tuple of two positive int, got %r" % (self.signature,))
+        if not (isinstance(self.silence, fractions.Fraction) and self.silence >= 0):
+            raise AssertionError("invalid silence duration, expected a non-negative fraction, got %r" % (self.silence,))
+        if not ((isinstance(self.tempo, int) or isinstance(self.tempo, float)) and self.tempo > 0):
+            raise AssertionError("invalid tempo value, expected a positive number, got %r" % (self.tempo,))
         # Tuple of mandatory columns, with their respective type or value checker
         mandatories = (
             ("note", lambda x: isinstance(x, str) and (ord(x) >= ord("A") and ord(x) <= ord("G"))),
@@ -325,7 +320,7 @@ class Section(pandas.DataFrame):
         for columns, mandatory in ((mandatories, True), (optionals, False)):
             for name, dtype in columns:
                 # Assert existence
-                if name not in self.columns:
+                if name not in self.notes.columns:
                     if mandatory:
                         raise AssertionError("missing mandatory column %r in section" % name)
                     continue
@@ -334,11 +329,11 @@ class Section(pandas.DataFrame):
                     checker = lambda x: isinstance(x, dtype)
                 else:
                     checker = dtype
-                if not self[name].apply(checker).all():
+                if not self.notes[name].apply(checker).all():
                     raise AssertionError("some row(s) for %s column %r do(es) not have a valid type/value" % (("mandatory" if mandatory else "optional"), name))
         # Check that the note start timestamps are monotonically increasing, starting no before than 0
         clock = fractions.Fraction(0, 1)
-        for start in self["start"]:
+        for start in self.notes["start"]:
             if start < clock:
                 raise AssertionError("note start timestamps are not monotonically increasing or start before clock 0")
             clock = start

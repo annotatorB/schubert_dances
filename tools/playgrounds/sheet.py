@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Test module for 'tools/sheet.py'.
+Playground testing some functions of 'tools/sheet.py'.
 """
 
 from libs import sheet
 
 # ---------------------------------------------------------------------------- #
-# Tests
+# Playground
 
 def test_written_named(sections):
     """ Test sheet 'as_written' iterations with spurious, named sections.
@@ -29,7 +29,8 @@ def test_written_named(sections):
         res += "%s%s(%s)%s" % (("𝄆" if begin else ""), section, (".").join(str(x) for x in voltas), ("𝄇" if end else " "))
     print(res)
 
-test_written_named("ABCD")
-test_written_named("ABACD")
-test_written_named("ABBCDEDEF")
-test_written_named("ABCBDBCBEBCBFGHIGHJK")
+if __name__ == "__main__":
+    test_written_named("ABCD")
+    test_written_named("ABACD")
+    test_written_named("ABBCDEDEF")
+    test_written_named("ABCBDBCBEBCBFGHIGHJK")
