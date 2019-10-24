@@ -7,7 +7,21 @@ _A 150 word description of the project idea, goals, dataset used. What story you
 _A list of research questions you would like to address during the project._
 
 # Dataset
-_List the dataset(s) you want to use, and some ideas on how do you expect to get, manage, process and enrich it/them. Show us you've read the docs and some examples, and you've a clear idea on what to expect. Discuss data size and format if relevant._
+The dataset consists of the scores of all 394 dances, written by Franz Schubert (1797-1828), in MuseScore 3 XML format.
+
+The dances include short pieces in triple meter, such as:
+* Waltzs
+* Minuets
+* Ländlers
+* Deutche
+* Cotillions
+
+And short pieces in binary meter, such as:
+* Ecossaises
+* Galops
+
+Most of this dataset was crawled from the web and cleaned by ourselves,
+and the rest has been directly typesetted in a group effort.
 
 # A list of internal milestones up until project milestone 2
 31.10
@@ -32,4 +46,5 @@ _List the dataset(s) you want to use, and some ideas on how do you expect to get
 
 # Questions for TAa
 _Add here some questions you have for us, in general or project-specific._
+
 
