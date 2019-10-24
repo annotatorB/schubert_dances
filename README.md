@@ -1,7 +1,14 @@
 # Title
 
 # Abstract
-_A 150 word description of the project idea, goals, dataset used. What story you would like to tell and why? What's the motivation behind your project?_
+
+Everybody has an emotional access to music. To a listener, music transports moods, emotions and atmospheric setting.
+This intuitive understanding of musical pieces grounds in structural elements such as motifs and their variations or repetitions.
+Our project aims at gaining an objective insight into why and and how these patterns create a certain feeling and in what way they differ. 
+Specifically, we will investigate the structure and compostion of Franz Schubert's "dances".
+This collection is particularly fitting to our question, since it comprises a sufficiently large set of 400 pieces that contains seven subtypes of dances.
+Firstly, our research aims to explain why Schubert's dances are so catchy and easy to grasp. We then want to investigate if and how the different types of dances can be distinguished.
+Furthermore, we want to put the findings from out data into a historical context.
 
 # Research questions and hypotheses
 
