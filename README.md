@@ -4,7 +4,8 @@
 _A 150 word description of the project idea, goals, dataset used. What story you would like to tell and why? What's the motivation behind your project?_
 
 # Research questions
-_A list of research questions you would like to address during the project._
+
+* What recurring patterns and regularities 
 
 # Dataset
 The dataset consists of the scores of all 394 dances, written by Franz Schubert (1797-1828), in MuseScore 3 XML format.
