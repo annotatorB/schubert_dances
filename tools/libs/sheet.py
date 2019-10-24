@@ -27,7 +27,7 @@ class Sheet:
 
     See Also
     --------
-    Section : section storage class.
+    sheet.Section : section storage class.
 
     Examples
     --------
@@ -35,9 +35,9 @@ class Sheet:
     Once the sheet and sections are built, it is then:
     - easy to playback a sheet, by just iterating over the stored sections.
     - possible to iterate over the sections as they (plausibly) were on paper, e.g.:
-        - A B B C D E D E F => A 𝄆  B 𝄇 C 𝄆 D E 𝄇 F
-        - A B C B D E       => A 𝄆  B C¹ 𝄇 D² E
-        - A B C A D E A C F => 𝄆 A B¹ C¹³ D² E² 𝄇 F⁴
+        - A B B C D E D E F => A 𝄆 B 𝄇 C 𝄆 D E 𝄇 F
+        - A B C B D E       => A 𝄆 B C¹ 𝄇 D² E
+        - A B C A D E A C F => 𝄆 A B¹ C¹³ D² E² 𝄇 F³
 
     >>> # Make a new sheet
     >>> my_sheet = sheet.Sheet()
@@ -46,7 +46,7 @@ class Sheet:
     >>> A, B, C = (sheet.Section(signature=(4, 4)) for _ in range(3))
     >>> # Parse and fill the columns of the sections (see 'help(sheet.Section)' for the format)
     >>> # ...
-    >>> # Optional validity asserts once the sections are built
+    >>> # Optional validity asserts each section once they have been fully built
     >>> for section in (A, B, C):
     ...     section.assert_format()
     ...
@@ -85,7 +85,7 @@ class Sheet:
 
         Parameters
         ----------
-        section : Section
+        section : :obj:`sheet.Section`
             Section to append to the sheet.
 
         Returns
@@ -135,8 +135,6 @@ class Sheet:
         -----
         The behavior is undefined if the sheet is modified while using the returned value.
 
-        Bugs
-        ----
         A (probably not representable) sheet with reordered sections in a repetition (e.g. ABCACB)
         will not raise an error and be consistently output as in the first repetition (e.g. 𝄆 ABC 𝄇).
 
@@ -153,7 +151,7 @@ class Sheet:
                 poses.append((section, pos))
             # Update the list of positions for the current section
             pos.append(i)
-        # Make the result tuple
+        # Build the result list from the position of each section instance
         result = list()
         repeat = None  # Current controling repeat position block, if any
         lvolta = 0     # Last volta value from previous repetition
@@ -167,7 +165,7 @@ class Sheet:
                 if pos[-1] - pos[0] + 1 > len(pos): # Has repetition(s) with at least one other section
                     result.append((sec, (consume_lvolta(), True, False)))
                     repeat = pos
-                    lvolta = 0
+                    lvolta = len(pos)
                 else: # No other section involved
                     if len(pos) == 1:
                         result.append((sec, (consume_lvolta(), False, False)))
@@ -180,16 +178,12 @@ class Sheet:
                 seens = [0] * len(repeat)
                 for p in pos:
                     seens[max(volta if p > repeat[volta] else 0 for volta in range(len(repeat)))] += 1
-                # Solve the volta for this section
+                # Solve the voltas for this section
                 voltas = list()
                 if min(seens) == 0: # If sometimes not repeated
                     for vid in range(len(seens)):
                         if seens[vid] == 1:
-                            vid += 1  # Correct volta count starts at 1 instead of 0
-                            voltas.append(vid)
-                            vid += 1  # Now set 'vid' to next volta value (to update 'lvolta')
-                            if vid > lvolta:
-                                lvolta = vid
+                            voltas.append(vid + 1)  # +1 simply because a volta starts counting at 1
                         elif seens[vid] > 1:
                             raise RuntimeError("unable to write section such that it is repeated more than once from inside a single repetition")
                 # Emit the section
@@ -228,41 +222,48 @@ class Section(pandas.DataFrame):
     It is to be though as "the ink on the paper" for a continuous segment of notes,
     and absolutely not as a period; finding periods is left to subsequent analysis.
 
-    Mandatory columns
-    -----------------
-    note : str
-        Note letter, one of {"A", "B", ..., "G", "-"}.
-        "-" represents a silence, and the associated 'octave' and 'accidental' are to be ignored.
-    octave : int
+    Mandatory columns:
+    - note (str)
+        Note letter, one of {"A", "B", ..., "G"}.
+    - octave (int)
         Octave number, any integer.
-    accidental : int
+    - accidental (int)
         Accidental value, in particular: -1 for flat, 0 for natural, 1 for sharp.
-    start : fractions.Fraction
+    - start (:obj:`fractions.Fraction`)
         Non-negative start time point (in beats), relative to the beginning of the section.
-    duration : fractions.Fraction
+    - duration (:obj:`fractions.Fraction`)
         Positive duration (in beats).
 
-    Optional columns
-    ----------------
-    velocity : int in [1 .. 127]
+    Optional columns:
+    - velocity (int in [1 .. 127])
         Velocity at which the note must be played.
-    hand : int
-        Which hand is supposed to play this note.
+    - hand (int)
+        Which hand (or more generally which voice) is supposed to play this note.
         (To be formalized, probably something like: 0 for unknown, -1 for left, 1 for right.)
+
+    A final silence (to play at the end of the section) is available in the member 'silence'.
+
+    Additional metadata can be stored, available in the member dictionary 'metadata'.
+    They can be used to specify details that do not directly impact the produced playback,
+    as for instance if the section begins (or ends) with a double bar, etc.
 
     See Also
     --------
-    Sheet : sheet music storage class.
+    sheet.Sheet : sheet music storage class.
 
     """
 
-    def __init__(self, signature, **kwargs):
+    def __init__(self, signature, silence=fractions.Fraction(0, 1), metadata=None, **kwargs):
         """ Section constructor.
 
         Parameters
         ----------
         signature : tuple of two positive int
             Time signature of the section.
+        silence : :obj:`fractions.Fraction`, optional
+            Silence duration to play at the very end of the section
+        metadata : dict or NoneType, optional
+            Additional metadata dictionary, or None for none.
         **kwargs
             Keyword arguments forwarded to the parent constructor.
             Notes:
@@ -274,12 +275,16 @@ class Section(pandas.DataFrame):
         """
         # Assertions
         assert isinstance(signature, tuple) and len(signature) == 2 and all(isinstance(x, int) and x > 0 for x in signature), "invalid time signature, expected a tuple of two positive int, got %r" % (signature,)
+        assert isinstance(silence, fractions.Fraction) and silence >= 0, "invalid silence duration, expected a non-negative fraction, got %r" % (silence,)
+        assert metadata is None or isinstance(metadata, dict), "invalid metadata, expected a dictionary or 'None', got %r" % (metadata,)
         # Parent constructor
         if "data" not in kwargs:
             kwargs["columns"] = ["note", "octave", "accidental", "start", "duration"] + kwargs.get("columns", list())
         super().__init__(**kwargs)
         # Set the signature
         self.__dict__["_signature"] = signature
+        self.__dict__["silence"]    = silence
+        self.__dict__["metadata"]   = dict() if metadata is None else metadata
 
     @property
     def signature():
@@ -307,7 +312,7 @@ class Section(pandas.DataFrame):
         """
         # Tuple of mandatory columns, with their respective type or value checker
         mandatories = (
-            ("note", lambda x: isinstance(x, str) and ((ord(x) >= ord("A") and ord(x) <= ord("G")) or x == "-")),
+            ("note", lambda x: isinstance(x, str) and (ord(x) >= ord("A") and ord(x) <= ord("G"))),
             ("octave", int),
             ("accidental", int),
             ("start", lambda x: isinstance(x, fractions.Fraction) and x >= 0),
@@ -331,7 +336,12 @@ class Section(pandas.DataFrame):
                     checker = dtype
                 if not self[name].apply(checker).all():
                     raise AssertionError("some row(s) for %s column %r do(es) not have a valid type/value" % (("mandatory" if mandatory else "optional"), name))
-        # TODO: Check that note starts are written by increasing order
+        # Check that the note start timestamps are monotonically increasing, starting no before than 0
+        clock = fractions.Fraction(0, 1)
+        for start in self["start"]:
+            if start < clock:
+                raise AssertionError("note start timestamps are not monotonically increasing or start before clock 0")
+            clock = start
 
 # ---------------------------------------------------------------------------- #
 # Load and save sheets
@@ -361,7 +371,7 @@ def save(sheet, path_or_fd):
 
     Parameters
     ----------
-    sheet : Sheet
+    sheet : :obj:`sheet.Sheet`
         Instance of the sheet to save.
     path_or_fd : str or pathlib.PurePath, or io.BytesIO (or equivalent)
         Path to the file to save to.

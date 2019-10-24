@@ -18,12 +18,6 @@ from libs import synth
 from libs import sheet
 
 # ---------------------------------------------------------------------------- #
-# Miscellaneous initializations
-
-# Logging management
-logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
-
-# ---------------------------------------------------------------------------- #
 # Argument parsing
 
 def cmdline_process():
@@ -71,73 +65,72 @@ def cmdline_process():
     # Return checked command line
     return args
 
-# Parse and check command line
-try:
-    cmdline_args = cmdline_process()
-except Exception as err:
-    logging.critical("parsing/checking of the command line failed: %s" % err)
-    exit(1)
-
 # ---------------------------------------------------------------------------- #
-# Loading
+# Main function
 
-# Load piano synthesizer
-try:
-    piano = synth.FluidSynth(library=cmdline_args.library).make(cmdline_args.soundfont, settings={"audio.driver": cmdline_args.audio_driver})
-except Exception as err:
-    logging.critical("piano synthesizer loading failed: %s" % err)
-    exit(1)
-except KeyboardInterrupt:
-    exit(0)
-
-# Load music sheet
-try:
-    piece = sheet.load(cmdline_args.sheet)
-except Exception as err:
-    logging.critical("music sheet loading failed: %s" % err)
-    exit(1)
-except KeyboardInterrupt:
-    exit(0)
-
-# ---------------------------------------------------------------------------- #
-# Playback
-
-# Play each section in playing order
-try:
-    offset  = fractions.Fraction(0, 1)  # Offset timestamp for the current section
-    current = fractions.Fraction(0, 1)  # Current timestamp
-    playing = list()  # List of (timestamp, midi/None), sorted by increasing timestamp
-    def play(duration, midi=None, velocity=100):
-        global current
-        global playing
-        # Play note
-        if midi is not None:
+def main():
+    """ Main function.
+    """
+    # Logging management
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+    # Parse and check command line
+    try:
+        cmdline_args = cmdline_process()
+    except Exception as err:
+        logging.critical("parsing/checking of the command line failed: %s" % err)
+        exit(1)
+    # Load piano synthesizer
+    try:
+        piano = synth.FluidSynth(library=cmdline_args.library).make(cmdline_args.soundfont, settings={"audio.driver": cmdline_args.audio_driver})
+    except Exception as err:
+        logging.critical("piano synthesizer loading failed: %s" % err)
+        exit(1)
+    except KeyboardInterrupt:
+        exit(0)
+    # Load music sheet
+    try:
+        piece = sheet.load(cmdline_args.sheet)
+    except Exception as err:
+        logging.critical("music sheet loading failed: %s" % err)
+        exit(1)
+    except KeyboardInterrupt:
+        exit(0)
+    # Play each section in playing order
+    try:
+        offset  = fractions.Fraction(0, 1)  # Offset timestamp for the current section
+        current = fractions.Fraction(0, 1)  # Current timestamp
+        playing = list()  # List of (release timestamp, midi/None), sorted by increasing timestamp
+        def play(midi, duration, velocity):
+            global current
+            global playing
+            # Play note
             piano.press(midi, vel=velocity)
-        # Insert into playing list
-        heapq.heappush(playing, (duration, midi))
-    def flow(start):
-        global offset
-        global current
-        global playing
-        # Flow through time, releasing elapsed keys on the way
-        while duration > 0:
-            pass  # TODO: Flow
-    for section in sheet.as_played():
-        # Play each note while flowing through time
-        for idx, row in section.iterrows():
-            note, octave, accidental, start, duration = row[:5]
-            # Flow through time to the start timestamp of the current note
-            flow(start)
-            # Now play the current note
-            if note != "-":
-                note     = synth.note_midi("%s%d" % (note, octave)) + accidental
+            # Insert into playing list
+            heapq.heappush(playing, (current + duration, midi))
+        def flow(start):
+            global offset
+            global current
+            global playing
+            # Flow through time, releasing elapsed keys on the way
+            while duration > 0:
+                pass  # TODO: Flow
+        for section in sheet.as_played():
+            # Play each note while flowing through time
+            for idx, row in section.iterrows():
+                note, octave, accidental, start, duration = row[:5]
+                # Flow through time to the press timestamp of the current note
+                flow(start)
+                # Now start playing the current note
+                midi     = synth.note_midi("%s%d" % (note, octave)) + accidental
                 velocity = row.get("velocity", 100)
-                play(duration, note, velocity)
-            else:
-                play(duration)
-        # Update the offset timestamp, warn about any missing silence in the current measure
-        pass  # TODO: Update offset timestamp
-    if len(playing) > 0:
-        flow(playing[-1])
-except KeyboardInterrupt:
-    piano.silence()
+                play(midi, duration, velocity)
+            # Update the offset timestamp, warn about any missing silence in the current measure
+            pass  # TODO: Update offset timestamp using the final silence of the current section
+        if len(playing) > 0:
+            flow(playing[-1])
+    except KeyboardInterrupt:
+        piano.silence()
+
+# Call main if main module
+if __name__ == "__main__":
+    main()
