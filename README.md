@@ -23,6 +23,9 @@ And short pieces in binary meter, such as:
 Most of this dataset was crawled from the web and cleaned by ourselves,
 and the rest has been directly typesetted in a group effort.
 
+The dataset is labelled at the piece level, so we have the name of the dance types for each piece.
+But no label exists (yet) at the section or chord levels.
+
 # A list of internal milestones up until project milestone 2
 31.10
 * Typeset the final dances (our dataset are scores in MuseScore 3 format).
