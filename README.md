@@ -5,8 +5,15 @@ _A 150 word description of the project idea, goals, dataset used. What story you
 
 # Research questions and hypotheses
 
-* Which features will a classifier use to distinguish the different dance types?
- * What recurring patterns and regularities account for the fact that Schubert's dances are easy to grasp and intuitively appealing?
+* What recurring patterns and regularities account for the fact that Schubert's dances are easy to grasp and intuitively appealing?
+* Are the different dance types musically distinguishable? Which features will a classifier use to distinguish the different dance types? Hypothetically, these features will include:
+  * meter
+  * melodic motives and shapes
+  * musical form
+  * harmonic progressions
+  * rhythmic markup
+  * musical texture
+  * relation between the two hands
 
 # Dataset
 The dataset consists of the scores of all 394 dances, written by Franz Schubert (1797-1828), in MuseScore 3 XML format.
