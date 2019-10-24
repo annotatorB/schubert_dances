@@ -34,9 +34,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ms3 module" href="ms3.html" />
-    <link rel="prev" title="coding_rules module" href="coding_rules.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -81,20 +79,8 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">tools</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="coding_rules.html">coding_rules module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">libs package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-libs.sheet">libs.sheet module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-libs.synth">libs.synth module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-libs">Module contents</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ms3.html">ms3 module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="play.html">play module</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">tools</a></li>
 </ul>
 
             
@@ -139,8 +125,6 @@
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html">Docs</a> &raquo;</li>
-        
-          <li><a href="modules.html">tools</a> &raquo;</li>
         
       <li>libs package</li>
     
@@ -316,13 +300,13 @@ Once the sheet and sections are built, it is then:
 <dd><p>Append/repeat a section into the sheet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>section</strong> (<a class="reference internal" href="ms3.html#ms3.Section" title="ms3.Section"><em>Section</em></a>) – Section to append to the sheet.</p>
+<dd class="field-odd"><p><strong>section</strong> (<a class="reference internal" href="#libs.sheet.Section" title="libs.sheet.Section"><em>Section</em></a>) – Section to append to the sheet.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The section passed as parameter, untouched</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="ms3.html#ms3.Section" title="ms3.Section">Section</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#libs.sheet.Section" title="libs.sheet.Section">Section</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -356,7 +340,7 @@ The additional tuple of information contains:
 - Whether the section is followed by an “end” repetition bar</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list of tuple of (<a class="reference internal" href="ms3.html#ms3.Section" title="ms3.Section">Section</a>, tuple of (list of int, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a>))</p>
+<dd class="field-even"><p>list of tuple of (<a class="reference internal" href="#libs.sheet.Section" title="libs.sheet.Section">Section</a>, tuple of (list of int, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a>))</p>
 </dd>
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.8)"><strong>RuntimeError</strong></a> – When the notation to achieve the existing repetition is unknown.</p>
@@ -551,15 +535,6 @@ Add/remove 1 to it for a sharp/flat note.</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="ms3.html" class="btn btn-neutral float-right" title="ms3 module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="coding_rules.html" class="btn btn-neutral float-left" title="coding_rules module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
