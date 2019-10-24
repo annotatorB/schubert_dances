@@ -108,17 +108,17 @@ try:
     current = fractions.Fraction(0, 1)  # Current timestamp
     playing = list()  # List of (timestamp, midi/None), sorted by increasing timestamp
     def play(duration, midi=None, velocity=100):
-        nonlocal current
-        nonlocal playing
+        global current
+        global playing
         # Play note
         if midi is not None:
             piano.press(midi, vel=velocity)
         # Insert into playing list
         heapq.heappush(playing, (duration, midi))
     def flow(start):
-        nonlocal offset
-        nonlocal current
-        nonlocal playing
+        global offset
+        global current
+        global playing
         # Flow through time, releasing elapsed keys on the way
         while duration > 0:
             pass  # TODO: Flow
