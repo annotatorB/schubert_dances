@@ -223,12 +223,9 @@ class Section:
 
     The main purpose of a section is to hold notes, in attribute 'notes' (a pandas.DataFrame).
     Mandatory columns:
-    - note (str)
-        Note letter, one of {"A", "B", ..., "G"}.
-    - octave (int)
-        Octave number, any integer.
-    - accidental (int)
-        Accidental value, in particular: -1 for flat, 0 for natural, 1 for sharp.
+    - note (int)
+        (Our augmented version of the) circle-of-fifths notation for the note.
+        See 'libs/notes.py' for more details on this notation.
     - start (fractions.Fraction)
         Non-negative start time point (in beats), relative to the beginning of the section.
     - duration (fractions.Fraction)
@@ -279,7 +276,7 @@ class Section:
         """
         # Initialize the dataframe
         if "data" not in kwargs:
-            kwargs["columns"] = ["note", "octave", "accidental", "start", "duration"] + kwargs.get("columns", list())
+            kwargs["columns"] = ["note", "start", "duration"] + kwargs.get("columns", list())
         self.notes = pandas.DataFrame(**kwargs)
         # Set the metadata
         self.signature = signature
@@ -307,9 +304,7 @@ class Section:
             raise AssertionError("invalid tempo value, expected a positive number, got %r" % (self.tempo,))
         # Tuple of mandatory columns, with their respective type or value checker
         mandatories = (
-            ("note", lambda x: isinstance(x, str) and (ord(x) >= ord("A") and ord(x) <= ord("G"))),
-            ("octave", int),
-            ("accidental", int),
+            ("note", lambda x: int),
             ("start", lambda x: isinstance(x, fractions.Fraction) and x >= 0),
             ("duration", lambda x: isinstance(x, fractions.Fraction) and x > 0) )
         # Tuple of optional columns, with their respective type/type checker

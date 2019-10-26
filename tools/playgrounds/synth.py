@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-Playground testing most functions of 'tools/synth.py'.
+Playground testing most functions of 'tools/synth.py' and some of 'tools/notes.py'.
 """
 
 import os
 import pathlib
 import time
 
+from libs import notes
 from libs import synth
 
 # ---------------------------------------------------------------------------- #
 # Playground
 
-if __name__ == "__main__":
+def main():
+    """ Playground entry point.
+    """
     # Load the default FluidSynth library and a given SoundFont file
     path = str(pathlib.Path.cwd() / "piano.sf2")
     while not os.access(path, os.R_OK, effective_ids=True):
@@ -24,20 +27,20 @@ if __name__ == "__main__":
             exit(1)
     piano = synth.FluidSynth().make(path)
     # Press a flat A4 then release it after 0.5 second
-    key = synth.note_midi("A4") - 1  # +1 makes sharp, -1 makes flat
+    key = notes.alpha_to_midi("A4", -1)
     piano.press(key)
     time.sleep(0.5)
     piano.release(key)
     # Play all the A between A7 to A0 (included)
     for i in range(7, -1, -1):
-        piano.press(synth.note_midi("A%d" % i))
+        piano.press(notes.alpha_to_midi("A%d" % i))
         time.sleep(0.15)
     # Silence all currently playing notes after 2 seconds
     time.sleep(2)
     piano.silence()
     time.sleep(0.5)
     # Play all the "blues" notes from C4 to C5 (included)
-    base  = synth.note_midi("C4")
+    base  = notes.alpha_to_midi("C4")
     delta = (0, 3, 5, 6, 7, 10, 12)
     piano.press(base + delta[0])
     for i in range(len(delta) - 1):
@@ -49,3 +52,7 @@ if __name__ == "__main__":
     time.sleep(2)
     piano.silence()
     time.sleep(0.5)
+
+# Call main if main module
+if __name__ == "__main__":
+    main()

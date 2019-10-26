@@ -15,41 +15,44 @@ $ python3 frere_jacques.py > frere_jacques.sht && python3 play.py --soundfont <s
 import fractions
 import sys
 
+from libs import notes
 from libs import sheet
 
 # ---------------------------------------------------------------------------- #
 # Build the sheet
 
-def push_section(section=None, **kwargs):
-    global sections
-    global current
-    if section is None:
-        # Make section and push if any
-        if current is None:
-            section = None
+def main():
+    """ Playground entry point.
+    """
+    def push_section(section=None, **kwargs):
+        nonlocal sections
+        nonlocal current
+        if section is None:
+            # Make section and push if any
+            if current is None:
+                section = None
+            else:
+                names = ("note", "start", "duration")
+                section = sheet.Section(data=dict(zip(names, current)), **kwargs)
+                sections.append(section)
+            # Reset current
+            current = None
         else:
-            names = ("note", "octave", "accidental", "start", "duration")
-            section = sheet.Section(data=dict(zip(names, current)), **kwargs)
+            # Just push the given section again
             sections.append(section)
-        # Reset current
-        current = None
-    else:
-        # Just push the given section again
-        sections.append(section)
-    return section
-
-def push_note(*args):
-    global current
-    # Initialize current if needed
-    if current is None:
-        current = tuple(list() for _ in range(5))
-    # Just push every argument in the corresponding list
-    for l, v in zip(current, args):
-        l.append(v)
-    # Return the timestamp right after the note finishes
-    return args[3] + args[4]
-
-if __name__ == "__main__":
+        return section
+    def push_note(*args):
+        nonlocal current
+        # Initialize current if needed
+        if current is None:
+            current = tuple(list() for _ in range(3))
+        # Transform the note
+        args = (notes.alpha_to_circle("%s%d" % (args[0], args[1]), args[2]),) + args[3:]
+        # Just push the transformed arguments in the corresponding list
+        for l, v in zip(current, args):
+            l.append(v)
+        # Return the timestamp right after the note finishes
+        return args[1] + args[2]
     # Data
     sections = sheet.Sheet()
     current  = None
@@ -76,3 +79,7 @@ if __name__ == "__main__":
     # Save sheet
     sections.assert_format()
     sheet.save(sections, sys.stdout.buffer)
+
+# Call main if main module
+if __name__ == "__main__":
+    main()

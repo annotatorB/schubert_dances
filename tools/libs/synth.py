@@ -8,20 +8,21 @@ A working example, provided both libsynthfluid and "my_piano_soundfont.sf2"
 have been properly installed and downloaded.
 To download piano SoundFonts, see: https://sites.google.com/site/soundfonts4u/
 
->>> import synth, time
+>>> from libs import synth, notes, time
+>>> import time
 
 >>> # Load the default FluidSynth library and a given SoundFont file
 >>> piano = synth.FluidSynth().make("my_piano_soundfont.sf2")
 
 >>> # Press a flat A4 then release it after 0.5 second
->>> key = synth.note_midi("A4") - 1  # +1 makes sharp, -1 makes flat
+>>> key = notes.alpha_to_midi("A4") - 1  # +1 makes sharp, -1 makes flat
 >>> piano.press(key)
 >>> time.sleep(0.5)
 >>> piano.release(key)
 
 >>> # Play all the A between A7 to A0 (included)
 >>> for i in range(7, -1, -1):
-...     piano.press(synth.note_midi("A%d" % i))
+...     piano.press(notes.alpha_to_midi("A%d" % i))
 ...     time.sleep(0.15)
 ...
 >>> # Silence all currently playing notes after 2 seconds
@@ -30,7 +31,7 @@ To download piano SoundFonts, see: https://sites.google.com/site/soundfonts4u/
 >>> time.sleep(0.5)
 
 >>> # Play all the "blues" notes from C4 to C5 (included)
->>> base  = synth.note_midi("C4")
+>>> base  = notes.alpha_to_midi("C4")
 >>> delta = (0, 3, 5, 6, 7, 10, 12)
 >>> piano.press(base + delta[0])
 >>> for i in range(len(delta) - 1):
@@ -49,53 +50,6 @@ To download piano SoundFonts, see: https://sites.google.com/site/soundfonts4u/
 
 import ctypes
 import ctypes.util
-
-# ---------------------------------------------------------------------------- #
-# Switch between note name and MIDI number
-
-def note_midi(name):
-    """ Compute the MIDI number associated with the given note name.
-
-    Parameters
-    ----------
-    name : str
-        Note name, format: /[ABCDEFG]-?[0-9]+/.
-
-    Returns
-    -------
-    int
-        Associated MIDI number.
-        Add/remove 1 to it for a sharp/flat note.
-
-    See Also
-    --------
-    midi_note : for the opposite operation.
-
-    """
-    note = (ord(name[0]) - ord("A") - 2) % 7
-    base = int(name[1:])
-    return (12 if note < 3 else 11) + 12 * base + 2 * note
-
-def midi_note(midi):
-    """ Compute the note name associated with the given MIDI number.
-
-    Parameters
-    ----------
-    midi : int
-        MIDI number.
-
-    Returns
-    -------
-    str
-        Associated note name, international pitch notation without accidental.
-        If a flat note was given, return the name of the note before.
-
-    See Also
-    --------
-    note_midi : for the opposite operation.
-
-    """
-    raise NotImplementedError
 
 # ---------------------------------------------------------------------------- #
 # FluidSynth library interface

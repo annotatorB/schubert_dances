@@ -11,6 +11,7 @@ import pathlib
 import sys
 import time
 
+from libs import notes
 from libs import synth
 from libs import sheet
 
@@ -30,8 +31,8 @@ def cmdline_process():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("--sheet",
         type=str,
-        default="-",
-        help="Sheet file to play, '-' for stdin (by default)")
+        default=None,
+        help="Sheet file to play, unspecified for stdin")
     parser.add_argument("--soundfont",
         type=str,
         required=True,
@@ -56,7 +57,7 @@ def cmdline_process():
     if not os.access(args.soundfont, os.R_OK, effective_ids=True):
         raise RuntimeError("given '--soundfont' file %r does not exist or cannot be read" % str(args.soundfont))
     args.soundfont = pathlib.Path(args.soundfont).resolve()
-    if args.sheet == "-":
+    if args.sheet is None:
         args.sheet = sys.stdin.buffer
     else:
         args.sheet = open(args.sheet, "rb")  # Let it raise on problem
@@ -113,7 +114,7 @@ def synthesize(piece, piano, speed_factor):
                         time.sleep(ntime - current)
                         current = ntime
                         midi = fnote[0]
-                        logging.debug("-- (%d): release" % midi)
+                        logging.debug("%3d: release" % midi)
                         piano.release(midi)
                         del playing[midi]
             # Done flowing
@@ -134,13 +135,13 @@ def synthesize(piece, piano, speed_factor):
             start    = 0
             duration = 0
             for idx, row in section.notes.iterrows():
-                note, octave, accidental, start, duration = row[:5]
+                circle, start, duration = row[:3]
                 # Flow through time to the press timestamp of the current note
                 flow(factor, start)
                 # Now start playing the current note
-                midi     = synth.note_midi("%s%d" % (note, octave)) + accidental
+                midi     = notes.circle_to_midi(circle)
                 velocity = row.get("velocity", 100)
-                logging.debug("%s%d (%d): start = %s, duration = %s" % (note, octave, midi, start, duration))
+                logging.debug("%3d: start = %s, duration = %s" % (midi, start, duration))
                 play(factor, midi, duration, velocity)
             # Wait for the final note + the final silence
             flow(factor, start + duration + silence)

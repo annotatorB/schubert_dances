@@ -29,6 +29,7 @@ def test_written_named(sections):
         res += "%s%s(%s)%s" % (("𝄆" if begin else ""), section, (".").join(str(x) for x in voltas), ("𝄇" if end else " "))
     print(res)
 
+# Just call the test function several times if main module
 if __name__ == "__main__":
     test_written_named("ABCD")
     test_written_named("ABACD")
