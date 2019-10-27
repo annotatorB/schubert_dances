@@ -1,16 +1,77 @@
-# Title
+# Schubert's Dances
 
 # Abstract
-A 150 word description of the project idea, goals, dataset used. What story you would like to tell and why? What's the motivation behind your project?
 
-# Research questions
-A list of research questions you would like to address during the project. 
+Everybody has an emotional access to music, which in turn transports listeners into specific moods, atmospheres and settings.
+This intuitive understanding of musical pieces is grounded in structural elements such as motifs and rhythms, with their variations or repetitions. 
+
+Our project aims at gaining an objective insight into how these patterns engender different shades of musical engagement.
+Specifically, we will investigate the structure and composition of Franz Schubert's "dances",
+a large set of 400 pieces classified in seven different types according to their times’ conventions.
+The conventionality of these short and catchy pieces makes them an ideal testing ground for computer-assisted analysis,
+but also makes them highly representative of the taste of early-nineteenth-century listeners.
+With our statistical investigation we hope to open a window onto this past:
+what did listeners expect of appealing dance-like music,
+and did different dance types correspond to different musical features or just to different social perspectives on the same musical features?
+
+# Research questions and hypotheses
+
+* What recurring patterns and regularities make Schubert's dances so intuitively appealing and easy to grasp? Possible levels of investigation:
+  * rhythmic patterns
+  * melodic patterns
+  * harmonic makeup
+  * formal level
+* Are the different dance types musically distinguishable? Which features will a classifier use to distinguish the different dance types? Hypothetically, these features will include:
+  * meter
+  * melodic motives and shapes
+  * musical form
+  * harmonic progressions
+  * rhythmic markup
+  * musical texture
+  * relation between the two hands
 
 # Dataset
-List the dataset(s) you want to use, and some ideas on how do you expect to get, manage, process and enrich it/them. Show us you've read the docs and some examples, and you've a clear idea on what to expect. Discuss data size and format if relevant.
+The dataset consists of the scores of all 394 dances, written by Franz Schubert (1797-1828), in MuseScore 3 XML format.
+
+The dances include short pieces in triple meter, such as:
+* Waltzs
+* Minuets
+* Ländlers
+* Deutsche Tänze
+* Cotillions
+
+And short pieces in binary meter, such as:
+* Ecossaises
+* Galops
+
+Most of this dataset was crawled from the web and cleaned by ourselves,
+and the rest has been directly typesetted in a group effort.
+
+The dataset is labelled at the piece level, so we have the name of the dance types for each piece.
+But no label exists (yet) at the section or chord levels.
 
 # A list of internal milestones up until project milestone 2
-Add here a sketch of your planning for the next project milestone.
+31.10
+* Typeset the final dances (our dataset are scores in MuseScore 3 format).
+* Explore XML structures of the scores.
 
-# Questions for TAa
-Add here some questions you have for us, in general or project-specific.
+07.11
+* Decide on the inner representation of scores (we parse MuseScore 3 format to a cleaner, more usuable format).
+* Finish the tool able to playback parsed scores.
+
+14.11
+* First version of the parser, able to extract basic features such as:
+  * Chords/notes
+  * Rests
+  * Sections
+
+21.11
+* Extract descriptive statistics from the dataset, such as:
+  * distribution of dance types.
+  * distribution of keys and key profiles.
+* Ensure the parser fully works with idiosyncratic MuseScore 3 files (i.e. works as expected with our whole dataset).
+
+# Questions for TAs
+
+None at the moment.
+
