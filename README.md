@@ -1,14 +1,18 @@
-# Title
+# Schubert's Dances
 
 # Abstract
 
-Everybody has an emotional access to music. It transports the listener into moods, atmospheres or imaginary settings.
-This intuitive understanding of musical pieces is grounded in structural elements such as motifs and their repetions or variations.
-Our project aims at gaining an objective insight into why and and how such patterns create a certain feeling and in what way they differ. 
-Specifically, we will investigate the structure and compostion of Franz Schubert's "dances".
-This collection is particularly fitting to our question, since it comprises a sufficiently large set of 400 pieces that contains seven subtypes of dances.
-Firstly, our research aims to explain why Schubert's dances are so catchy and easy to grasp. We then want to investigate if and how the different types of dances can be distinguished.
-Furthermore, we want to put the findings from out data into a historical context.
+Everybody has an emotional access to music, which in turn transports listeners into specific moods, atmospheres and settings.
+This intuitive understanding of musical pieces is grounded in structural elements such as motifs and rhythms, with their variations or repetitions. 
+
+Our project aims at gaining an objective insight into how these patterns engender different shades of musical engagement.
+Specifically, we will investigate the structure and composition of Franz Schubert's "dances",
+a large set of 400 pieces classified in seven different types according to their times’ conventions.
+The conventionality of these short and catchy pieces makes them an ideal testing ground for computer-assisted analysis,
+but also makes them highly representative of the taste of early-nineteenth-century listeners.
+With our statistical investigation we hope to open a window onto this past:
+what did listeners expect of appealing dance-like music,
+and did different dance types correspond to different musical features or just to different social perspectives on the same musical features?
 
 # Research questions and hypotheses
 
@@ -33,7 +37,7 @@ The dances include short pieces in triple meter, such as:
 * Waltzs
 * Minuets
 * Ländlers
-* Deutsche
+* Deutsche Tänze
 * Cotillions
 
 And short pieces in binary meter, such as:
@@ -67,7 +71,7 @@ But no label exists (yet) at the section or chord levels.
   * distribution of keys and key profiles.
 * Ensure the parser fully works with idiosyncratic MuseScore 3 files (i.e. works as expected with our whole dataset).
 
-# Questions for TAa
-_Add here some questions you have for us, in general or project-specific._
+# Questions for TAs
 
+None at the moment.
 
