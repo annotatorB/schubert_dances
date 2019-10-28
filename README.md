@@ -52,12 +52,14 @@ But no label exists (yet) at the section or chord levels.
 
 # A list of internal milestones up until project milestone 2
 31.10
-* Typeset the final dances (our dataset are scores in MuseScore 3 format).
-* Explore XML structures of the scores.
+* Typeset the final dances in MuseScore 3;
+* Explore XML structures of the scores;
+* Musicological investigation: bibliography.
 
 07.11
-* Decide on the inner representation of scores (we parse MuseScore 3 format to a cleaner, more usuable format).
-* Finish the tool able to playback parsed scores.
+* Formulate hypotheses based on musicological insight, and identify relevant variables;
+* Decide on the inner representation of scores (we parse MuseScore 3 format to a cleaner, more usuable format);
+* Set-up tool able to playback parsed scores.
 
 14.11
 * First version of the parser, able to extract basic features such as:
@@ -70,6 +72,11 @@ But no label exists (yet) at the section or chord levels.
   * distribution of dance types.
   * distribution of keys and key profiles.
 * Ensure the parser fully works with idiosyncratic MuseScore 3 files (i.e. works as expected with our whole dataset).
+* Set-up internal milestones for project’s completion. 
+
+25.11
+* Assemble and submit notebook as per assignment.
+
 
 # Questions for TAs
 
