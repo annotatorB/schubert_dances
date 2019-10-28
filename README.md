@@ -7,7 +7,7 @@ This intuitive understanding of musical pieces is grounded in structural element
 
 Our project aims at gaining an objective insight into how these patterns engender different shades of musical engagement.
 Specifically, we will investigate the structure and composition of Franz Schubert's "dances",
-a large set of 400 pieces classified in seven different types according to their times’ conventions.
+a large set of 400 piano pieces classified in seven different types according to their times’ conventions.
 The conventionality of these short and catchy pieces makes them an ideal testing ground for computer-assisted analysis,
 but also makes them highly representative of the taste of early-nineteenth-century listeners.
 With our statistical investigation we hope to open a window onto this past:
@@ -31,7 +31,7 @@ and did different dance types correspond to different musical features or just t
   * relation between the two hands
 
 # Dataset
-The dataset consists of the scores of all 394 dances, written by Franz Schubert (1797-1828), in MuseScore 3 XML format.
+The dataset consists of the scores, in MuseScore 3 XML format, of all 394 dances written for piano by Franz Schubert (1797-1828).
 
 The dances include short pieces in triple meter, such as:
 * Waltzs
