@@ -69,9 +69,9 @@ But no label exists (yet) at the section or chord levels.
 
 21.11
 * Extract descriptive statistics from the dataset, such as:
-  * distribution of dance types.
+  * distribution of dance types;
   * distribution of keys and key profiles.
-* Ensure the parser fully works with idiosyncratic MuseScore 3 files (i.e. works as expected with our whole dataset).
+* Ensure the parser fully works with idiosyncratic MuseScore 3 files (i.e. works as expected with our whole dataset);
 * Set-up internal milestones for project’s completion. 
 
 25.11
