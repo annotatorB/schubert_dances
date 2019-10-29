@@ -88,7 +88,10 @@ def feature_from_node(tag, nodes):
         node = nodes[0]
 
     if tag in ['accidental', 'noOffset', 'irregular']:
-        return int(node.string)
+        try:
+            return int(node.string)
+        except:
+            print(node)
     elif tag == 'TimeSig':
         return convert_timesig(node)
     elif tag in ['endRepeat', 'startRepeat']:
@@ -350,7 +353,7 @@ class Section(object):
 
                 remaining_tags = [k for k in list(tagtypes) + list(nodetypes.keys()) if not k in parent.info_tags + treated_tags]
                 if len(remaining_tags) > 0:
-                    logging.warning(f"The following tags have not been treated: {remaining_tags}")
+                    logging.debug(f"The following tags have not been treated: {remaining_tags}")
 
         df = pd.DataFrame(df_vals).astype({'volta': 'Int64'})
         df = df.groupby('mc', group_keys=False).apply(lambda df: df.sort_values(['onset', 'midi']))
@@ -442,6 +445,7 @@ class Score(object):
         ms_version = self.score.find('programVersion').string
         if ms_version != NEWEST_MUSESCORE:
             logging.warning(f"{self.filename} was created with MuseScore {ms_version}. Auto-conversion will be implemented in the future.")
+        assert ms_version.split('.')[0] == '3', f"This is a MS2 file, version {ms_version}"
         # ToDo: Auto-conversion
 
         #######################################################################
@@ -506,14 +510,15 @@ class Score(object):
         # Check for infos which are not included in self.mc_info[1]; i.e.,
         # infos appearing only in one of the lower staves.
         for col in self.mc_info[1].columns:
-            cols = [self.mc_info[k][col] for k in self.mc_info.keys()]
-            c1 = cols[0]
-            cols = cols[1:]
-            for i, c in enumerate(cols):
-                if not c1.equals(c):
-                    not_in_c1 = c[~nan_eq(c1, c)]
-                    if len(not_in_c1.dropna()) > 0:
-                        logging.warning(f"These values in mc_info[{i+2}] are not included in mc_info[1]: {not_in_c1}")
+            if not col in ['voices']:    # Exclude columns, that will be aggregated anyway
+                cols = [self.mc_info[k][col] for k in self.mc_info.keys()]
+                c1 = cols[0]
+                cols = cols[1:]
+                for i, c in enumerate(cols):
+                    if not c1.equals(c):
+                        not_in_c1 = c[~nan_eq(c1, c)]
+                        if len(not_in_c1.dropna()) > 0:
+                            logging.warning(f"These values in mc_info[{i+2}] are not included in mc_info[1]: {not_in_c1}")
 
         # complete the keysig and timesig infos
         for staff, mc_info in self.mc_info.items():
@@ -659,13 +664,15 @@ class Score(object):
 
 # %% Test cell
 
-S = Score('testscore.mscx')
-S.sections[1].events[S.sections[1].events.mc == 11]
-S.sections
-S.section_structure
-S.section_order
-S.super_sections
-S.super_section_order
+# S = Score('testscore.mscx')
+# S = Score('BWV806_08_Bourée_I.mscx')
+# S.mc_info[0].mn_in_score
+# S.sections[1].events[S.sections[1].events.mc == 11]
+# S.sections
+# S.section_structure
+# S.section_order
+# S.super_sections
+# S.super_section_order
 
 
 # %% Exclude this from the main cell

@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>play &mdash; Schubert Dances 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Schubert Dances
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">tools</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Schubert Dances</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>play</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for play</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Play our custom-format sheet music file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">fractions</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">libs</span> <span class="k">import</span> <span class="n">notes</span>
+<span class="kn">from</span> <span class="nn">libs</span> <span class="k">import</span> <span class="n">synth</span>
+<span class="kn">from</span> <span class="nn">libs</span> <span class="k">import</span> <span class="n">sheet</span>
+
+<span class="c1"># ---------------------------------------------------------------------------- #</span>
+<span class="c1"># Argument parsing</span>
+
+<div class="viewcode-block" id="cmdline_process"><a class="viewcode-back" href="../play.html#play.cmdline_process">[docs]</a><span class="k">def</span> <span class="nf">cmdline_process</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Parse the command-line and perform checks.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    argparse.Namespace</span>
+<span class="sd">        Parsed configuration.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Description</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--sheet&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sheet file to play, unspecified for stdin&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--soundfont&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;SoundFont file to use&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--speed-factor&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Non-negative speed factor&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--library&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;fluidsynth&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to/name of the FluidSynth library to use&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--audio-driver&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;pulseaudio&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Audio driver to use&quot;</span><span class="p">)</span>
+    <span class="c1"># Parse command line</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="c1"># Check command line</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">speed_factor</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;invalid &#39;--speed-factor&#39; value, expected a positive float, got </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">args</span><span class="o">.</span><span class="n">speed_factor</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">soundfont</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">,</span> <span class="n">effective_ids</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;given &#39;--soundfont&#39; file </span><span class="si">%r</span><span class="s2"> does not exist or cannot be read&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">soundfont</span><span class="p">))</span>
+    <span class="n">args</span><span class="o">.</span><span class="n">soundfont</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">soundfont</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">sheet</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">sheet</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">buffer</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">sheet</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sheet</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>  <span class="c1"># Let it raise on problem</span>
+    <span class="c1"># Return checked command line</span>
+    <span class="k">return</span> <span class="n">args</span></div>
+
+<span class="c1"># ---------------------------------------------------------------------------- #</span>
+<span class="c1"># Synthesizer</span>
+
+<div class="viewcode-block" id="synthesize"><a class="viewcode-back" href="../play.html#play.synthesize">[docs]</a><span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">piece</span><span class="p">,</span> <span class="n">piano</span><span class="p">,</span> <span class="n">speed_factor</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Play a sheet with the given instrument at the given speed factor.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    piece : :obj:`sheet.Sheet`</span>
+<span class="sd">        Sheet to play</span>
+<span class="sd">    piano : :obj:`synth.FluidSynth._Instance`</span>
+<span class="sd">        Instance manager for playback</span>
+<span class="sd">    speed_factor : float</span>
+<span class="sd">        Positive speed factor</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">offset</span>  <span class="o">=</span> <span class="mf">0.</span>      <span class="c1"># Real time offset for the current section (time in each section is relative to the section start)</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="mf">0.</span>      <span class="c1"># Current real timestamp</span>
+        <span class="n">playing</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># Mapping of playing midi -&gt; release real timestamp</span>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">midi</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">velocity</span><span class="p">):</span>
+            <span class="k">nonlocal</span> <span class="n">current</span>
+            <span class="k">nonlocal</span> <span class="n">playing</span>
+            <span class="c1"># Play note</span>
+            <span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">midi</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="n">velocity</span><span class="p">)</span>
+            <span class="c1"># Register release real timestamp</span>
+            <span class="n">playing</span><span class="p">[</span><span class="n">midi</span><span class="p">]</span> <span class="o">=</span> <span class="n">current</span> <span class="o">+</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">duration</span>
+        <span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">isreal</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">nonlocal</span> <span class="n">piano</span>
+            <span class="k">nonlocal</span> <span class="n">offset</span>
+            <span class="k">nonlocal</span> <span class="n">current</span>
+            <span class="k">nonlocal</span> <span class="n">playing</span>
+            <span class="c1"># Convert start timestamp to real time</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">isreal</span><span class="p">:</span>
+                <span class="n">point</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">point</span>
+            <span class="c1"># Flow through time, releasing elapsed keys on the way</span>
+            <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">point</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">playing</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">current</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fnote</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">playing</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">ntime</span> <span class="o">=</span> <span class="n">fnote</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">ntime</span> <span class="o">&gt;</span> <span class="n">point</span><span class="p">:</span>
+                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="n">current</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ntime</span> <span class="o">-</span> <span class="n">current</span><span class="p">)</span>
+                        <span class="n">current</span> <span class="o">=</span> <span class="n">ntime</span>
+                        <span class="n">midi</span> <span class="o">=</span> <span class="n">fnote</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%3d</span><span class="s2">: release&quot;</span> <span class="o">%</span> <span class="n">midi</span><span class="p">)</span>
+                        <span class="n">piano</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">midi</span><span class="p">)</span>
+                        <span class="k">del</span> <span class="n">playing</span><span class="p">[</span><span class="n">midi</span><span class="p">]</span>
+            <span class="c1"># Done flowing</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="n">point</span>
+        <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="n">factor</span><span class="p">):</span>
+            <span class="k">nonlocal</span> <span class="n">playing</span>
+            <span class="k">nonlocal</span> <span class="n">current</span>
+            <span class="c1"># Flow until the latest note release</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">playing</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">flow</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">playing</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">isreal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">piece</span><span class="o">.</span><span class="n">as_played</span><span class="p">():</span>
+            <span class="c1"># Set real time offset at the beginning of this section</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">current</span>
+            <span class="c1"># Gather info from section</span>
+            <span class="n">factor</span>  <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">signature</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">section</span><span class="o">.</span><span class="n">tempo</span> <span class="o">/</span> <span class="n">speed_factor</span>
+            <span class="n">silence</span> <span class="o">=</span> <span class="n">section</span><span class="o">.</span><span class="n">silence</span>
+            <span class="c1"># Play each note while flowing through time</span>
+            <span class="n">start</span>    <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">duration</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">section</span><span class="o">.</span><span class="n">notes</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">circle</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">duration</span> <span class="o">=</span> <span class="n">row</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+                <span class="c1"># Flow through time to the press timestamp of the current note</span>
+                <span class="n">flow</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span>
+                <span class="c1"># Now start playing the current note</span>
+                <span class="n">midi</span>     <span class="o">=</span> <span class="n">notes</span><span class="o">.</span><span class="n">circle_to_midi</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span>
+                <span class="n">velocity</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%3d</span><span class="s2">: start = </span><span class="si">%s</span><span class="s2">, duration = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">midi</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">duration</span><span class="p">))</span>
+                <span class="n">play</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">midi</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">velocity</span><span class="p">)</span>
+            <span class="c1"># Wait for the final note + the final silence</span>
+            <span class="n">flow</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">duration</span> <span class="o">+</span> <span class="n">silence</span><span class="p">)</span>
+        <span class="c1"># Wait for the latest note</span>
+        <span class="n">wait</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># In case of exception</span>
+            <span class="n">piano</span><span class="o">.</span><span class="n">silence</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+<span class="c1"># ---------------------------------------------------------------------------- #</span>
+<span class="c1"># Main function</span>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../play.html#play.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; Main function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Logging management</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(levelname)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Parse and check command line</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">cmdline_process</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;parsing/checking of the command line failed: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">err</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Load piano synthesizer</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">piano</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">FluidSynth</span><span class="p">(</span><span class="n">library</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">library</span><span class="p">)</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">soundfont</span><span class="p">,</span> <span class="n">settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;audio.driver&quot;</span><span class="p">:</span> <span class="n">args</span><span class="o">.</span><span class="n">audio_driver</span><span class="p">})</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;piano synthesizer loading failed: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">err</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Load music sheet</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">piece</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">sheet</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;music sheet loading failed: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">err</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Play the piece as instructed</span>
+    <span class="n">synthesize</span><span class="p">(</span><span class="n">piece</span><span class="p">,</span> <span class="n">piano</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">speed_factor</span><span class="p">)</span></div>
+
+<span class="c1"># Call main if main module</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">main</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, TeamSchubert
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

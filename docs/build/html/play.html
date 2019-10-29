@@ -156,8 +156,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="play-module">
-<h1>play module<a class="headerlink" href="#play-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-play">
+<span id="play-module"></span><h1>play module<a class="headerlink" href="#module-play" title="Permalink to this headline">¶</a></h1>
+<p>Play our custom-format sheet music file.</p>
+<dl class="function">
+<dt id="play.cmdline_process">
+<code class="sig-prename descclassname">play.</code><code class="sig-name descname">cmdline_process</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/play.html#cmdline_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#play.cmdline_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the command-line and perform checks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Parsed configuration.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/argparse.html#argparse.Namespace" title="(in Python v3.8)">argparse.Namespace</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="play.main">
+<code class="sig-prename descclassname">play.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/play.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#play.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="play.synthesize">
+<code class="sig-prename descclassname">play.</code><code class="sig-name descname">synthesize</code><span class="sig-paren">(</span><em class="sig-param">piece</em>, <em class="sig-param">piano</em>, <em class="sig-param">speed_factor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/play.html#synthesize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#play.synthesize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Play a sheet with the given instrument at the given speed factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>piece</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">sheet.Sheet</span></code>) – Sheet to play</p></li>
+<li><p><strong>piano</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">synth.FluidSynth._Instance</span></code>) – Instance manager for playback</p></li>
+<li><p><strong>speed_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Positive speed factor</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 

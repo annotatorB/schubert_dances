@@ -154,20 +154,21 @@
 <span class="sd">have been properly installed and downloaded.</span>
 <span class="sd">To download piano SoundFonts, see: https://sites.google.com/site/soundfonts4u/</span>
 
-<span class="sd">&gt;&gt;&gt; import synth, time</span>
+<span class="sd">&gt;&gt;&gt; from libs import synth, notes, time</span>
+<span class="sd">&gt;&gt;&gt; import time</span>
 
 <span class="sd">&gt;&gt;&gt; # Load the default FluidSynth library and a given SoundFont file</span>
 <span class="sd">&gt;&gt;&gt; piano = synth.FluidSynth().make(&quot;my_piano_soundfont.sf2&quot;)</span>
 
 <span class="sd">&gt;&gt;&gt; # Press a flat A4 then release it after 0.5 second</span>
-<span class="sd">&gt;&gt;&gt; key = synth.note_midi(&quot;A4&quot;) - 1  # +1 makes sharp, -1 makes flat</span>
+<span class="sd">&gt;&gt;&gt; key = notes.alpha_to_midi(&quot;A4&quot;) - 1  # +1 makes sharp, -1 makes flat</span>
 <span class="sd">&gt;&gt;&gt; piano.press(key)</span>
 <span class="sd">&gt;&gt;&gt; time.sleep(0.5)</span>
 <span class="sd">&gt;&gt;&gt; piano.release(key)</span>
 
 <span class="sd">&gt;&gt;&gt; # Play all the A between A7 to A0 (included)</span>
 <span class="sd">&gt;&gt;&gt; for i in range(7, -1, -1):</span>
-<span class="sd">...     piano.press(synth.note_midi(&quot;A%d&quot; % i))</span>
+<span class="sd">...     piano.press(notes.alpha_to_midi(&quot;A%d&quot; % i))</span>
 <span class="sd">...     time.sleep(0.15)</span>
 <span class="sd">...</span>
 <span class="sd">&gt;&gt;&gt; # Silence all currently playing notes after 2 seconds</span>
@@ -176,7 +177,7 @@
 <span class="sd">&gt;&gt;&gt; time.sleep(0.5)</span>
 
 <span class="sd">&gt;&gt;&gt; # Play all the &quot;blues&quot; notes from C4 to C5 (included)</span>
-<span class="sd">&gt;&gt;&gt; base  = synth.note_midi(&quot;C4&quot;)</span>
+<span class="sd">&gt;&gt;&gt; base  = notes.alpha_to_midi(&quot;C4&quot;)</span>
 <span class="sd">&gt;&gt;&gt; delta = (0, 3, 5, 6, 7, 10, 12)</span>
 <span class="sd">&gt;&gt;&gt; piano.press(base + delta[0])</span>
 <span class="sd">&gt;&gt;&gt; for i in range(len(delta) - 1):</span>
@@ -195,53 +196,6 @@
 
 <span class="kn">import</span> <span class="nn">ctypes</span>
 <span class="kn">import</span> <span class="nn">ctypes.util</span>
-
-<span class="c1"># ---------------------------------------------------------------------------- #</span>
-<span class="c1"># Switch between note name and MIDI number</span>
-
-<div class="viewcode-block" id="note_midi"><a class="viewcode-back" href="../../libs.html#libs.synth.note_midi">[docs]</a><span class="k">def</span> <span class="nf">note_midi</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Compute the MIDI number associated with the given note name.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    name : str</span>
-<span class="sd">        Note name, format: /[ABCDEFG]-?[0-9]+/.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    int</span>
-<span class="sd">        Associated MIDI number.</span>
-<span class="sd">        Add/remove 1 to it for a sharp/flat note.</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    midi_note : for the opposite operation.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">note</span> <span class="o">=</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span>
-    <span class="n">base</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-    <span class="k">return</span> <span class="p">(</span><span class="mi">12</span> <span class="k">if</span> <span class="n">note</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">11</span><span class="p">)</span> <span class="o">+</span> <span class="mi">12</span> <span class="o">*</span> <span class="n">base</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">note</span></div>
-
-<div class="viewcode-block" id="midi_note"><a class="viewcode-back" href="../../libs.html#libs.synth.midi_note">[docs]</a><span class="k">def</span> <span class="nf">midi_note</span><span class="p">(</span><span class="n">midi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Compute the note name associated with the given MIDI number.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    midi : int</span>
-<span class="sd">        MIDI number.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    str</span>
-<span class="sd">        Associated note name, international pitch notation without accidental.</span>
-<span class="sd">        If a flat note was given, return the name of the note before.</span>
-
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    note_midi : for the opposite operation.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 <span class="c1"># ---------------------------------------------------------------------------- #</span>
 <span class="c1"># FluidSynth library interface</span>

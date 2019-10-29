@@ -155,36 +155,66 @@
 <p>Our custom-format, simplified sheet music class.</p>
 <dl class="class">
 <dt id="libs.sheet.Section">
-<em class="property">class </em><code class="sig-prename descclassname">libs.sheet.</code><code class="sig-name descname">Section</code><span class="sig-paren">(</span><em class="sig-param">signature</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Section" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.core.frame.DataFrame</span></code></p>
+<em class="property">class </em><code class="sig-prename descclassname">libs.sheet.</code><code class="sig-name descname">Section</code><span class="sig-paren">(</span><em class="sig-param">signature=(4</em>, <em class="sig-param">4)</em>, <em class="sig-param">silence=Fraction(0</em>, <em class="sig-param">1)</em>, <em class="sig-param">tempo=120</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/sheet.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.sheet.Section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Section of notes storage class.</p>
-<p>A section is merely a pandas.DataFrame, augmented with a time signature.
-It is to be though as “the ink on the paper” for a continuous segment of notes,
+<p>It is to be though as “the ink on the paper” for a continuous segment of notes,
 and absolutely not as a period; finding periods is left to subsequent analysis.</p>
-<dl class="simple">
-<dt>note<span class="classifier">str</span></dt><dd><p>Note letter, one of {“A”, “B”, …, “G”, “-“}.
-“-” represents a silence, and the associated ‘octave’ and ‘accidental’ are to be ignored.</p>
-</dd>
-<dt>octave<span class="classifier">int</span></dt><dd><p>Octave number, any integer.</p>
-</dd>
-<dt>accidental<span class="classifier">int</span></dt><dd><p>Accidental value, in particular: -1 for flat, 0 for natural, 1 for sharp.</p>
-</dd>
-<dt>start<span class="classifier">fractions.Fraction</span></dt><dd><p>Non-negative start time point (in beats), relative to the beginning of the section.</p>
-</dd>
-<dt>duration<span class="classifier">fractions.Fraction</span></dt><dd><p>Positive duration (in beats).</p>
+<p>The main purpose of a section is to hold notes, in attribute ‘notes’ (a pandas.DataFrame).
+Mandatory columns:
+- note (int)</p>
+<blockquote>
+<div><p>(Our augmented version of the) circle-of-fifths notation for the note.
+See ‘libs/notes.py’ for more details on this notation.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>start (fractions.Fraction)</dt><dd><p>Non-negative start time point (in beats), relative to the beginning of the section.</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>velocity<span class="classifier">int in [1 .. 127]</span></dt><dd><p>Velocity at which the note must be played.</p>
+</li>
+<li><dl class="simple">
+<dt>duration (fractions.Fraction)</dt><dd><p>Positive duration (in beats).</p>
 </dd>
-<dt>hand<span class="classifier">int</span></dt><dd><p>Which hand is supposed to play this note.
+</dl>
+</li>
+</ul>
+<p>Optional columns:
+- velocity (int in [1 .. 127])</p>
+<blockquote>
+<div><p>Velocity at which the note must be played.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>hand (int)</dt><dd><p>Which hand (or more generally which voice) is supposed to play this note.
 (To be formalized, probably something like: 0 for unknown, -1 for left, 1 for right.)</p>
 </dd>
 </dl>
+</li>
+</ul>
+<p>A section is augmented with metadata, and there is two mandatory metadata:
+- signature (tuple of two positive integers)</p>
+<blockquote>
+<div><p>The time signature of this section.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>silence (fractions.Fraction)</dt><dd><p>A non-negative silence duration to play at the end of the section.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>tempo (float)</dt><dd><p>The tempo (in beats per minute) at which this section should be played.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Additional metadata can be freely stored in the instance, as a new attribute.
+For instance, whether the section begins with a double bar can be specified this way.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#libs.sheet.Sheet" title="libs.sheet.Sheet"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sheet</span></code></a></dt><dd><p>sheet music storage class.</p>
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">sheet.Sheet</span></code></dt><dd><p>sheet music storage class.</p>
 </dd>
 </dl>
 </div>
@@ -197,20 +227,6 @@ and absolutely not as a period; finding periods is left to subsequent analysis.<
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.8)"><strong>AssertionError</strong></a> – If the format is not followed, with an explanatory error message.
     This is raised even when not in debug mode (i.e. ‘__debug__ == False’).</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="libs.sheet.Section.signature">
-<em class="property">property </em><code class="sig-name descname">signature</code><a class="headerlink" href="#libs.sheet.Section.signature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Access the read-only signature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Time signature of the section.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple of two positive int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -240,7 +256,7 @@ and absolutely not as a period; finding periods is left to subsequent analysis.<
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#libs.sheet.Section" title="libs.sheet.Section"><code class="xref py py-class docutils literal notranslate"><span class="pre">Section</span></code></a></dt><dd><p>section storage class.</p>
+<dt><code class="xref py py-class docutils literal notranslate"><span class="pre">sheet.Section</span></code></dt><dd><p>section storage class.</p>
 </dd>
 </dl>
 </div>
@@ -251,9 +267,9 @@ Once the sheet and sections are built, it is then:
 - possible to iterate over the sections as they (plausibly) were on paper, e.g.:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>A B B C D E D E F =&gt; A 𝄆  B 𝄇 C 𝄆 D E 𝄇 F</p></li>
-<li><p>A B C B D E       =&gt; A 𝄆  B C¹ 𝄇 D² E</p></li>
-<li><p>A B C A D E A C F =&gt; 𝄆 A B¹ C¹³ D² E² 𝄇 F⁴</p></li>
+<li><p>A B B C D E D E F =&gt; A 𝄆 B 𝄇 C 𝄆 D E 𝄇 F</p></li>
+<li><p>A B C B D E       =&gt; A 𝄆 B C¹ 𝄇 D² E</p></li>
+<li><p>A B C A D E A C F =&gt; 𝄆 A B¹ C¹³ D² E² 𝄇 F³</p></li>
 </ul>
 </div></blockquote>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make a new sheet</span>
@@ -261,10 +277,10 @@ Once the sheet and sections are built, it is then:
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make three sections</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="n">sheet</span><span class="o">.</span><span class="n">Section</span><span class="p">(</span><span class="n">signature</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="n">sheet</span><span class="o">.</span><span class="n">Section</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Parse and fill the columns of the sections (see &#39;help(sheet.Section)&#39; for the format)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># ...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Optional validity asserts once the sections are built</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Optional validity asserts each section once they have been fully built</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">section</span><span class="o">.</span><span class="n">assert_format</span><span class="p">()</span>
 <span class="gp">...</span>
@@ -300,7 +316,7 @@ Once the sheet and sections are built, it is then:
 <dd><p>Append/repeat a section into the sheet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>section</strong> (<a class="reference internal" href="#libs.sheet.Section" title="libs.sheet.Section"><em>Section</em></a>) – Section to append to the sheet.</p>
+<dd class="field-odd"><p><strong>section</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">sheet.Section</span></code>) – Section to append to the sheet.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The section passed as parameter, untouched</p>
@@ -390,7 +406,7 @@ will not raise an error and be consistently output as in the first repetition (e
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sheet</strong> (<a class="reference internal" href="#libs.sheet.Sheet" title="libs.sheet.Sheet"><em>Sheet</em></a>) – Instance of the sheet to save.</p></li>
+<li><p><strong>sheet</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">sheet.Sheet</span></code>) – Instance of the sheet to save.</p></li>
 <li><p><strong>path_or_fd</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.PurePath" title="(in Python v3.8)"><em>pathlib.PurePath</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/io.html#io.BytesIO" title="(in Python v3.8)"><em>io.BytesIO</em></a><em> (or </em><em>equivalent</em><em>)</em>) – Path to the file to save to.</p></li>
 </ul>
 </dd>
@@ -405,7 +421,8 @@ will not raise an error and be consistently output as in the first repetition (e
 <p>A working example, provided both libsynthfluid and “my_piano_soundfont.sf2”
 have been properly installed and downloaded.
 To download piano SoundFonts, see: <a class="reference external" href="https://sites.google.com/site/soundfonts4u/">https://sites.google.com/site/soundfonts4u/</a></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">synth</span><span class="o">,</span> <span class="nn">time</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libs</span> <span class="k">import</span> <span class="n">synth</span><span class="p">,</span> <span class="n">notes</span><span class="p">,</span> <span class="n">time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Load the default FluidSynth library and a given SoundFont file</span>
@@ -413,7 +430,7 @@ To download piano SoundFonts, see: <a class="reference external" href="https://s
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Press a flat A4 then release it after 0.5 second</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">key</span> <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">note_midi</span><span class="p">(</span><span class="s2">&quot;A4&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># +1 makes sharp, -1 makes flat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">key</span> <span class="o">=</span> <span class="n">notes</span><span class="o">.</span><span class="n">alpha_to_midi</span><span class="p">(</span><span class="s2">&quot;A4&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># +1 makes sharp, -1 makes flat</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
@@ -421,7 +438,7 @@ To download piano SoundFonts, see: <a class="reference external" href="https://s
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Play all the A between A7 to A0 (included)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">synth</span><span class="o">.</span><span class="n">note_midi</span><span class="p">(</span><span class="s2">&quot;A</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">notes</span><span class="o">.</span><span class="n">alpha_to_midi</span><span class="p">(</span><span class="s2">&quot;A</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.15</span><span class="p">)</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Silence all currently playing notes after 2 seconds</span>
@@ -431,7 +448,7 @@ To download piano SoundFonts, see: <a class="reference external" href="https://s
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Play all the &quot;blues&quot; notes from C4 to C5 (included)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">base</span>  <span class="o">=</span> <span class="n">synth</span><span class="o">.</span><span class="n">note_midi</span><span class="p">(</span><span class="s2">&quot;C4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">base</span>  <span class="o">=</span> <span class="n">notes</span><span class="o">.</span><span class="n">alpha_to_midi</span><span class="p">(</span><span class="s2">&quot;C4&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">piano</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">base</span> <span class="o">+</span> <span class="n">delta</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -472,56 +489,6 @@ To download piano SoundFonts, see: <a class="reference external" href="https://s
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="function">
-<dt id="libs.synth.midi_note">
-<code class="sig-prename descclassname">libs.synth.</code><code class="sig-name descname">midi_note</code><span class="sig-paren">(</span><em class="sig-param">midi</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/synth.html#midi_note"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.synth.midi_note" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the note name associated with the given MIDI number.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>midi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – MIDI number.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Associated note name, international pitch notation without accidental.
-If a flat note was given, return the name of the note before.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="#libs.synth.note_midi" title="libs.synth.note_midi"><code class="xref py py-func docutils literal notranslate"><span class="pre">note_midi()</span></code></a></dt><dd><p>for the opposite operation.</p>
-</dd>
-</dl>
-</div>
-</dd></dl>
-
-<dl class="function">
-<dt id="libs.synth.note_midi">
-<code class="sig-prename descclassname">libs.synth.</code><code class="sig-name descname">note_midi</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/libs/synth.html#note_midi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#libs.synth.note_midi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the MIDI number associated with the given note name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Note name, format: /[ABCDEFG]-?[0-9]+/.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Associated MIDI number.
-Add/remove 1 to it for a sharp/flat note.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference internal" href="#libs.synth.midi_note" title="libs.synth.midi_note"><code class="xref py py-func docutils literal notranslate"><span class="pre">midi_note()</span></code></a></dt><dd><p>for the opposite operation.</p>
-</dd>
-</dl>
-</div>
 </dd></dl>
 
 </div>

@@ -7,6 +7,7 @@ Welcome to Schubert Dances Project documentation!
    :caption: Contents:
 
    modules
+   libs
 
 
 Indices and tables

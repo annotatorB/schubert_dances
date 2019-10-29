@@ -161,7 +161,7 @@
 <p>MuseScore3 Parser</p>
 <dl class="class">
 <dt id="ms3.Score">
-<em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Score</code><span class="sig-paren">(</span><em class="sig-param">file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Score</code><span class="sig-paren">(</span><em class="sig-param">file, separating_barlines=['double']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Parser for MuseScore3 MSCX files.</p>
 <p>NOTE: Measure count <code class="docutils literal notranslate"><span class="pre">mc</span></code> refers to the <cite>mc</cite> th measure node, whereas measure
@@ -201,12 +201,36 @@ of several measure nodes and can be split across sections.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="ms3.Score.info_tags">
+<code class="sig-name descname">info_tags</code><a class="headerlink" href="#ms3.Score.info_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of tag names under the &lt;Measure&gt; level that are being treated for
+extracting structural information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="ms3.Score.last_node">
 <code class="sig-name descname">last_node</code><a class="headerlink" href="#ms3.Score.last_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Count of the score’s last measure node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Score.mc_info">
+<code class="sig-name descname">mc_info</code><a class="headerlink" href="#ms3.Score.mc_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>One DataFrame per staff where measure counts are index values and columns
+hold corresponding structural information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -284,6 +308,17 @@ of only one section.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="ms3.Score.separating_barlines">
+<code class="sig-name descname">separating_barlines</code><a class="headerlink" href="#ms3.Score.separating_barlines" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of barline types that cause the score to be split in separate sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="ms3.Score.staff_nodes">
 <code class="sig-name descname">staff_nodes</code><a class="headerlink" href="#ms3.Score.staff_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Keys are staff IDs starting with 1, values are XML nodes.</p>
@@ -318,10 +353,17 @@ represented by lists of section IDs.</p>
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="ms3.Section">
+<em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Section</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">first_mc</em>, <em class="sig-param">last_mc</em>, <em class="sig-param">index</em>, <em class="sig-param">repeated</em>, <em class="sig-param">start_break</em>, <em class="sig-param">end_break</em>, <em class="sig-param">voltas=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Holds the properties of a section.</p>
 <dl class="attribute">
-<dt id="ms3.Score.test">
-<code class="sig-name descname">test</code><a class="headerlink" href="#ms3.Score.test" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mal schaun.</p>
+<dt id="ms3.Section.events">
+<code class="sig-name descname">events</code><a class="headerlink" href="#ms3.Section.events" title="Permalink to this definition">¶</a></dt>
+<dd><p>DataFrame holding all sounding events, i.e. notes, and their features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.2)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
@@ -329,22 +371,21 @@ represented by lists of section IDs.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="ms3.Score.parse_section_breaks">
-<code class="sig-name descname">parse_section_breaks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score.parse_section_breaks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score.parse_section_breaks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="ms3.Section">
-<em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Section</code><span class="sig-paren">(</span><em class="sig-param">parent</em>, <em class="sig-param">first_measure</em>, <em class="sig-param">last_measure</em>, <em class="sig-param">index</em>, <em class="sig-param">repeated</em>, <em class="sig-param">start_break</em>, <em class="sig-param">end_break</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Section" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Holds the properties of a section.</p>
 <dl class="attribute">
 <dt>
-<code class="sig-name descname">first_measure, last_measure</code></dt>
+<code class="sig-name descname">first_mc, last_mc</code></dt>
 <dd><p>Measure counts of the section’s first and last measure nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="sig-name descname">first_mn, last_mn</code></dt>
+<dd><p>First and last measure number as shown in the score.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
@@ -386,12 +427,34 @@ represented by lists of section IDs.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt>
+<code class="sig-name descname">previous_section, next_section</code></dt>
+<dd><p>Indices of the previous and following sections in the score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="ms3.Section.repeated">
 <code class="sig-name descname">repeated</code><a class="headerlink" href="#ms3.Section.repeated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether or not this section is repeated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ms3.Section.subsection_of">
+<code class="sig-name descname">subsection_of</code><a class="headerlink" href="#ms3.Section.subsection_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>If section is a subsection, the index of the super_section, None otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -410,28 +473,56 @@ represented by lists of section IDs.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="ms3.convert_timesig">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">convert_timesig</code><span class="sig-paren">(</span><em class="sig-param">tag</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#convert_timesig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.convert_timesig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns a TimeSig-tag into a fraction. If you pass a list of tags, all need
+to represent the same time signature. In case of errors, None is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.feature_from_node">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">feature_from_node</code><span class="sig-paren">(</span><em class="sig-param">tag</em>, <em class="sig-param">nodes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#feature_from_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.feature_from_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a tag name and a list of corresponding tags and
+computes a useful value from it.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="ms3.get_repeat_structure">
-<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">get_repeat_structure</code><span class="sig-paren">(</span><em class="sig-param">section_breaks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#get_repeat_structure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.get_repeat_structure" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Checks a list of (mc, break_tag_list)-tuples or the respective dict</dt><dd><p>for closure and returns repetition structure.</p>
-</dd>
-</dl>
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">get_repeat_structure</code><span class="sig-paren">(</span><em class="sig-param">tag_series</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#get_repeat_structure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.get_repeat_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accepts a Series of start tags (‘firstMeasure’, ‘startRepeat’) and end tags
+(‘endRepeat’, ‘lastMeasure’), checks for correct structure and returns repeated
+sections based on the index values.</p>
 <p class="rubric">Example</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">check</span> <span class="o">=</span> <span class="p">{</span>
-<span class="go">             0: [&#39;start&#39;],</span>
-<span class="go">             8: [&#39;endRepeat&#39;],</span>
-<span class="go">             9: [&#39;startRepeat&#39;],</span>
-<span class="go">             12: [&#39;Volta&#39;],</span>
-<span class="go">             13: [&#39;endRepeat&#39;],</span>
-<span class="go">             14: [&#39;Volta&#39;,&#39;startRepeat&#39;],</span>
-<span class="go">             30: [&#39;end&#39;]</span>
-<span class="go">            }</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">get_repeat_structure</span><span class="p">(</span><span class="n">check</span><span class="p">)</span>
-<span class="go">[(0, 8), (9, 13)]</span>
-<span class="go">WARNING:Section begins with a volta: (14, [&#39;Volta&#39;, &#39;startRepeat&#39;]). Trouble follows.</span>
-<span class="go">WARNING:Repeat structure so far: [(0, 8), (9, 13)]. Stack: [(14,)]. Closure missing.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tag_series</span>
+<span class="go">0     firstMeasure</span>
+<span class="go">8        endRepeat</span>
+<span class="go">9      startRepeat</span>
+<span class="go">14       endRepeat</span>
+<span class="go">21     startRepeat</span>
+<span class="go">24       endRepeat</span>
+<span class="go">40     lastMeasure</span>
+<span class="go">Name: repeats, dtype: object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_repeat_structure</span><span class="p">(</span><span class="n">tag_series</span><span class="p">)</span>
+<span class="go">[(0, 8), (9, 14), (21, 24)]</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.get_volta_structure">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">get_volta_structure</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#get_volta_structure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.get_volta_structure" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ms3.isnan">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">isnan</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#isnan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.isnan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if <cite>num</cite> is np.NaN (not a number)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.nan_eq">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">nan_eq</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#nan_eq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.nan_eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check for equality, including NaNs</p>
 </dd></dl>
 
 <dl class="function">
