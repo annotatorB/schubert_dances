@@ -16,10 +16,11 @@ from bs4 import BeautifulSoup as bs         # python -m pip install beautifulsou
 import pandas as pd
 import numpy as np
 
-#########
-# Globals
-#########
+###########
+# Constants
+###########
 NEWEST_MUSESCORE = '3.2.3'
+
 DURATIONS = {"measure" : 1.0,
              "breve"   : 2.0,
              "whole"   : 1.0,
@@ -31,11 +32,112 @@ DURATIONS = {"measure" : 1.0,
              "64th"    : frac(1/64),
              "128th"   : frac(1/128)}
 
+PITCH_NAMES = {0: 'F',
+               1: 'C',
+               2: 'G',
+               3: 'D',
+               4: 'A',
+               5: 'E',
+               6: 'B'}
+
+
+# XML tags of MuseScore 3 format that this parser takes care of
+TREATED_TAGS = ['accidental',   # within <KeySig>
+                'Accidental',   # within <Note>, ignored
+                'actualNotes',  # within <Tuplet>
+                'Articulation', # optional
+                'baseNote',     # within <Tuplet>, ignored
+                'BarLine',
+                'Chord',
+                'dots',
+                'durationType',
+                'endRepeat',
+                'endTuplet',
+                'irregular',    # measure exluded from bar count
+                'location',     # within <Volta>
+                'Measure',
+                'measures',     # within <next> within <Volta>
+                'next',         # within <Volta>
+                'noOffset',     # vlue to add to bar count from here on
+                'normalNotes',  # within <Tuplet>
+                'Note',         # within <Chord>
+                'Number',       # within <Tuplet>, ignored
+                'pitch',
+                'prev',         # within <Volta>, ignored
+                'Rest',
+                'Slur',         # ignored
+                'Spanner',      # several cases; used: "Tie" (test 8va)
+                'startRepeat',
+                'subtype',      # as part of <Articulation> or <BarLine>
+                'TimeSig',
+                'tpc',          # Tonal pitch class C = 0, F = -1, Bb = -2, G = 1,
+                                # D = 2 etc. (i.e. MuseScore format minus 14: https://musescore.org/en/plugin-development/tonal-pitch-class-enum)
+                'Tuplet',
+                'voice',
+                'Volta']
+
 
 ################################################################################
 #                     HELPER FUNCTIONS in alphabetical order
 ################################################################################
+def check_mn(mn_series):
+    """Check measure numbers for gaps and overlaps."""
+    # Check that numbers are strictly ascending
+    ensure_ascending = mn_series < mn_series.shift()
+    if ensure_ascending.any():
+        ixs = mn_series.index[ensure_ascending]
+        logging.error(f"Score contains descending barnumbers at measure count{'s ' if len(ixs) > 1 else ' '}{', '.join([str(i) for i in ixs])}, possibly caused by MuseScore's 'Add to bar number' function.")
+    # Check for numbering gaps
+    highest = mn_series.max()
+    missing = [i for i in range(1, highest) if not i in mn_series.values]
+    if len(missing) > 0:
+        logging.error(f"The score has a numbering gap, these measure numbers are missing: {missing}")
 
+
+
+def compute_mn(df, check=True):
+    """Df with first column for excluded measures and facultative second column
+       for offset ("add to bar count"); measure counts in the index.
+
+    Example
+    -------
+        >>> df
+        	dont_count	numbering_offset
+        0	NaN	        NaN
+        1	1	        NaN
+        2	NaN	        NaN
+        3	NaN	        -1
+        4	NaN	        NaN
+        >>> compute_mn(df)
+        0    1
+        1    1
+        2    2
+        3    2
+        4    3
+    """
+    if df.__class__ == pd.core.series.Series:
+        excluded = df
+        offset = None
+    else:
+        excluded = df.iloc[:,0]
+        offset   = df.iloc[:,1] if len(df.columns) > 1 else None
+
+    ix = df.index
+    regular_ix = ix[excluded.isna()]
+    mn_in_score = pd.Series(range(1, 1 + len(regular_ix)), index=regular_ix)
+    mn_in_score = mn_in_score.reindex(ix)
+    if isnan(mn_in_score[0]):   # if anacrusis
+        mn_in_score[0] = 0
+    mn_in_score.fillna(method='ffill', inplace=True)
+    if offset is not None and offset.notna().any():
+        if isnan(offset[0]):
+            offset[0] = 0
+        offset = offset.fillna(method='ffill')
+        mn_in_score += offset
+    mn_in_score = mn_in_score.astype('int')
+    if check:
+        check_mn(mn_in_score)
+    return mn_in_score
 
 
 
@@ -221,6 +323,12 @@ def nan_eq(a, b):
     return a == b or (isnan(a) and isnan(b))
 
 
+
+def midi2octave(val):
+    """Sets midi notes 60-71 to octave 4"""
+    return val // 12 - 1
+
+
 def search_in_list_of_tuples(L, pos, search, add=0):
     """ Returns a list of indices.
 
@@ -245,6 +353,22 @@ def sort_dict(D):
 
 
 
+def spell_tpc(tpc):
+    """Return name of a tonal pitch class where
+       0 = C, -1 = F, -2 = Bb, 1 = G etc.
+    """
+    if tpc.__class__ == pd.core.series.Series:
+        return tpc.apply(spell_tpc)
+
+    tpc += 1 # to make the lowest name F = 0 instead of -1
+    if tpc < 0:
+        acc = abs(tpc // 7) * 'b'
+    else:
+        acc = tpc // 7 * '#'
+    return PITCH_NAMES[tpc % 7] + acc
+
+
+
 
 ################################################################################
 #                             SECTION CLASS
@@ -254,8 +378,6 @@ class Section(object):
 
     Attributes
     ----------
-    events : :obj:`pandas.DataFrame`
-        DataFrame holding all sounding events, i.e. notes, and their features.
     first_mc, last_mc : :obj:`int`
         Measure counts of the section's first and last measure nodes.
     first_mn, last_mn : :obj:`int`
@@ -264,6 +386,8 @@ class Section(object):
         What causes the section breaks at either side.
     index : :obj:`int`
         Index (running number) of this section.
+    notes : :obj:`pandas.DataFrame`
+        DataFrame holding all notes and their features.
     parent : :obj:`Score`
         The parent `Score` object that is creating this section.
     previous_section, next_section : :obj:`int`
@@ -284,7 +408,11 @@ class Section(object):
         self.start_break, self.end_break = start_break, end_break
         self.voltas = [] if voltas is None else voltas
         self.subsection_of = None
-        self.events = pd.DataFrame(columns=['mc', 'onset', 'duration', 'nominal_duration', 'scalar', 'tpc', 'midi', 'octave', 'staff', 'voice', 'volta'])
+        features = ['mc', 'onset', 'duration', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta']
+        for f in ['articulation']:
+            if f in parent.score_features:
+                features.append(f)
+        self.notes = pd.DataFrame(columns=features)
         if index > 0:
             self.previous_section = index-1
             parent.sections[index-1].next_section = index
@@ -297,8 +425,8 @@ class Section(object):
         #######################
 
         # Parse all measures contained in this section
-        volta_dict = {mc: volta for volta, measures in enumerate(self.voltas) for mc in measures}
-        df_vals = {col: [] for col in self.events.columns}
+        volta_dict = {mc: volta+1 for volta, measures in enumerate(self.voltas) for mc in measures}
+        df_vals = {col: [] for col in self.notes.columns}
         for mc, measure_stack in enumerate(zip(*[[measure for mc, measure in node_dicts.items() if self.first_mc <= mc <= self.last_mc] for node_dicts in parent.measure_nodes.values()])):
             mc += self.first_mc
             nodetypes = defaultdict(list)
@@ -329,40 +457,72 @@ class Section(object):
                                 dotscale = sum([frac(1/2) ** i for i in range(int(dots.string)+1)]) * scalar if dots else scalar
                                 duration = nominal_duration * dotscale
                                 if event.name == 'Chord':
+
+                                    if 'articulation' in parent.score_features and event.find('Articulation'):
+                                        articulation = event.Articulation.subtype.string
+                                    else:
+                                        articulation = np.nan
+
                                     for note in event.find_all('Note'):
-                                        df_vals['mc'].append(mc)
-                                        df_vals['staff'].append(staff_id)
-                                        df_vals['voice'].append(voice)
-                                        df_vals['onset'].append(pointer)
-                                        df_vals['duration'].append(duration)
-                                        df_vals['nominal_duration'].append(nominal_duration)
-                                        df_vals['scalar'].append(dotscale)
-                                        df_vals['tpc'].append(int(note.tpc.string) - 14) # MuseScore Tonal Pitch Classes have C as 14: https://musescore.org/en/plugin-development/tonal-pitch-class-enum)
-                                        midi = int(note.pitch.string)
-                                        df_vals['midi'].append(midi)
-                                        df_vals['octave'].append(midi // 12 - 1)  # Making MIDI pitches 60-71 -> octave 4)
-                                        df_vals['volta'].append(volta_dict[mc] if mc in volta_dict else np.nan)
+
+                                        def get_feature_value(f):
+                                            if   f == 'mc':
+                                                return mc
+                                            elif f == 'staff':
+                                                return staff_id
+                                            elif f == 'voice':
+                                                return voice
+                                            elif f == 'onset':
+                                                return pointer
+                                            elif f == 'duration':
+                                                return duration
+                                            elif f == 'nominal_duration':
+                                                return nominal_duration
+                                            elif f == 'scalar':
+                                                return dotscale
+                                            elif f == 'tpc':
+                                                return int(note.tpc.string) - 14
+                                            elif f == 'midi':
+                                                return int(note.pitch.string)
+                                            elif f == 'volta':
+                                                return volta_dict[mc] if mc in volta_dict else np.nan
+                                            elif f == 'articulation':
+                                                return articulation
+                                            elif f == 'tied':
+                                                tie = note.find('Spanner', {'type': 'Tie'})
+                                                if tie:                                 # -1: end of tie
+                                                    t = -1 if tie.find('prev') else 0   #  1: beginning of tie
+                                                    t += 1 if tie.find('next') else 0   #  0: both
+                                                else:
+                                                    t = np.nan
+                                                return t
+
+                                        for f in features:
+                                            df_vals[f].append(get_feature_value(f))
+
+
+
                                 pointer += duration
 
 
                     del nodetypes['voice']
-                    treated_tags = ['Chord', 'Note', 'Rest', 'Tuplet', 'durationType', 'dots', 'endTuplet', 'tpc', 'pitch']
+
 
                 else:
                     logging.error('Measure without <voice> tag.')
 
-                remaining_tags = [k for k in list(tagtypes) + list(nodetypes.keys()) if not k in parent.info_tags + treated_tags]
+                global TREATED_TAGS
+                remaining_tags = [k for k in list(tagtypes) + list(nodetypes.keys()) if not k in TREATED_TAGS]
                 if len(remaining_tags) > 0:
                     logging.debug(f"The following tags have not been treated: {remaining_tags}")
 
-        df = pd.DataFrame(df_vals).astype({'volta': 'Int64'})
+        df = pd.DataFrame(df_vals).astype({'volta': 'Int64', 'tied': 'Int64'})
         df = df.groupby('mc', group_keys=False).apply(lambda df: df.sort_values(['onset', 'midi']))
-        self.events = df.reset_index(drop=True)
+        self.notes = df.reset_index(drop=True)
 
     def __repr__(self):
         return f"{'Repeated s' if self.repeated else 'S'}{'' if self.subsection_of is None else 'ubs'}ection from node {self.first_mc} ({self.start_break}) to node {self.last_mc} ({self.end_break}), {'with ' + str(len(self.voltas)) if len(self.voltas) > 0 else 'without'} voltas."
 
-#S = Score('testscore.mscx')
 
 ################################################################################
 #                             SCORE CLASS
@@ -382,9 +542,6 @@ class Score(object):
         Absolute or relative path to the MSCX file you want to parse.
     filename : :obj:`str`
         Filename of the parsed file.
-    info_tags : :obj:`list` of :obj:`str`
-        List of tag names under the <Measure> level that are being treated for
-        extracting structural information.
     last_node : :obj:`int`
         Count of the score's last measure node.
     mc_info : :obj:`dict` of :obj:`pandas.DataFrame`
@@ -395,6 +552,8 @@ class Score(object):
         measure counts (NOT measure numbers) and values are XML nodes.
     score : :class:`bs4.BeautifulSoup`
         The complete XML structure of the parsed MSCX file.
+    score_features : :obj:`list` of {'articulation'}
+        Additional features you want to extract.
     section_breaks : :obj:`dict`
         Keys are the counts of the measures that have a section break, values are
         lists of the breaking elements {startRepeat, endRepeat, BarLine}
@@ -420,14 +579,14 @@ class Score(object):
         A more abstract version of section_order, using the keys from super_sections.
     """
 
-    def __init__(self, file, separating_barlines=['double']):
+    def __init__(self, file, score_features=[], separating_barlines=['double']):
 
         # Initialize attributes
         self.file = file
         self.dir, self.filename = os.path.split(os.path.abspath(file))
         self.staff_nodes = {}
         self.measure_nodes = {}
-        self.info_tags = []
+        self.score_features = score_features
         self.section_breaks = defaultdict(list)
         self.sections = {}
         self.section_structure = {}
@@ -470,9 +629,8 @@ class Score(object):
                       'noOffset': 'numbering_offset',
                       'irregular': 'dont_count'
                       }
-        self.info_tags = list(tag_to_col.keys())
-        cols = ['keysig', 'timesig', 'act_dur', 'voices', 'repeats', 'volta', 'barline', 'numbering_offset', 'dont_count']
 
+        cols = ['keysig', 'timesig', 'act_dur', 'voices', 'repeats', 'volta', 'barline', 'numbering_offset', 'dont_count']
 
         def get_measure_infos(measure):
             """Treat <Measure> node and return info dict."""
@@ -480,7 +638,7 @@ class Score(object):
             if measure.has_attr('len'):
                 mc_info['act_dur'] = frac(measure['len'])
             infos = defaultdict(list)
-            for tag in measure.find_all(self.info_tags):
+            for tag in measure.find_all(tag_to_col.keys()):
                 infos[tag.name].append(tag)
             for tag, nodes in infos.items():
                 col = tag_to_col[tag]
@@ -556,34 +714,6 @@ class Score(object):
             self.mc_info[0].voices += df.voices
 
 
-        # Calculate and check measure numbers (MN != MC)
-        # mn_in_score shows bar numbers as they are shown in MuseScore
-        ix = self.mc_info[0].index
-        regular_ix = ix[self.mc_info[0].dont_count.isna()]
-        mn_in_score = pd.Series(range(1, 1 + len(regular_ix)), index=regular_ix)
-        mn_in_score = mn_in_score.reindex(ix)
-        if isnan(mn_in_score[0]):
-            mn_in_score[0] = 0
-        mn_in_score.fillna(method='ffill', inplace=True)
-        if self.mc_info[0].numbering_offset.notna().any():
-            offset = self.mc_info[0].numbering_offset.copy()
-            if isnan(offset[0]):
-                offset[0] = 0
-            offset.fillna(method='ffill', inplace=True)
-            mn_in_score += offset
-        self.mc_info[0]['mn_in_score'] = mn_in_score.astype('int')
-        # Check that numbers are strictly ascending
-        ensure_ascending = mn_in_score < mn_in_score.shift()
-        if ensure_ascending.any():
-            ixs = self.mc_info[0].index[ensure_ascending]
-            logging.error(f"Score contains descending barnumbers at measure count{'s ' if len(ixs) > 1 else ' '}{', '.join([str(i) for i in ixs])}, possibly caused by MuseScore's 'Add to bar number' function.")
-        # Check for numbering gaps
-        in_score = self.mc_info[0].mn_in_score.values
-        highest = in_score.max()
-        missing = [i for i in range(1, highest) if not i in in_score]
-        if len(missing) > 0:
-            logging.error(f"The score has a numbering gap, these measure numbers are missing: {missing}")
-
         #############################
         # Compute section structure #
         #############################
@@ -591,7 +721,12 @@ class Score(object):
         volta_structure = get_volta_structure(self.mc_info[0])
         # extending repeated sections that have voltas
         volta_dict = defaultdict(lambda: None)
+
+
+
         for group in volta_structure:
+            for i, volta in enumerate(group):
+                self.mc_info[0].loc[volta, 'volta'] = i+1
             endRepeat = group[0][-1] # last mc of the first volta
             ixs = search_in_list_of_tuples(repeat_structure, 1, endRepeat)
             if len(ixs) == 1:
@@ -652,7 +787,6 @@ class Score(object):
             last_to = to
 
 
-
         last_to = -1
         section_counter, super_counter = 0, 0
         for fro, to in repeat_structure:
@@ -662,19 +796,67 @@ class Score(object):
         if to != self.last_node:
             create_section(to+1, self.last_node)
 
-# %% Test cell
+        ##################################################
+        # Calculate and check measure numbers (MN != MC) #
+        ##################################################
+        # mn_in_score shows bar numbers as they are shown in MuseScore
+        self.mc_info[0]['mn_in_score'] = compute_mn(self.mc_info[0][['dont_count','numbering_offset']])
+
+
+        # mn_correct are should-be measure numbers that can deviate from mn_in_score
+
+
+
+
+    def get_notes(self, sections=None, octaves=False, pitch_names=False):
+
+        if sections:
+            if sections.__class__ == int:
+                if sections in self.sections:
+                    df = self.sections[sections].notes
+                else:
+                    raise ValueError(f"Section {sections} does not exist.")
+            else:
+                nonex = [s for s in sections if not s in self.sections]
+                if len(nonex) > 0:
+                    logging.warning(f"Section{'s ' + str(nonex) if len(nonex) > 1 else ' ' + str(nonex[0])} does not exist.")
+                    sections = [s for s in sections if not s in nonex]
+                df = pd.concat([self.sections[s].notes for s in sections], keys=sections)
+        else:
+            sections = self.sections
+            df = pd.concat([self.sections[s].notes for s in sections], keys=sections)
+
+        if octaves:
+            df['octave'] = midi2octave(df.midi)
+        if pitch_names:
+            df['pitch_names'] = spell_tpc(df.tpc)
+        return df
+
+# %% Playground
+
+
+
 
 # S = Score('testscore.mscx')
-# S = Score('BWV806_08_Bourée_I.mscx')
-# S.mc_info[0].mn_in_score
+# S.get_notes(1, True, True)
+#
+# act = S.mc_info[0].act_dur[S.mc_info[0].act_dur.notna()]
+# act
+# volta_structure = get_volta_structure(S.mc_info[0])
+# volta_structure
+
+# S.mc_info[0]
+#S = Score('BWV806_08_Bourée_I.mscx')
+#S.sections[0].notes
 # S.sections[1].events[S.sections[1].events.mc == 11]
 # S.sections
 # S.section_structure
 # S.section_order
 # S.super_sections
 # S.super_section_order
-
-
+# logging.basicConfig(level=logging.DEBUG)
+# logging.getLogger().setLevel(logging.DEBUG)
+# logging.getLogger().setLevel(logging.INFO)
 # %% Exclude this from the main cell
 
 ################################################################################
