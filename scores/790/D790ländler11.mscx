@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.2.3</programVersion>
-  <programRevision>d2d863f</programRevision>
+  <programVersion>3.3.0</programVersion>
+  <programRevision>4761df6</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -777,14 +777,6 @@
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
-            <Spanner type="Slur">
-              <Slur>
                 <up>up</up>
                 </Slur>
               <next>
@@ -871,17 +863,6 @@
           <Chord>
             <dots>1</dots>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <SlurSegment no="0">
-                  <offset x="0" y="0.10267"/>
-                  </SlurSegment>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <Spanner type="Slur">
               <Slur>
                 <up>up</up>
@@ -989,14 +970,6 @@
           <Chord>
             <dots>1</dots>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <Spanner type="Slur">
               <Slur>
                 <up>up</up>

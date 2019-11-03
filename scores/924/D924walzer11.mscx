@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.2.3</programVersion>
-  <programRevision>d2d863f</programRevision>
+  <programVersion>3.3.0</programVersion>
+  <programRevision>4761df6</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -1231,13 +1231,8 @@
             <Ottava>
               <subtype>8va</subtype>
               <Segment>
-                <subtype>1</subtype>
+                <subtype>0</subtype>
                 <offset x="0" y="-7.13409"/>
-                <off2 x="0" y="0"/>
-                </Segment>
-              <Segment>
-                <subtype>3</subtype>
-                <offset x="0" y="-3"/>
                 <off2 x="0" y="0"/>
                 </Segment>
               </Ottava>
@@ -1650,8 +1645,13 @@
             <Ottava>
               <subtype>8va</subtype>
               <Segment>
-                <subtype>0</subtype>
+                <subtype>1</subtype>
                 <offset x="0" y="-4.78772"/>
+                <off2 x="0" y="0"/>
+                </Segment>
+              <Segment>
+                <subtype>3</subtype>
+                <offset x="0" y="-3"/>
                 <off2 x="0" y="0"/>
                 </Segment>
               </Ottava>
@@ -1743,9 +1743,6 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end-repeat</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -2841,9 +2838,6 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end-repeat</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

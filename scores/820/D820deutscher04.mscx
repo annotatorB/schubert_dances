@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.2.3</programVersion>
-  <programRevision>d2d863f</programRevision>
+  <programVersion>3.3.0</programVersion>
+  <programRevision>4761df6</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -2182,9 +2182,6 @@
               <tpc>12</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end-repeat</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -3077,9 +3074,6 @@
               <tpc>12</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end-repeat</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

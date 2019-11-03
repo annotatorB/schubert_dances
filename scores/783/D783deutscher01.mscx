@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.2.3</programVersion>
-  <programRevision>d2d863f</programRevision>
+  <programVersion>3.3.0</programVersion>
+  <programRevision>4761df6</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -25,8 +25,8 @@
       <lyricsOddFrameWidth>0</lyricsOddFrameWidth>
       <lyricsEvenFontFace>Times New Roman</lyricsEvenFontFace>
       <lyricsEvenFontSize>8.6764</lyricsEvenFontSize>
-      <lyricsOddFramePadding>0</lyricsOddFramePadding>
-      <lyricsOddFrameWidth>0</lyricsOddFrameWidth>
+      <lyricsEvenFramePadding>0</lyricsEvenFramePadding>
+      <lyricsEvenFrameWidth>0</lyricsEvenFrameWidth>
       <doubleBarDistance>0.46</doubleBarDistance>
       <endBarDistance>0.65</endBarDistance>
       <clefLeftMargin>0.64</clefLeftMargin>

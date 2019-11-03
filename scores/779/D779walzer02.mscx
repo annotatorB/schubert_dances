@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.2.3</programVersion>
-  <programRevision>d2d863f</programRevision>
+  <programVersion>3.3.0</programVersion>
+  <programRevision>4761df6</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -101,7 +101,7 @@
           </StaffType>
         <defaultClef>F</defaultClef>
         </Staff>
-      <trackName></trackName>
+      <trackName>Midi_1</trackName>
       <Instrument>
         <trackName>Midi_1</trackName>
         <Articulation>
@@ -185,8 +185,6 @@
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            </BarLine>
           </voice>
         <voice>
           <Rest>
@@ -917,8 +915,6 @@ D 779 Nr.2</text>
               <tpc>10</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            </BarLine>
           </voice>
         <voice>
           <Rest>
@@ -2463,8 +2459,6 @@ D 779 Nr.2</text>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            </BarLine>
           </voice>
         <voice>
           <Rest>
@@ -2880,8 +2874,6 @@ D 779 Nr.2</text>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            </BarLine>
           </voice>
         <voice>
           <Rest>

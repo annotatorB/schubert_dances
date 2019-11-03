@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.2.3</programVersion>
-  <programRevision>d2d863f</programRevision>
+  <programVersion>3.3.0</programVersion>
+  <programRevision>4761df6</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -540,7 +540,6 @@
           </voice>
         <voice>
           <Rest>
-            <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
@@ -616,7 +615,6 @@
           </voice>
         <voice>
           <Rest>
-            <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
@@ -929,17 +927,19 @@
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            <Note>
               <pitch>85</pitch>
               <tpc>21</tpc>
               </Note>
             </Chord>
           <Rest>
-            <offset x="0" y="-4"/>
             <BeamMode>mid</BeamMode>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <offset x="0" y="-4"/>
             <BeamMode>mid</BeamMode>
             <durationType>quarter</durationType>
             </Rest>
@@ -996,35 +996,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          </voice>
-        <voice>
-          <Chord>
-            <durationType>quarter</durationType>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <pitch>76</pitch>
-              <tpc>18</tpc>
-              </Note>
-            </Chord>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <Rest>
-            <offset x="0" y="6"/>
-            <BeamMode>mid</BeamMode>
-            <durationType>quarter</durationType>
-            </Rest>
-          <location>
-            <fractions>-1/8</fractions>
-            </location>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
-          <Rest>
-            <offset x="0" y="6"/>
-            <BeamMode>mid</BeamMode>
-            <durationType>quarter</durationType>
-            </Rest>
           </voice>
         </Measure>
       <Measure>
@@ -1355,7 +1326,6 @@
             <subtype>f</subtype>
             <velocity>88</velocity>
             <placement>above</placement>
-            <offset x="1.12394" y="-4.40589"/>
             </Dynamic>
           <Chord>
             <durationType>quarter</durationType>
