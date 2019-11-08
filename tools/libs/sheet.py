@@ -16,12 +16,13 @@ class Sheet:
 
     Attributes
     ----------
-    sections : list of pandas.DataFrame
+    sections : :obj:`list` of :obj:`pandas.DataFrame`
         List of sections in played order, each possibly appearing several times.
 
     Notes
     -----
     Compared to a standard music sheet:
+
     - repetitions of (contiguous) sections are specified separately.
     - many informative elements (like ties between notes) are optionally stored.
 
@@ -33,15 +34,17 @@ class Sheet:
     --------
     These examples illustrate how to build a sheet with repetitions of sections.
     Once the sheet and sections are built, it is then:
+
     - easy to playback a sheet, by just iterating over the stored sections.
     - possible to iterate over the sections as they (plausibly) were on paper, e.g.:
+
         - A B B C D E D E F => A 𝄆 B 𝄇 C 𝄆 D E 𝄇 F
         - A B C B D E       => A 𝄆 B C¹ 𝄇 D² E
         - A B C A D E A C F => 𝄆 A B¹ C¹³ D² E² 𝄇 F³
 
     >>> # Make a new sheet
     >>> my_sheet = sheet.Sheet()
-
+    >>>
     >>> # Make three sections
     >>> A, B, C = (sheet.Section() for _ in range(3))
     >>> # Parse and fill the columns of the sections (see 'help(sheet.Section)' for the format)
@@ -54,7 +57,7 @@ class Sheet:
     >>> for section in (A, B, A, C, C):
     ...     my_sheet.append(section)
     ...
-
+    >>>
     >>> # Iterate over the sections in playing order (i.e.: A-B-A-C-C)
     >>> for section in my_sheet.as_played():
     ...     pass
@@ -67,7 +70,7 @@ class Sheet:
     ...     # - C, ([-2], True, True)  <- volta value from previous pair of repetition bars is noted as negative (if any)
     ...     pass
     ...
-
+    >>>
     >>> # Save and load again the sheet
     >>> sheet.save(my_sheet, "my_sheet.sht")
     >>> my_sheet = sheet.load("my_sheet.sht")
@@ -202,7 +205,7 @@ class Sheet:
         ------
         AssertionError
             If the format is not followed, with an explanatory error message.
-            This is raised even when not in debug mode (i.e. '__debug__ == False').
+            This is raised even when not in debug mode (i.e. `__debug__ == False`).
 
         """
         global Section
@@ -221,32 +224,67 @@ class Section:
     It is to be though as "the ink on the paper" for a continuous segment of notes,
     and absolutely not as a period; finding periods is left to subsequent analysis.
 
-    The main purpose of a section is to hold notes, in attribute 'notes' (a pandas.DataFrame).
+    The main purpose of a section is to hold notes, in attribute `notes` (a :obj:`pandas.DataFrame`).
+
     Mandatory columns:
-    - note (int)
-        (Our augmented version of the) circle-of-fifths notation for the note.
-        See 'libs/notes.py' for more details on this notation.
-    - start (fractions.Fraction)
+
+    - note (:obj:`int`)
+        Our augmented version of the circle-of-fifths notation for the note.
+        See `libs/notes.py` for more details on this notation.
+    - start (:obj:`fractions.Fraction`)
         Non-negative start time point (in beats), relative to the beginning of the section.
-    - duration (fractions.Fraction)
+    - duration (:obj:`fractions.Fraction`)
         Positive duration (in beats).
+
     Optional columns:
-    - velocity (int in [1 .. 127])
+
+    - velocity (:obj:`int` in [1 .. 127])
         Velocity at which the note must be played.
-    - hand (int)
+    - hand (:obj:`int`)
         Which hand (or more generally which voice) is supposed to play this note.
         (To be formalized, probably something like: 0 for unknown, -1 for left, 1 for right.)
 
-    A section is augmented with metadata, and there is two mandatory metadata:
-    - signature (tuple of two positive integers)
+    A section is augmented with metadata, and there is three mandatory metadata:
+
+    - signature (tuple of two positive :obj:`int`)
         The time signature of this section.
-    - silence (fractions.Fraction)
+    - silence (:obj:`fractions.Fraction`)
         A non-negative silence duration to play at the end of the section.
-    - tempo (float)
+    - tempo (:obj:`float`)
         The tempo (in beats per minute) at which this section should be played.
 
     Additional metadata can be freely stored in the instance, as a new attribute.
     For instance, whether the section begins with a double bar can be specified this way.
+
+    Example
+    -------
+    Below we display the full internal structure of the Frère Jacques nursery rhyme,
+    which can be obtained with `python3 playground/frere_jacques.py > frere_jacques.sht`
+
+    >>> # Import and load the sheet
+    >>> from libs import sheet
+    >>> my_sheet = sheet.load("frere_jacques.sht")
+
+    >>> # A sheet contains a single data member, named 'sections', which is a list of sections
+    >>> # The section instances are stored in playing order, so each can appear several times
+    >>> my_sheet.sections
+    [<libs.sheet.Section object at 0x7fdd5c24b9b0>, ...]
+
+    >>> # Let's look (exhaustively) into the internal structure of the first section
+    >>> sec_0 = my_sheet.sections[0]
+    >>> # It contains 4 members: the 'notes' dataframe, and 3 attributes.
+    >>> sec_0.signature  # The time signature for this section
+    (2, 4)
+    >>> sec_0.silence    # A non-negative silence duration to play at the end of the section
+    Fraction(0, 1)
+    >>> sec_0.tempo      # The tempo (in beats per minute) for this section
+    60
+    >>> sec_0.notes      # The notes dataframe (see above for the structure)
+       note start duration
+    0   104     0      1/4
+    1   106   1/4      1/4
+    2   108   1/2      1/4
+    3   104   3/4      1/4
 
     See Also
     --------
@@ -268,10 +306,10 @@ class Section:
         **kwargs
             Keyword arguments forwarded to the parent constructor.
             Notes:
-            · If the 'columns' keyword argument is passed (expected a list),
+            · If the `columns` keyword argument is passed (expected a list),
               the given values are appended to the list of mandatory columns.
-            · If the 'data' keyword argument is passed,
-              no 'columns' argument is forwarded by default and no check is made.
+            · If the `data` keyword argument is passed,
+              no `columns` argument is forwarded by default and no check is made.
 
         """
         # Initialize the dataframe
@@ -292,7 +330,7 @@ class Section:
         ------
         AssertionError
             If the format is not followed, with an explanatory error message.
-            This is raised even when not in debug mode (i.e. '__debug__ == False').
+            This is raised even when not in debug mode (i.e. `__debug__ == False`).
 
         """
         # (Known) metadata assertions

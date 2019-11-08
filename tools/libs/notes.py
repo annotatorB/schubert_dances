@@ -3,21 +3,24 @@
 Convertion between note formats.
 
 The list of supported formats are the following:
-· alpha : "A5", "B3", "G4", ... (they do not include "#"; accidental is given aside)
-· circle: -2, -1, 0, 1, 2, ... (see: https://en.wikipedia.org/wiki/Circle_of_fifths)
-· midi:   0, 1, 2, ...
+
+- alpha : "A5", "B3", "G4", ... (they do not include "#"; accidental is given aside)
+- circle: -2, -1, 0, 1, 2, ... (see: https://en.wikipedia.org/wiki/Circle_of_fifths)
+- midi:   0, 1, 2, ...
 
 Only the few translations that we need are supported.
-The naming convention of the convertion functions is: <format>_to_<format>
+The naming convention of the convertion functions is `<format>_to_<format>`,
+e.g.: `alpha_to_midi`, `alpha_to_circle`, ...
 
 Accidentals are always represented with an integer:
-·  0 (natural)
-·  1 (sharp),  2 (double sharp), ...
-· -1 (flat),  -2 (double flat), ...
+
+-  0 (natural)
+-  1 (sharp),  2 (double sharp), ...
+- -1 (flat),  -2 (double flat), ...
 
 Our circle-of-fifth notation is augmented with containing the octave as well.
-With 'note' the standard circle-of-fifth notation and 'octave' the octave number,
-our augmented circle-of-fifth notation corresponds to: 'note + 11 + 23 * octave'.
+With `note` the standard circle-of-fifth notation and `octave` the octave number,
+our augmented circle-of-fifth notation corresponds to: `note + 11 + 23 * octave`.
 
 """
 
