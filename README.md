@@ -45,6 +45,7 @@ And short pieces in binary meter, such as:
 * Galops
 
 **Distribution:**
+
 |     type       |count|
 |----------------|----:|
 |walzer          |  132|
