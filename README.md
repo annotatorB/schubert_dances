@@ -44,6 +44,21 @@ And short pieces in binary meter, such as:
 * Ecossaises
 * Galops
 
+**Distribution:**
+|     type       |count|
+|----------------|----:|
+|walzer          |  132|
+|ländler         |   80|
+|ecossaise       |   78|
+|deutscher       |   71|
+|trio            |   35|
+|menuett         |   29|
+|trio I          |    5|
+|trio II         |    5|
+|galopp          |    2|
+|cotillon        |    1|
+|alternative_trio|    1|
+
 Most of this dataset was crawled from the web and cleaned by ourselves,
 and the rest has been directly typesetted in a group effort.
 
