@@ -53,7 +53,11 @@ TREATED_TAGS = ['accidental',   # within <KeySig>
                 'durationType',
                 'endRepeat',
                 'endTuplet',
+                'fractions',    # ignored (part of Spanner)
+                'grace4','grace4after','grace8','grace8after','grace16','grace16after',
+                'grace32','grace32after','grace64','grace64after',
                 'irregular',    # measure exluded from bar count
+                'LayoutBreak',  # subtype 'section' taken into account for repeat structure
                 'location',     # within <Volta>
                 'Measure',
                 'measures',     # within <next> within <Volta>
@@ -69,10 +73,12 @@ TREATED_TAGS = ['accidental',   # within <KeySig>
                 'Spanner',      # several cases; used: "Tie" (test 8va)
                 'startRepeat',
                 'subtype',      # as part of <Articulation> or <BarLine>
+                'Tie',          # see Spanner
                 'TimeSig',
                 'tpc',          # Tonal pitch class C = 0, F = -1, Bb = -2, G = 1,
                                 # D = 2 etc. (i.e. MuseScore format minus 14: https://musescore.org/en/plugin-development/tonal-pitch-class-enum)
                 'Tuplet',
+                'visible',      # ignored
                 'voice',
                 'Volta']
 
@@ -80,6 +86,26 @@ TREATED_TAGS = ['accidental',   # within <KeySig>
 ################################################################################
 #                     HELPER FUNCTIONS in alphabetical order
 ################################################################################
+def check_measure_boundaries(notes, measure_durations):
+    """ Check that no note surpasses the barline.
+
+    Parameters
+    ----------
+    notes : :obj:`pandas.DataFrame`
+        DataFrame with columns ['mc', 'onset', 'duration']
+    measure_durations : :obj:`pandas.Series`
+        A series where the index matches notes.mc
+    """
+    OK = True
+    for ix, mc, onset, duration in notes[['mc', 'onset', 'duration']].itertuples():
+        if onset + duration > measure_durations.loc[mc]:
+            OK = False
+            logging.warning(f"Event {ix} in MC {mc} has has duration {duration} and starts on {onset}, surpassing the measure length of {measure_durations.loc[mc]}")
+    if OK:
+        logging.debug("Measure boundaries checked: No errors.")
+
+
+
 def check_mn(mn_series):
     """Check measure numbers for gaps and overlaps."""
     # Check that numbers are strictly ascending
@@ -243,6 +269,11 @@ def get_repeat_structure(tag_series):
             else:
                 logging.debug(f"First measure not used as startRepeat because tag element is {tag_series.iloc[1]}")
 
+        elif tag == 'newSection':
+            if tag_series.iloc[tag_series.index.get_loc(i)+1] == 'endRepeat':
+                stack.append((i,))
+                logging.debug(f"Section break after MC {i-1} inferred as beginning of a repeated section.")
+
         elif tag == 'startRepeat':
             stack.append((i,))
 
@@ -252,7 +283,7 @@ def get_repeat_structure(tag_series):
                 repeat_structure.append(section_start + (i,))
             else:
                 correct = '\n'.join(tag_series[:i]) + '\n'
-                logging.error(f"Correct up to {correct}Next {tag} invalid.")
+                logging.error(f"Correct before the {tag} in mc {i} invalid:{correct}. Insert the missing startRepeat or section break into the score.")
                 OK = False
                 return repeat_structure
 
@@ -408,7 +439,7 @@ class Section(object):
         self.start_break, self.end_break = start_break, end_break
         self.voltas = [] if voltas is None else voltas
         self.subsection_of = None
-        features = ['mc', 'onset', 'duration', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta']
+        features = ['mc', 'onset', 'duration', 'gracenote', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta']
         for f in ['articulation']:
             if f in parent.score_features:
                 features.append(f)
@@ -429,19 +460,19 @@ class Section(object):
         df_vals = {col: [] for col in self.notes.columns}
         for mc, measure_stack in enumerate(zip(*[[measure for mc, measure in node_dicts.items() if self.first_mc <= mc <= self.last_mc] for node_dicts in parent.measure_nodes.values()])):
             mc += self.first_mc
-            nodetypes = defaultdict(list)
+            nodetypes = defaultdict(list)   # keeping track of tags on the measure level
             mc_info = parent.mc_info[0].loc[mc]
             for staff_id, measure in enumerate(measure_stack):
                 staff_id += 1
                 for tag in measure.find_all(recursive=False):
                     nodetypes[tag.name].append(tag)
-                tagtypes = set()
+                tagtypes = set()            # keeping track of tags on the event group level
                 if 'voice' in nodetypes:
                     # Parse all events within a voice within a measure within a staff
                     for voice, voice_tag in enumerate(nodetypes['voice']):
                         voice += 1
                         pointer = frac(0)
-                        scalar = 1
+                        scalar = 1  # to manipulate note durations
                         scalar_stack = []
                         for event in voice_tag.find_all(['Chord', 'Rest', 'Tuplet', 'endTuplet']):
                             for tag in event.find_all(recursive=True):
@@ -454,14 +485,17 @@ class Section(object):
                             else:
                                 nominal_duration = DURATIONS[event.find('durationType').string]
                                 dots = event.find('dots')
-                                dotscale = sum([frac(1/2) ** i for i in range(int(dots.string)+1)]) * scalar if dots else scalar
-                                duration = nominal_duration * dotscale
+                                dotscalar = sum([frac(1/2) ** i for i in range(int(dots.string)+1)]) * scalar if dots else scalar
+                                duration = nominal_duration * dotscalar
                                 if event.name == 'Chord':
 
                                     if 'articulation' in parent.score_features and event.find('Articulation'):
                                         articulation = event.Articulation.subtype.string
                                     else:
                                         articulation = np.nan
+
+                                    grace = event.find(['grace4','grace4after','grace8','grace8after','grace16','grace16after','grace32','grace32after','grace64','grace64after'])
+                                    gracenote = grace.name if grace else np.nan
 
                                     for note in event.find_all('Note'):
 
@@ -475,11 +509,16 @@ class Section(object):
                                             elif f == 'onset':
                                                 return pointer
                                             elif f == 'duration':
-                                                return duration
+                                                if not grace:
+                                                    return duration
+                                                else:
+                                                    return 0
                                             elif f == 'nominal_duration':
                                                 return nominal_duration
+                                            elif f == 'gracenote':
+                                                return gracenote
                                             elif f == 'scalar':
-                                                return dotscale
+                                                return dotscalar
                                             elif f == 'tpc':
                                                 return int(note.tpc.string) - 14
                                             elif f == 'midi':
@@ -500,18 +539,12 @@ class Section(object):
                                         for f in features:
                                             df_vals[f].append(get_feature_value(f))
 
-
-
-                                pointer += duration
-
-
-                    del nodetypes['voice']
-
+                                if not grace:
+                                    pointer += duration
 
                 else:
                     logging.error('Measure without <voice> tag.')
 
-                global TREATED_TAGS
                 remaining_tags = [k for k in list(tagtypes) + list(nodetypes.keys()) if not k in TREATED_TAGS]
                 if len(remaining_tags) > 0:
                     logging.debug(f"The following tags have not been treated: {remaining_tags}")
@@ -522,7 +555,6 @@ class Section(object):
 
     def __repr__(self):
         return f"{'Repeated s' if self.repeated else 'S'}{'' if self.subsection_of is None else 'ubs'}ection from node {self.first_mc} ({self.start_break}) to node {self.last_mc} ({self.end_break}), {'with ' + str(len(self.voltas)) if len(self.voltas) > 0 else 'without'} voltas."
-
 
 ################################################################################
 #                             SCORE CLASS
@@ -556,7 +588,7 @@ class Score(object):
         Additional features you want to extract.
     section_breaks : :obj:`dict`
         Keys are the counts of the measures that have a section break, values are
-        lists of the breaking elements {startRepeat, endRepeat, BarLine}
+        lists of the breaking elements {startRepeat, endRepeat, BarLine, LayoutBreak}
     section_order : :obj:`list` of :obj:`int`:
         List of section IDs representing in which the sections in ``section_structure``
         are presented and repeated.
@@ -618,12 +650,14 @@ class Score(object):
             self.measure_nodes[staff_id] = {}
             logging.debug(f"Stored staff with ID {staff_id}.")
 
-        # Extract measures
+        # Tags to extract from measures and corresponding column names after
+        # having a value computed by feature_from_node()
         tag_to_col = {'accidental': 'keysig',
                       'TimeSig': 'timesig',
                       'voice': 'voices',
                       'startRepeat': 'repeats',
                       'endRepeat': 'repeats',
+                      'LayoutBreak': 'repeats',
                       'Volta': 'volta',
                       'BarLine': 'barline',
                       'noOffset': 'numbering_offset',
@@ -634,20 +668,30 @@ class Score(object):
 
         def get_measure_infos(measure):
             """Treat <Measure> node and return info dict."""
+            nonlocal new_section
             mc_info = {}
+            if new_section:
+                mc_info['repeats'] = 'newSection' # if section starts with startRepeat, this is overwritten
+                new_section = False
             if measure.has_attr('len'):
                 mc_info['act_dur'] = frac(measure['len'])
             infos = defaultdict(list)
             for tag in measure.find_all(tag_to_col.keys()):
                 infos[tag.name].append(tag)
             for tag, nodes in infos.items():
-                col = tag_to_col[tag]
-                mc_info[col] = feature_from_node(tag, nodes)
+                if tag != 'LayoutBreak':
+                    col = tag_to_col[tag]
+                    mc_info[col] = feature_from_node(tag, nodes)
+                else:
+                    subtype = nodes[0].find('subtype')
+                    if subtype and subtype.string == 'section':
+                        new_section = True
             return mc_info
 
 
         for staff_id, staff in self.staff_nodes.items():
             mc_info = pd.DataFrame(columns=cols)
+            new_section = False    # flag
 
             for i, measure in enumerate(staff.find_all('Measure')):
                 self.measure_nodes[staff_id][i] = measure
@@ -709,6 +753,8 @@ class Score(object):
             logging.warning(f"mc_info[0] and mc_info[1] were not identical before aggregation.\
                             This means that lower staves contain information that's missing in\
                             the first staff (as shown in previous warning).")
+        # complete measure durations
+        self.mc_info[0].act_dur.fillna(self.mc_info[0].timesig.apply(lambda x: frac(x)), inplace=True)
         # Aggregate values in self.mc_info[0]
         for df in (self.mc_info[k] for k in self.mc_info.keys() if k > 1):
             self.mc_info[0].voices += df.voices
@@ -721,8 +767,6 @@ class Score(object):
         volta_structure = get_volta_structure(self.mc_info[0])
         # extending repeated sections that have voltas
         volta_dict = defaultdict(lambda: None)
-
-
 
         for group in volta_structure:
             for i, volta in enumerate(group):
@@ -785,16 +829,21 @@ class Score(object):
             logging.debug(f"Created {'repeated ' if repeated else ''}section from {fro} to {to}.")
             nonlocal last_to
             last_to = to
+        ########################## end of create_section()
 
 
         last_to = -1
         section_counter, super_counter = 0, 0
         for fro, to in repeat_structure:
             if fro != last_to + 1:
-                create_section(last_to+1, fro-1)
-            create_section(fro, to, True, volta_dict[(fro, to)])
+                create_section(last_to+1, fro-1)                    # create unrepeated section
+            create_section(fro, to, True, volta_dict[(fro, to)])    # create repeated   section
         if to != self.last_node:
             create_section(to+1, self.last_node)
+
+        # check that no note crosses measure boundary
+        check_measure_boundaries(self.get_notes(), self.mc_info[0].act_dur)
+
 
         ##################################################
         # Calculate and check measure numbers (MN != MC) #
@@ -837,7 +886,10 @@ class Score(object):
 
 
 
-# S = Score('testscore.mscx')
+S = Score('./scores/041/D041menuett01diff.mscx')
+S.mc_info[0]
+S.get_notes(1,).iloc[:20]
+
 # S.get_notes(1, True, True)
 #
 # act = S.mc_info[0].act_dur[S.mc_info[0].act_dur.notna()]
