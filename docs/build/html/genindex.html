@@ -82,6 +82,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="libs.html">libs package</a></li>
 </ul>
 
             
@@ -151,7 +152,6 @@
  <a href="#A"><strong>A</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
- | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
@@ -187,11 +187,19 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ms3.html#ms3.check_measure_boundaries">check_measure_boundaries() (in module ms3)</a>
+</li>
+      <li><a href="ms3.html#ms3.check_mn">check_mn() (in module ms3)</a>
+</li>
       <li><a href="play.html#play.cmdline_process">cmdline_process() (in module play)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="coding_rules.html#module-coding_rules">coding_rules (module)</a>
+</li>
+      <li><a href="ms3.html#ms3.compute_mn">compute_mn() (in module ms3)</a>
+</li>
+      <li><a href="ms3.html#ms3.compute_repeat_structure">compute_repeat_structure() (in module ms3)</a>
 </li>
       <li><a href="ms3.html#ms3.convert_timesig">convert_timesig() (in module ms3)</a>
 </li>
@@ -202,14 +210,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ms3.html#ms3.Score.dir">dir (ms3.Score attribute)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="E">E</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="ms3.html#ms3.Section.events">events (ms3.Section attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -233,7 +233,7 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="ms3.html#ms3.get_repeat_structure">get_repeat_structure() (in module ms3)</a>
+      <li><a href="ms3.html#ms3.Score.get_notes">get_notes() (ms3.Score method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -249,7 +249,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="ms3.html#ms3.Score.info_tags">info_tags (ms3.Score attribute)</a>
+      <li><a href="ms3.html#ms3.Score.info">info() (ms3.Score property)</a>
 </li>
       <li><a href="ms3.html#ms3.isnan">isnan() (in module ms3)</a>
 </li>
@@ -281,11 +281,13 @@
 </li>
       <li><a href="libs.html#libs.synth.FluidSynth.make">make() (libs.synth.FluidSynth method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ms3.html#ms3.Score.mc_info">mc_info (ms3.Score attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ms3.html#ms3.Score.measure_nodes">measure_nodes (ms3.Score attribute)</a>
+</li>
+      <li><a href="ms3.html#ms3.midi2octave">midi2octave() (in module ms3)</a>
 </li>
       <li><a href="ms3.html#module-ms3">ms3 (module)</a>
 </li>
@@ -296,6 +298,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ms3.html#ms3.nan_eq">nan_eq() (in module ms3)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="ms3.html#ms3.Section.notes">notes (ms3.Section attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -329,6 +335,8 @@
 </li>
       <li><a href="ms3.html#ms3.Score.score">score (ms3.Score attribute)</a>
 </li>
+      <li><a href="ms3.html#ms3.Score.score_features">score_features (ms3.Score attribute)</a>
+</li>
       <li><a href="ms3.html#ms3.search_in_list_of_tuples">search_in_list_of_tuples() (in module ms3)</a>
 </li>
       <li><a href="libs.html#libs.sheet.Section">Section (class in libs.sheet)</a>
@@ -337,25 +345,27 @@
         <li><a href="ms3.html#ms3.Section">(class in ms3)</a>
 </li>
       </ul></li>
-      <li><a href="ms3.html#ms3.Score.section_breaks">section_breaks (ms3.Score attribute)</a>
-</li>
       <li><a href="ms3.html#ms3.Score.section_order">section_order (ms3.Score attribute)</a>
 </li>
       <li><a href="ms3.html#ms3.Score.section_structure">section_structure (ms3.Score attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="libs.html#libs.sheet.Sheet.sections">sections (libs.sheet.Sheet attribute)</a>
 
       <ul>
         <li><a href="ms3.html#ms3.Score.sections">(ms3.Score attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="ms3.html#ms3.Score.separating_barlines">separating_barlines (ms3.Score attribute)</a>
 </li>
       <li><a href="libs.html#libs.sheet.Sheet">Sheet (class in libs.sheet)</a>
 </li>
+      <li><a href="ms3.html#ms3.SliceMaker">SliceMaker (class in ms3)</a>
+</li>
       <li><a href="ms3.html#ms3.sort_dict">sort_dict() (in module ms3)</a>
+</li>
+      <li><a href="ms3.html#ms3.spell_tpc">spell_tpc() (in module ms3)</a>
 </li>
       <li><a href="ms3.html#ms3.Score.staff_nodes">staff_nodes (ms3.Score attribute)</a>
 </li>

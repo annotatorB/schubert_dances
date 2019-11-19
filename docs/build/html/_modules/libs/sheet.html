@@ -81,6 +81,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../libs.html">libs package</a></li>
 </ul>
 
             
@@ -162,12 +163,13 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    sections : list of pandas.DataFrame</span>
+<span class="sd">    sections : :obj:`list` of :obj:`pandas.DataFrame`</span>
 <span class="sd">        List of sections in played order, each possibly appearing several times.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    Compared to a standard music sheet:</span>
+
 <span class="sd">    - repetitions of (contiguous) sections are specified separately.</span>
 <span class="sd">    - many informative elements (like ties between notes) are optionally stored.</span>
 
@@ -179,15 +181,17 @@
 <span class="sd">    --------</span>
 <span class="sd">    These examples illustrate how to build a sheet with repetitions of sections.</span>
 <span class="sd">    Once the sheet and sections are built, it is then:</span>
+
 <span class="sd">    - easy to playback a sheet, by just iterating over the stored sections.</span>
 <span class="sd">    - possible to iterate over the sections as they (plausibly) were on paper, e.g.:</span>
+
 <span class="sd">        - A B B C D E D E F =&gt; A 𝄆 B 𝄇 C 𝄆 D E 𝄇 F</span>
 <span class="sd">        - A B C B D E       =&gt; A 𝄆 B C¹ 𝄇 D² E</span>
 <span class="sd">        - A B C A D E A C F =&gt; 𝄆 A B¹ C¹³ D² E² 𝄇 F³</span>
 
 <span class="sd">    &gt;&gt;&gt; # Make a new sheet</span>
 <span class="sd">    &gt;&gt;&gt; my_sheet = sheet.Sheet()</span>
-
+<span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Make three sections</span>
 <span class="sd">    &gt;&gt;&gt; A, B, C = (sheet.Section() for _ in range(3))</span>
 <span class="sd">    &gt;&gt;&gt; # Parse and fill the columns of the sections (see &#39;help(sheet.Section)&#39; for the format)</span>
@@ -200,7 +204,7 @@
 <span class="sd">    &gt;&gt;&gt; for section in (A, B, A, C, C):</span>
 <span class="sd">    ...     my_sheet.append(section)</span>
 <span class="sd">    ...</span>
-
+<span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Iterate over the sections in playing order (i.e.: A-B-A-C-C)</span>
 <span class="sd">    &gt;&gt;&gt; for section in my_sheet.as_played():</span>
 <span class="sd">    ...     pass</span>
@@ -213,7 +217,7 @@
 <span class="sd">    ...     # - C, ([-2], True, True)  &lt;- volta value from previous pair of repetition bars is noted as negative (if any)</span>
 <span class="sd">    ...     pass</span>
 <span class="sd">    ...</span>
-
+<span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; # Save and load again the sheet</span>
 <span class="sd">    &gt;&gt;&gt; sheet.save(my_sheet, &quot;my_sheet.sht&quot;)</span>
 <span class="sd">    &gt;&gt;&gt; my_sheet = sheet.load(&quot;my_sheet.sht&quot;)</span>
@@ -348,7 +352,7 @@
 <span class="sd">        ------</span>
 <span class="sd">        AssertionError</span>
 <span class="sd">            If the format is not followed, with an explanatory error message.</span>
-<span class="sd">            This is raised even when not in debug mode (i.e. &#39;__debug__ == False&#39;).</span>
+<span class="sd">            This is raised even when not in debug mode (i.e. `__debug__ == False`).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">global</span> <span class="n">Section</span>
@@ -367,32 +371,67 @@
 <span class="sd">    It is to be though as &quot;the ink on the paper&quot; for a continuous segment of notes,</span>
 <span class="sd">    and absolutely not as a period; finding periods is left to subsequent analysis.</span>
 
-<span class="sd">    The main purpose of a section is to hold notes, in attribute &#39;notes&#39; (a pandas.DataFrame).</span>
+<span class="sd">    The main purpose of a section is to hold notes, in attribute `notes` (a :obj:`pandas.DataFrame`).</span>
+
 <span class="sd">    Mandatory columns:</span>
-<span class="sd">    - note (int)</span>
-<span class="sd">        (Our augmented version of the) circle-of-fifths notation for the note.</span>
-<span class="sd">        See &#39;libs/notes.py&#39; for more details on this notation.</span>
-<span class="sd">    - start (fractions.Fraction)</span>
+
+<span class="sd">    - note (:obj:`int`)</span>
+<span class="sd">        Our augmented version of the circle-of-fifths notation for the note.</span>
+<span class="sd">        See `libs/notes.py` for more details on this notation.</span>
+<span class="sd">    - start (:obj:`fractions.Fraction`)</span>
 <span class="sd">        Non-negative start time point (in beats), relative to the beginning of the section.</span>
-<span class="sd">    - duration (fractions.Fraction)</span>
+<span class="sd">    - duration (:obj:`fractions.Fraction`)</span>
 <span class="sd">        Positive duration (in beats).</span>
+
 <span class="sd">    Optional columns:</span>
-<span class="sd">    - velocity (int in [1 .. 127])</span>
+
+<span class="sd">    - velocity (:obj:`int` in [1 .. 127])</span>
 <span class="sd">        Velocity at which the note must be played.</span>
-<span class="sd">    - hand (int)</span>
+<span class="sd">    - hand (:obj:`int`)</span>
 <span class="sd">        Which hand (or more generally which voice) is supposed to play this note.</span>
 <span class="sd">        (To be formalized, probably something like: 0 for unknown, -1 for left, 1 for right.)</span>
 
-<span class="sd">    A section is augmented with metadata, and there is two mandatory metadata:</span>
-<span class="sd">    - signature (tuple of two positive integers)</span>
+<span class="sd">    A section is augmented with metadata, and there is three mandatory metadata:</span>
+
+<span class="sd">    - signature (tuple of two positive :obj:`int`)</span>
 <span class="sd">        The time signature of this section.</span>
-<span class="sd">    - silence (fractions.Fraction)</span>
+<span class="sd">    - silence (:obj:`fractions.Fraction`)</span>
 <span class="sd">        A non-negative silence duration to play at the end of the section.</span>
-<span class="sd">    - tempo (float)</span>
+<span class="sd">    - tempo (:obj:`float`)</span>
 <span class="sd">        The tempo (in beats per minute) at which this section should be played.</span>
 
 <span class="sd">    Additional metadata can be freely stored in the instance, as a new attribute.</span>
 <span class="sd">    For instance, whether the section begins with a double bar can be specified this way.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    Below we display the full internal structure of the Frère Jacques nursery rhyme,</span>
+<span class="sd">    which can be obtained with `python3 playground/frere_jacques.py &gt; frere_jacques.sht`</span>
+
+<span class="sd">    &gt;&gt;&gt; # Import and load the sheet</span>
+<span class="sd">    &gt;&gt;&gt; from libs import sheet</span>
+<span class="sd">    &gt;&gt;&gt; my_sheet = sheet.load(&quot;frere_jacques.sht&quot;)</span>
+
+<span class="sd">    &gt;&gt;&gt; # A sheet contains a single data member, named &#39;sections&#39;, which is a list of sections</span>
+<span class="sd">    &gt;&gt;&gt; # The section instances are stored in playing order, so each can appear several times</span>
+<span class="sd">    &gt;&gt;&gt; my_sheet.sections</span>
+<span class="sd">    [&lt;libs.sheet.Section object at 0x7fdd5c24b9b0&gt;, ...]</span>
+
+<span class="sd">    &gt;&gt;&gt; # Let&#39;s look (exhaustively) into the internal structure of the first section</span>
+<span class="sd">    &gt;&gt;&gt; sec_0 = my_sheet.sections[0]</span>
+<span class="sd">    &gt;&gt;&gt; # It contains 4 members: the &#39;notes&#39; dataframe, and 3 attributes.</span>
+<span class="sd">    &gt;&gt;&gt; sec_0.signature  # The time signature for this section</span>
+<span class="sd">    (2, 4)</span>
+<span class="sd">    &gt;&gt;&gt; sec_0.silence    # A non-negative silence duration to play at the end of the section</span>
+<span class="sd">    Fraction(0, 1)</span>
+<span class="sd">    &gt;&gt;&gt; sec_0.tempo      # The tempo (in beats per minute) for this section</span>
+<span class="sd">    60</span>
+<span class="sd">    &gt;&gt;&gt; sec_0.notes      # The notes dataframe (see above for the structure)</span>
+<span class="sd">       note start duration</span>
+<span class="sd">    0   104     0      1/4</span>
+<span class="sd">    1   106   1/4      1/4</span>
+<span class="sd">    2   108   1/2      1/4</span>
+<span class="sd">    3   104   3/4      1/4</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>
@@ -414,10 +453,10 @@
 <span class="sd">        **kwargs</span>
 <span class="sd">            Keyword arguments forwarded to the parent constructor.</span>
 <span class="sd">            Notes:</span>
-<span class="sd">            · If the &#39;columns&#39; keyword argument is passed (expected a list),</span>
+<span class="sd">            · If the `columns` keyword argument is passed (expected a list),</span>
 <span class="sd">              the given values are appended to the list of mandatory columns.</span>
-<span class="sd">            · If the &#39;data&#39; keyword argument is passed,</span>
-<span class="sd">              no &#39;columns&#39; argument is forwarded by default and no check is made.</span>
+<span class="sd">            · If the `data` keyword argument is passed,</span>
+<span class="sd">              no `columns` argument is forwarded by default and no check is made.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialize the dataframe</span>
@@ -438,7 +477,7 @@
 <span class="sd">        ------</span>
 <span class="sd">        AssertionError</span>
 <span class="sd">            If the format is not followed, with an explanatory error message.</span>
-<span class="sd">            This is raised even when not in debug mode (i.e. &#39;__debug__ == False&#39;).</span>
+<span class="sd">            This is raised even when not in debug mode (i.e. `__debug__ == False`).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># (Known) metadata assertions</span>

@@ -34,7 +34,8 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="synth module" href="synth.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -79,8 +80,15 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="modules.html">tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">libs package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-libs.sheet">libs.sheet module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-libs.synth">libs.synth module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-libs">Module contents</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -160,57 +168,91 @@
 <p>Section of notes storage class.</p>
 <p>It is to be though as “the ink on the paper” for a continuous segment of notes,
 and absolutely not as a period; finding periods is left to subsequent analysis.</p>
-<p>The main purpose of a section is to hold notes, in attribute ‘notes’ (a pandas.DataFrame).
-Mandatory columns:
-- note (int)</p>
-<blockquote>
-<div><p>(Our augmented version of the) circle-of-fifths notation for the note.
-See ‘libs/notes.py’ for more details on this notation.</p>
-</div></blockquote>
+<p>The main purpose of a section is to hold notes, in attribute <cite>notes</cite> (a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>).</p>
+<p>Mandatory columns:</p>
 <ul class="simple">
 <li><dl class="simple">
-<dt>start (fractions.Fraction)</dt><dd><p>Non-negative start time point (in beats), relative to the beginning of the section.</p>
+<dt>note (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>)</dt><dd><p>Our augmented version of the circle-of-fifths notation for the note.
+See <cite>libs/notes.py</cite> for more details on this notation.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>duration (fractions.Fraction)</dt><dd><p>Positive duration (in beats).</p>
+<dt>start (<a class="reference external" href="https://docs.python.org/3/library/fractions.html#fractions.Fraction" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractions.Fraction</span></code></a>)</dt><dd><p>Non-negative start time point (in beats), relative to the beginning of the section.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>duration (<a class="reference external" href="https://docs.python.org/3/library/fractions.html#fractions.Fraction" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractions.Fraction</span></code></a>)</dt><dd><p>Positive duration (in beats).</p>
 </dd>
 </dl>
 </li>
 </ul>
-<p>Optional columns:
-- velocity (int in [1 .. 127])</p>
-<blockquote>
-<div><p>Velocity at which the note must be played.</p>
-</div></blockquote>
+<p>Optional columns:</p>
 <ul class="simple">
 <li><dl class="simple">
-<dt>hand (int)</dt><dd><p>Which hand (or more generally which voice) is supposed to play this note.
+<dt>velocity (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a> in [1 .. 127])</dt><dd><p>Velocity at which the note must be played.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>hand (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>)</dt><dd><p>Which hand (or more generally which voice) is supposed to play this note.
 (To be formalized, probably something like: 0 for unknown, -1 for left, 1 for right.)</p>
 </dd>
 </dl>
 </li>
 </ul>
-<p>A section is augmented with metadata, and there is two mandatory metadata:
-- signature (tuple of two positive integers)</p>
-<blockquote>
-<div><p>The time signature of this section.</p>
-</div></blockquote>
+<p>A section is augmented with metadata, and there is three mandatory metadata:</p>
 <ul class="simple">
 <li><dl class="simple">
-<dt>silence (fractions.Fraction)</dt><dd><p>A non-negative silence duration to play at the end of the section.</p>
+<dt>signature (tuple of two positive <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>)</dt><dd><p>The time signature of this section.</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>tempo (float)</dt><dd><p>The tempo (in beats per minute) at which this section should be played.</p>
+<dt>silence (<a class="reference external" href="https://docs.python.org/3/library/fractions.html#fractions.Fraction" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractions.Fraction</span></code></a>)</dt><dd><p>A non-negative silence duration to play at the end of the section.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>tempo (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">float</span></code></a>)</dt><dd><p>The tempo (in beats per minute) at which this section should be played.</p>
 </dd>
 </dl>
 </li>
 </ul>
 <p>Additional metadata can be freely stored in the instance, as a new attribute.
 For instance, whether the section begins with a double bar can be specified this way.</p>
+<p class="rubric">Example</p>
+<p>Below we display the full internal structure of the Frère Jacques nursery rhyme,
+which can be obtained with <cite>python3 playground/frere_jacques.py &gt; frere_jacques.sht</cite></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Import and load the sheet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">libs</span> <span class="k">import</span> <span class="n">sheet</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;frere_jacques.sht&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># A sheet contains a single data member, named &#39;sections&#39;, which is a list of sections</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The section instances are stored in playing order, so each can appear several times</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span><span class="o">.</span><span class="n">sections</span>
+<span class="go">[&lt;libs.sheet.Section object at 0x7fdd5c24b9b0&gt;, ...]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Let&#39;s look (exhaustively) into the internal structure of the first section</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_0</span> <span class="o">=</span> <span class="n">my_sheet</span><span class="o">.</span><span class="n">sections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># It contains 4 members: the &#39;notes&#39; dataframe, and 3 attributes.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_0</span><span class="o">.</span><span class="n">signature</span>  <span class="c1"># The time signature for this section</span>
+<span class="go">(2, 4)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_0</span><span class="o">.</span><span class="n">silence</span>    <span class="c1"># A non-negative silence duration to play at the end of the section</span>
+<span class="go">Fraction(0, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_0</span><span class="o">.</span><span class="n">tempo</span>      <span class="c1"># The tempo (in beats per minute) for this section</span>
+<span class="go">60</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sec_0</span><span class="o">.</span><span class="n">notes</span>      <span class="c1"># The notes dataframe (see above for the structure)</span>
+<span class="go">   note start duration</span>
+<span class="go">0   104     0      1/4</span>
+<span class="go">1   106   1/4      1/4</span>
+<span class="go">2   108   1/2      1/4</span>
+<span class="go">3   104   3/4      1/4</span>
+</pre></div>
+</div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -226,7 +268,7 @@ For instance, whether the section begins with a double bar can be specified this
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.8)"><strong>AssertionError</strong></a> – If the format is not followed, with an explanatory error message.
-    This is raised even when not in debug mode (i.e. ‘__debug__ == False’).</p>
+    This is raised even when not in debug mode (i.e. <cite>__debug__ == False</cite>).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -244,15 +286,17 @@ For instance, whether the section begins with a double bar can be specified this
 <dd><p>List of sections in played order, each possibly appearing several times.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>list of pandas.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <p class="rubric">Notes</p>
-<p>Compared to a standard music sheet:
-- repetitions of (contiguous) sections are specified separately.
-- many informative elements (like ties between notes) are optionally stored.</p>
+<p>Compared to a standard music sheet:</p>
+<ul class="simple">
+<li><p>repetitions of (contiguous) sections are specified separately.</p></li>
+<li><p>many informative elements (like ties between notes) are optionally stored.</p></li>
+</ul>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -262,9 +306,10 @@ For instance, whether the section begins with a double bar can be specified this
 </div>
 <p class="rubric">Examples</p>
 <p>These examples illustrate how to build a sheet with repetitions of sections.
-Once the sheet and sections are built, it is then:
-- easy to playback a sheet, by just iterating over the stored sections.
-- possible to iterate over the sections as they (plausibly) were on paper, e.g.:</p>
+Once the sheet and sections are built, it is then:</p>
+<ul>
+<li><p>easy to playback a sheet, by just iterating over the stored sections.</p></li>
+<li><p>possible to iterate over the sections as they (plausibly) were on paper, e.g.:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>A B B C D E D E F =&gt; A 𝄆 B 𝄇 C 𝄆 D E 𝄇 F</p></li>
@@ -272,11 +317,12 @@ Once the sheet and sections are built, it is then:
 <li><p>A B C A D E A C F =&gt; 𝄆 A B¹ C¹³ D² E² 𝄇 F³</p></li>
 </ul>
 </div></blockquote>
+</li>
+</ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make a new sheet</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">Sheet</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make three sections</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Make three sections</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="n">sheet</span><span class="o">.</span><span class="n">Section</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Parse and fill the columns of the sections (see &#39;help(sheet.Section)&#39; for the format)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># ...</span>
@@ -288,9 +334,8 @@ Once the sheet and sections are built, it is then:
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">my_sheet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
 <span class="gp">...</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Iterate over the sections in playing order (i.e.: A-B-A-C-C)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Iterate over the sections in playing order (i.e.: A-B-A-C-C)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">my_sheet</span><span class="o">.</span><span class="n">as_played</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 <span class="gp">...</span>
@@ -302,9 +347,8 @@ Once the sheet and sections are built, it is then:
 <span class="gp">... </span>    <span class="c1"># - C, ([-2], True, True)  &lt;- volta value from previous pair of repetition bars is noted as negative (if any)</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 <span class="gp">...</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Save and load again the sheet</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Save and load again the sheet</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sheet</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">my_sheet</span><span class="p">,</span> <span class="s2">&quot;my_sheet.sht&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;my_sheet.sht&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_sheet</span><span class="o">.</span><span class="n">assert_format</span><span class="p">()</span>  <span class="c1"># Optional, checks both the sheet and its sections</span>
@@ -375,7 +419,7 @@ will not raise an error and be consistently output as in the first repetition (e
 <dl class="field-list simple">
 <dt class="field-odd">Raises</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.8)"><strong>AssertionError</strong></a> – If the format is not followed, with an explanatory error message.
-    This is raised even when not in debug mode (i.e. ‘__debug__ == False’).</p>
+    This is raised even when not in debug mode (i.e. <cite>__debug__ == False</cite>).</p>
 </dd>
 </dl>
 </dd></dl>
@@ -502,6 +546,13 @@ To download piano SoundFonts, see: <a class="reference external" href="https://s
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="synth.html" class="btn btn-neutral float-left" title="synth module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

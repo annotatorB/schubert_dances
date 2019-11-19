@@ -5,7 +5,7 @@
 #Internal libraries
 ###################
 import os, re, argparse, logging
-from collections import defaultdict
+from collections import defaultdict, Counter
 from fractions import Fraction as frac
 
 
@@ -53,6 +53,22 @@ class SliceMaker(object):
 
 SL, SM = SliceMaker(), SliceMaker()
 
+TIMESIG_BEAT = {
+                '3/16': '1/16',
+                '6/16': '3/16',
+                '3/8':  '1/8',
+                '4/8':  '1/4',
+                '6/8':  '3/8',
+                '9/8':  '3/8',
+                '12/8': '3/8',
+                '2/4':  '1/4',
+                '3/4':  '1/4',
+                '4/4':  '1/4',
+                '6/4':  '3/4',
+                '2/2':  '1/2',
+                '3/2':  '1/2',
+                }
+
 # XML tags of MuseScore 3 format that this parser takes care of
 TREATED_TAGS = ['accidental',   # within <KeySig>
                 'Accidental',   # within <Note>, ignored
@@ -99,6 +115,21 @@ TREATED_TAGS = ['accidental',   # within <KeySig>
 ################################################################################
 #                     HELPER FUNCTIONS in alphabetical order
 ################################################################################
+def a_n_range(a, n):
+    """Generates `a` and the `n-1` following characters.
+    Parameters
+    ----------
+    a : :obj:`char`
+        Start character.
+    n : :obj:`int`
+        Number of total characters.
+    """
+    a = ord(a)
+    for c in range(a, a+n):
+        yield chr(c)
+
+
+
 def check_measure_boundaries(notes, measure_durations):
     """ Check that no note surpasses the barline.
 
@@ -469,7 +500,7 @@ class Section(object):
         for mc, measure_stack in enumerate(zip(*[[measure for mc, measure in node_dicts.items() if self.first_mc <= mc <= self.last_mc] for node_dicts in parent.measure_nodes.values()])):
             mc += self.first_mc
             nodetypes = defaultdict(list)   # keeping track of tags on the measure level
-            mc_info = parent.mc_info[0].loc[mc]
+            mc_info = parent.info.loc[mc]
             volta = mc_info.volta
             for staff_id, measure in enumerate(measure_stack):
                 staff_id += 1
@@ -585,6 +616,9 @@ class Score(object):
         Absolute or relative path to the MSCX file you want to parse.
     filename : :obj:`str`
         Filename of the parsed file.
+    info : obj:`pandas.DataFrame`
+        Aggregation and strongly expanded version of the dataframes in `mc_info`.
+        Useful for everyday work.
     last_node : :obj:`int`
         Count of the score's last measure node.
     mc_info : :obj:`dict` of :obj:`pandas.DataFrame`
@@ -634,6 +668,7 @@ class Score(object):
         self.super_sections = {}
         self.super_section_order = []
         self.mc_info = {}
+        self.info = pd.DataFrame()
 
         # Load file
         with open(self.file, 'r') as file:
@@ -746,26 +781,26 @@ class Score(object):
             mc_info[['keysig', 'timesig']] = mc_info[['keysig', 'timesig']].fillna(method='ffill')
 
         #######################################################################
-        # Create the master DataFrame mc_info[0], combining all staves'       #
+        # Create the master DataFrame self.info, combining all staves'        #
         # structural information and newly computed infos such as bar numbers #
         #######################################################################
 
-        self.mc_info[0] = self.mc_info[1].copy()
+        self.info = self.mc_info[1].copy()
         for df in (self.mc_info[k] for k in self.mc_info.keys() if k > 1):
-            self.mc_info[0].fillna(df, inplace=True)
-        same = self.mc_info[0].equals(self.mc_info[1])
+            self.info.fillna(df, inplace=True)
+        same = self.info.equals(self.mc_info[1])
         if same:
-            logging.debug(f"mc_info[0] and mc_info[1] were identical before aggregation.")
+            logging.debug(f"info and mc_info[1] were identical before aggregation.")
         else:
-            logging.warning(f"mc_info[0] and mc_info[1] were not identical before aggregation.\
+            logging.warning(f"info and mc_info[1] were not identical before aggregation.\
 This means that lower staves contain information that's missing in\
 the first staff (as shown in previous warning).")
         # complete measure durations
-        self.mc_info[0].insert(2, 'duration', self.mc_info[0]['timesig'].apply(lambda x: frac(x)))
-        self.mc_info[0].act_dur.fillna(self.mc_info[0].duration, inplace=True)
-        # Aggregate values in self.mc_info[0]
+        self.info.insert(2, 'duration', self.info['timesig'].apply(lambda x: frac(x)))
+        self.info.act_dur.fillna(self.info.duration, inplace=True)
+        # Aggregate values in self.info
         for df in (self.mc_info[k] for k in self.mc_info.keys() if k > 1):
-            self.mc_info[0].voices += df.voices
+            self.info.voices += df.voices
 
 
         #############################
@@ -773,23 +808,23 @@ the first staff (as shown in previous warning).")
         #############################
 
         # Spreading volta information
-        volta_structure = get_volta_structure(self.mc_info[0])
+        volta_structure = get_volta_structure(self.info)
         for group in volta_structure:
             for i, mc in enumerate(group):
-                self.mc_info[0].loc[mc, 'volta'] = i+1
-        repeat_structure = compute_repeat_structure(self.mc_info[0][['repeats', 'volta']][self.mc_info[0].repeats.notna() | self.mc_info[0].volta.notna()])
+                self.info.loc[mc, 'volta'] = i+1
+        repeat_structure = compute_repeat_structure(self.info[['repeats', 'volta']][self.info.repeats.notna() | self.info.volta.notna()])
 
 
         def create_section(fro, to, repeated=False, volta_group=None):
             nonlocal section_counter, super_counter
-            start_reason = 'start' if isnan(self.mc_info[0].repeats[fro]) else self.mc_info[0].repeats[fro]
-            end_reason   = 'end'   if isnan(self.mc_info[0].repeats[to])  else self.mc_info[0].repeats[to]
+            start_reason = 'start' if isnan(self.info.repeats[fro]) else self.info.repeats[fro]
+            end_reason   = 'end'   if isnan(self.info.repeats[to])  else self.info.repeats[to]
             if start_reason == 'start':
                 start_reason = 'startRepeat' if repeated else 'startNormal'
             if end_reason == 'end':
                 end_reason = 'endRepeat' if repeated else 'endNormal'
 
-            inner_structure = self.mc_info[0].loc[fro+1:to-1]   # measure infos excluding starting and ending measure
+            inner_structure = self.info.loc[fro+1:to-1]   # measure infos excluding starting and ending measure
             # check whether this section contains separating barlines: then, subsections have to be created
             splits = inner_structure.barline.isin(self.separating_barlines)
             if splits.any():
@@ -845,25 +880,25 @@ the first staff (as shown in previous warning).")
             self.sections[section].voltas = group
 
         # Add sections to info frame
-        self.mc_info[0].insert(0, 'section', pd.Series(np.nan, dtype='Int64'))
+        self.info.insert(0, 'section', pd.Series(np.nan, dtype='Int64'))
         for s, (fro, to) in self.section_structure.items():
-            self.mc_info[0].loc[fro:to, 'section'] = s
+            self.info.loc[fro:to, 'section'] = s
 
-        if self.mc_info[0].section.isna().any():
+        if self.info.section.isna().any():
             logging.critical("Not all measure nodes have been assigned to a section.")
 
         # check that no note crosses measure boundary
-        check_measure_boundaries(self.get_notes(), self.mc_info[0].act_dur)
+        check_measure_boundaries(self.get_notes(), self.info.act_dur)
 
         ##################################################
         # Calculate and check measure numbers (MN != MC) #
         ##################################################
         # mn_in_score shows bar numbers as they are shown in MuseScore
-        self.mc_info[0]['mn_in_score'] = compute_mn(self.mc_info[0][['dont_count','numbering_offset']])
+        self.info['mn_in_score'] = compute_mn(self.info[['dont_count','numbering_offset']])
 
         # Compute the subsequent mc for every mc
-        self.mc_info[0]['next'] = np.nan
-        mcs = self.mc_info[0].reset_index()['mc']
+        self.info['next'] = np.nan
+        mcs = self.info.reset_index()['mc']
         before_volta = {}
         for section in self.sections.values():
             fro, to = section.first_mc, section.last_mc
@@ -878,105 +913,210 @@ the first staff (as shown in previous warning).")
                 n_voltas = len(section.voltas)
                 for i, group in enumerate(reversed(section.voltas)):        # iterate backwards through voltas
                     if i < n_voltas - 1:                                    # check for all voltas but the first
-                        group_info = self.mc_info[0].loc[group]             # whether they are exluded from bar count
+                        group_info = self.info.loc[group]             # whether they are exluded from bar count
                         wrongly_counted = group_info.dont_count.isna() & group_info.numbering_offset.isna()
                         if wrongly_counted.any():
                             logging.warning(f"MC(s) {mcs[group][wrongly_counted].values} in volta {group} in section {section.index} is/are not excluded from barcount.")
                     if i == 0:                                              # last volta:
                         normal_slice.extend(group)                          # just normal
                         # check
-                        repeat_vals = self.mc_info[0].repeats.loc[group].values
+                        repeat_vals = self.info.repeats.loc[group].values
                         if any(rep in repeat_vals for rep in ['startRepeat', 'endRepeat']):
                             logging.warning(f"Final volta with MC {group} contains a repeat sign.")
                     else:                                                   # previous voltas:
                         for j, mc in enumerate(reversed(group)):            # iterate backwards through measure counts
                             if j == 0:                                      # the last one goes back to section's beginning
                                 # check
-                                self.mc_info[0].loc[mc, 'next'] = [[fro]]
-                                if self.mc_info[0].loc[mc, 'repeats'] != 'endRepeat':
+                                self.info.loc[mc, 'next'] = [[fro]]
+                                if self.info.loc[mc, 'repeats'] != 'endRepeat':
                                     logging.warning(f"Volta with MC {group} is missing the endRepeat.")
                             else:                                           # previous MCs just normal
                                 normal_slice.append(mc)
                 before_volta[mc-1] = [group[0] for group in section.voltas] # store measure before the first volta and a list holding
                                                                             # the first measure of each volta which can follow it
         # Fill the column 'next'
-            self.mc_info[0].loc[normal_slice, 'next'] = mcs.loc[normal_slice].apply(lambda x: [x+1])
+            self.info.loc[normal_slice, 'next'] = mcs.loc[normal_slice].apply(lambda x: [x+1])
             if repeat_slice:
-                self.mc_info[0].loc[repeat_slice, 'next'] = self.mc_info[0].loc[repeat_slice, 'next'].apply(lambda x: x + [fro])
-        self.mc_info[0].loc[before_volta.keys(), 'next'] = pd.Series(before_volta)
-        self.mc_info[0].iloc[-1, self.mc_info[0].columns.get_loc('next')] = np.nan
+                self.info.loc[repeat_slice, 'next'] = self.info.loc[repeat_slice, 'next'].apply(lambda x: x + [fro])
+        self.info.loc[before_volta.keys(), 'next'] = pd.Series(before_volta)
+        self.info.iloc[-1, self.info.columns.get_loc('next')] = np.nan
 
         # Calculate offsets for split measures and check for correct counting
         not_excluded = lambda r: isnan(r.dont_count) and isnan(r.numbering_offset)
-        measures_to_check = (self.mc_info[0].act_dur != self.mc_info[0].duration) | (self.mc_info[0].repeats == 'endRepeat')
-        check = self.mc_info[0][measures_to_check]
-        self.mc_info[0].insert(5, 'offset', 0)
+        measures_to_check = (self.info.act_dur != self.info.duration) | (self.info.repeats == 'endRepeat')
+        check = self.info[measures_to_check]
+        self.info.insert(5, 'offset', 0)
         for ix, r in check.iterrows():
             if r.act_dur > r.duration:
                 logging.info(f"MC {ix} is longer than its nominal value.")
             elif r.act_dur == r.duration:           # endRepeat
-                next_mcs = self.mc_info[0].loc[r.next]
+                next_mcs = self.info.loc[r.next]
                 irregular = next_mcs.act_dur != next_mcs.duration
                 if irregular.any():
                     logging.warning(f"The endRepeat in MC {ix} ({r.act_dur}) is not adapted to the irregular measure length(s) in MC(s) {next_mcs[irregular].index.to_list()} ({[str(fr) for fr in next_mcs[irregular].act_dur.values]})")
             elif ix == 0:   # anacrusis
-                self.mc_info[0].loc[ix, 'offset'] = r.duration - r.act_dur
+                self.info.loc[ix, 'offset'] = r.duration - r.act_dur
                 if not_excluded(r):
                     logging.warning(f"MC {ix} seems to be a pickup measure but has not been excluded from bar count!")
             else:
-                if self.mc_info[0].loc[ix, 'offset'] == 0:
+                if self.info.loc[ix, 'offset'] == 0:
                     missing = r.duration - r.act_dur
                     if not isnan(r.next):
                         for n in r.next:
-                            if self.mc_info[0].loc[n].act_dur == missing:
-                                self.mc_info[0].loc[n, 'offset'] = r.act_dur
-                                if not_excluded(self.mc_info[0].loc[n]):
+                            if self.info.loc[n].act_dur == missing:
+                                self.info.loc[n, 'offset'] = r.act_dur
+                                if not_excluded(self.info.loc[n]):
                                     logging.warning(f"MC {n}  is completing MC {ix} but has not been excluded from bar count!")
                             else:
-                                logging.warning(f"MC {ix} ({r.act_dur}) and MC {n} ({self.mc_info[0].loc[n].act_dur}) don't add up to {r.duration}.")
+                                logging.warning(f"MC {ix} ({r.act_dur}) and MC {n} ({self.info.loc[n].act_dur}) don't add up to {r.duration}.")
 
 
 
+    def get_notes(self, selector=None, element='section', octaves=False, pitch_names=False, beats=False, multiindex=True, mc=None):
+        """ Retrieve list of notes as a DataFrame.
 
+        Parameters
+        ----------
+        selector : :obj:`int` or :obj:`collection` of :obj:`int`
+            Index/Indices of the sections of which you want to see the notes.
+            By default, all sections are shown.
+            Special case 2-tuple (a,b) yields a slice from section a to section b (inclusive).
+            The parameter is ignored if `mc` is passed.
+            If you don't want the respective sections to be displayed as first level of a
+            multiindex with sequential index on the second, pass `multiindex=False`.
+        element : {'section', }
+        """
+        features = {}
+        features['octaves'] = octaves
+        features['pitch_names'] = pitch_names
+        features['beats'] = beats
 
-    def get_notes(self, sections=None, octaves=False, pitch_names=False, mc=None):
-
-        if mc is not None:
-            df = self.get_notes()
-            df = df[df.mc == mc]
-            if len(df) == 0:
-                raise ValueError(f"Measure count {mc} does not exist")
-        elif sections is not None:
-            if sections.__class__ == int:
-                if sections in self.sections:
-                    df = pd.concat([self.sections[sections].notes], keys=[sections])
+        if element == 'section':
+            if selector is None:
+                selector = self.sections.keys()
+                df = pd.concat([self.sections[s].notes for s in selector], keys=selector, names=['section', 'ix'])
+            elif selector.__class__ == int:
+                if selector in self.sections:
+                    df = pd.concat([self.sections[selector].notes], keys=[selector], names=['section', 'ix'])
                 else:
-                    raise ValueError(f"Section {sections} does not exist.")
+                    raise ValueError(f"Section {selector} does not exist.")
             else:
-                nonex = [s for s in sections if not s in self.sections]
+                if selector.__class__ == tuple and len(selector) == 2:
+                    selector = list(range(selector[0], selector[1]+1))
+                nonex = [s for s in selector if not s in self.sections]
                 if len(nonex) > 0:
-                    logging.warning(f"Section{'s ' + str(nonex) if len(nonex) > 1 else ' ' + str(nonex[0])} does not exist.")
-                    sections = [s for s in sections if not s in nonex]
-                df = pd.concat([self.sections[s].notes for s in sections], keys=sections)
+                    logging.warning(f"Section{'s ' + str(nonex) + ' do' if len(nonex) > 1 else ' ' + str(nonex[0]) + ' does'} not exist.")
+                    selector = [s for s in selector if not s in nonex]
+                c = Counter(selector)
+                multiples = {k: v for k, v in c.items() if v > 1}
+                if len(multiples) == 0:
+                    df = pd.concat([self.sections[s].notes for s in selector], keys=selector, names=['section', 'ix'])
+                else:
+                    new_keys = {k: a_n_range('a',v) for k,v in multiples.items()}
+                    keys = [f"{s}{next(new_keys[s])}" if s in new_keys else s for s in selector]
+                    df = pd.concat([self.sections[s].notes for s in selector], keys=keys, names=['section', 'ix'])
         else:
-            sections = self.sections
-            df = pd.concat([self.sections[s].notes for s in sections], keys=sections)
 
-        if octaves:
-            df['octave'] = midi2octave(df.midi)
-        if pitch_names:
+            if element == 'n':
+                df = S.get_notes().reset_index(1, drop=False)\
+                                  .set_index('ix',drop=False, append=True)\
+                                  .rename(columns={'ix': 'n'})
+            else:
+                df = self.get_notes()
+                if not element in df.columns:
+                    if not element in features.keys():
+                        raise ValueError(f"{element} is not part of the note features.")
+                    elif not features[element]:
+                        features[element] = True
+
+        if features['octaves']:
+            df['octaves'] = midi2octave(df.midi)
+        if features['pitch_names']:
             df['pitch_names'] = spell_tpc(df.tpc)
+        if features['beats']:
+            if beats.__class__ == bool:
+                beats = {}
+            if beats.__class__ == dict:
+                beatsize = defaultdict(lambda: frac(1/4))
+                beatsize.update(TIMESIG_BEAT)
+                beatsize.update(beats)
+                for k in beatsize.keys():
+                    beatsize[k] = frac(beatsize[k])
+            elif beats.__class__ == str:
+                beatsize = defaultdict(lambda: frac(beats))
+            elif beats.__class__ == frac:
+                beatsize = defaultdict(lambda: beats)
+            else:
+                raise ValueError(f"Datatype of beats = {beats} not understood")
+
+            def compute_beat(r):
+                size = beatsize[r.timesig]
+                onset = r.onset + r.offset
+                beat = onset // size + 1
+                subbeat = (onset % size) / size
+                if subbeat > 0:
+                    return f"{beat}.{subbeat}"
+                else:
+                    return str(beat)
+            print(self.info[['timesig','offset']].merge(df[['mc', 'onset']], on='mc').apply(compute_beat, axis=1))
+            df['beats'] = df.merge(self.info[['timesig', 'offset']], on='mc', right_index=True)\
+                           .apply(compute_beat, axis=1)
+
+        if element != 'section' and selector is not None:
+            if selector.__class__ == int:
+                sel = df[element] == selector
+            elif selector.__class__ == tuple and len(selector) == 2:
+                sel = (selector[0] <= df[element]) & (df[element] <= selector[1])
+            else:
+                sel = df[element].isin(selector)
+            df = df[sel]
+            if element == 'n':
+                df.drop(columns='n', inplace=True)
+        if len(df) == 0:
+            logging.info(f"No notes exist for this selection.")
+
+        if not multiindex:
+            df.reset_index(drop=True, inplace=True)
+
+
+
         return df
-
-    @property
-    def info(self):
-        return self.mc_info[0]
-
 
 
 # %% Playground
-# S = Score('BWV806_08_Bourée_I.mscx')
-# S.info
+S = Score('BWV806_08_Bourée_I.mscx')
+S.get_notes(6)
+S.get_notes((0,2,2)).iloc[:30]
+S.get_notes(0, beats={'2/2':'1/8'})
+info = S.info[['timesig','offset']]
+notes.append(info.loc[notes.mc])
+pd.concat([notes, info.loc[notes.mc]], axis=1, ignore_index=True)
+notes
+notes.merge(info, on='mc', right_index=True).apply(compute_beat, axis=1)
+info.reset_index()
+info.loc[notes.mc]
+info.loc[notes.mc]
+info.index = pd.MultiIndex.from_product([[''], info.index])
+
+notes.merge(info, on='mc')
+notes = S.get_notes(0, beats=True)
+S.info[['timesig','offset']].merge(notes[['mc', 'onset']],on = 'mc').apply(compute_beat, axis=1)
+S.info.set_index('section', append=True).swaplevel().merge(notes[['mc', 'onset']],on = 'mc')
+pd.merge(S.info[['timesig','offset','section']].set_index('section', append=True).swaplevel(), notes[['mc', 'onset']], left_on = 'mc', right_on='mc')
+info = S.info[['timesig','offset','section']].reset_index().set_index(['section', 'mc'], append=True, drop=False).droplevel(0)
+info = S.info[['timesig','offset','section']].set_index('section', append=True).reset_index(0)
+notes.index.names = ['section', 'id']
+notes.merge(info, on='mc')
+notes
+info
+info[['timesig','offset','mc']].merge(notes[['mc', 'onset']],on = 'mc')
+beatsize = TIMESIG_BEAT
+for k in beatsize.keys():
+    beatsize[k] = frac(beatsize[k])
+
+test = infos
+test['beat'] = test.apply(compute_beat, axis=1)
+test
 # S = Score('./scores/041/D041menuett01diff.mscx')
 
 # S.get_notes(1, True, True)
