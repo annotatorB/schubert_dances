@@ -19,8 +19,6 @@ import numpy as np
 ###########
 # Constants
 ###########
-NEWEST_MUSESCORE = '3.2.3'
-
 DURATIONS = {"measure" : 1.0,
              "breve"   : 2.0,
              "whole"   : 1.0,
@@ -32,6 +30,10 @@ DURATIONS = {"measure" : 1.0,
              "64th"    : frac(1/64),
              "128th"   : frac(1/128)}
 
+NEWEST_MUSESCORE = '3.3.0'
+
+NL = '\n'
+
 PITCH_NAMES = {0: 'F',
                1: 'C',
                2: 'G',
@@ -40,11 +42,22 @@ PITCH_NAMES = {0: 'F',
                5: 'E',
                6: 'B'}
 
+class SliceMaker(object):
+    """ This class serves for passing slice notation such as :3 as function arguments.
+    Example
+    -------
+        SL = SliceMaker()
+        some_function( slice_this, SL[3:8] )"""
+    def __getitem__(self, item):
+        return item
+
+SL, SM = SliceMaker(), SliceMaker()
 
 # XML tags of MuseScore 3 format that this parser takes care of
 TREATED_TAGS = ['accidental',   # within <KeySig>
                 'Accidental',   # within <Note>, ignored
                 'actualNotes',  # within <Tuplet>
+                'appoggiatura',
                 'Articulation', # optional
                 'baseNote',     # within <Tuplet>, ignored
                 'BarLine',
@@ -100,6 +113,10 @@ def check_measure_boundaries(notes, measure_durations):
     for ix, mc, onset, duration in notes[['mc', 'onset', 'duration']].itertuples():
         if onset + duration > measure_durations.loc[mc]:
             OK = False
+            try:
+                ix = int(ix) # single index
+            except:
+                ix = ix[-1]  # multiindex
             logging.warning(f"Event {ix} in MC {mc} has has duration {duration} and starts on {onset}, surpassing the measure length of {measure_durations.loc[mc]}")
     if OK:
         logging.debug("Measure boundaries checked: No errors.")
@@ -158,12 +175,65 @@ def compute_mn(df, check=True):
     if offset is not None and offset.notna().any():
         if isnan(offset[0]):
             offset[0] = 0
-        offset = offset.fillna(method='ffill')
+        offset = offset.cumsum().fillna(method='ffill')
         mn_in_score += offset
     mn_in_score = mn_in_score.astype('int')
     if check:
         check_mn(mn_in_score)
     return mn_in_score
+
+
+
+def compute_repeat_structure(mc_repeats_volta):
+    """
+    Parameters
+    ----------
+    df : :obj:`pandas.DataFrame`
+        Needs to have the two columns ['repeats', 'volta'] where for every measure count
+        in the index a tag {'startRepeat', 'endRepeat', 'firstMeasure', 'lastMeasure'}
+        and/or a volta number (typically {1, 2, 3}) is given.
+
+    Returns
+    -------
+    :obj:`list` of :obj:`tuple` of :obj:`int`
+        Beginning and ending measure counts of repeated sections.
+
+    Example
+    -------
+        >>> df
+            repeats	        volta
+        0	firstMeasure	NaN
+        16	NaN	            1
+        17	endRepeat	    1
+        18	NaN	            2
+        19	startRepeat	    NaN
+        23	endRepeat	    1
+        24	endRepeat	    2
+        25	NaN	            3
+        31	startRepeat	    NaN
+        39	endRepeat	    1
+        40	NaN	            2
+        >>> compute_repeat_structure(df)
+        [(0, 18), (19, 25), (31, 40)]
+    """
+    df = mc_repeats_volta[['repeats', 'volta']].reset_index() # -> 3 columns: [indexname, 'repeats', 'volta']
+
+    # Check whether beginning is an implicit startRepeat
+    if df.iloc[0,1] == 'firstMeasure':
+        i = 1
+        while isnan(df.iloc[i,1]):
+            i += 1
+        if df.iloc[i,1] == 'endRepeat':
+            df.iloc[0,1] = 'startRepeat'
+        else:
+            df.drop(index=0, inplace=True)
+
+    startRepeats = df.repeats == 'startRepeat'
+    start_mcs = df.iloc[:,0][startRepeats].to_list() # measure counts of startRepeats
+    endRepeats = startRepeats.shift(-1)
+    endRepeats.iloc[-1] = True
+    end_mcs = df.iloc[:,0][endRepeats].to_list()
+    return list(zip(start_mcs, end_mcs))
 
 
 
@@ -204,8 +274,7 @@ def feature_from_node(tag, nodes):
     computes a useful value from it."""
     if len(nodes) == 0:
         logging.error("Got empty node list. This shouldn't have happened:\
-                        check construction of defaultdict 'infos' in function\
-                        get_measure_infos")
+check construction of defaultdict 'infos' in function get_measure_infos")
         return None
     if len(nodes) > 1 and tag != 'voice':
         logging.warning(f"{len(nodes)} {tag}-nodes in one <Measure>.")
@@ -225,7 +294,13 @@ def feature_from_node(tag, nodes):
     elif tag in ['endRepeat', 'startRepeat']:
         return tag
     elif tag == 'Volta':
-        return int(node.find_next('next').location.measures.string)
+        loc = node.find_next('next').location
+        val = 1 if loc.find('fractions') else 0
+        if loc.find('measures'):
+            val += int(loc.measures.string)
+        if val == 0:
+            logging.error(f"Length of volta {node} not specified.")
+        return val
     elif tag == 'BarLine':
         subtype = node.find('subtype')
         return subtype.string if subtype else 'other'
@@ -233,84 +308,15 @@ def feature_from_node(tag, nodes):
         logging.error(f"Treatment of {tag}-tags not implemented.")
 
 
-def get_repeat_structure(tag_series):
-    """Accepts a Series of start tags ('firstMeasure', 'startRepeat') and end tags
-    ('endRepeat', 'lastMeasure'), checks for correct structure and returns repeated
-    sections based on the index values.
-
-    Example
-    -------
-        >>> tag_series
-        0     firstMeasure
-        8        endRepeat
-        9      startRepeat
-        14       endRepeat
-        21     startRepeat
-        24       endRepeat
-        40     lastMeasure
-        Name: repeats, dtype: object
-        >>> get_repeat_structure(tag_series)
-        [(0, 8), (9, 14), (21, 24)]
-    """
-    OK=True
-    tag_series = tag_series.dropna()
-    tag_series.sort_index(inplace=True)
-    stack, repeat_structure = [], []
-    for i, tag in tag_series.iteritems():
-
-        if tag == 'firstMeasure':
-            if i != 0:
-                logging.error("A 'firstMeasure' tag occurred somewhere after the first measure.")
-                OK = False
-            # firstMeasure serves as startRepeat if the next element is an endRepeat.
-            elif tag_series.iloc[1] == 'endRepeat':
-                stack.append((0,))
-                logging.debug("First measure used as startRepeat because next tag is endRepeat.")
-            else:
-                logging.debug(f"First measure not used as startRepeat because tag element is {tag_series.iloc[1]}")
-
-        elif tag == 'newSection':
-            if tag_series.iloc[tag_series.index.get_loc(i)+1] == 'endRepeat':
-                stack.append((i,))
-                logging.debug(f"Section break after MC {i-1} inferred as beginning of a repeated section.")
-
-        elif tag == 'startRepeat':
-            stack.append((i,))
-
-        elif tag == 'endRepeat':
-            if len(stack) > 0:
-                section_start = stack.pop(-1)
-                repeat_structure.append(section_start + (i,))
-            else:
-                correct = '\n'.join(tag_series[:i]) + '\n'
-                logging.error(f"Correct before the {tag} in mc {i} invalid:{correct}. Insert the missing startRepeat or section break into the score.")
-                OK = False
-                return repeat_structure
-
-        elif tag == 'lastMeasure':
-            if len(stack) > 0:
-                logging.warning("A startRepeat still needs closing. Assuming that the last measure closes it.")
-                OK = False
-                section_start = stack.pop(-1)
-                repeat_structure.append(section_start + (i,))
-
-        else:
-            logging.warning(f"{tag}-tag has been ignored by get_repeat_structure().")
-            OK = False
-
-    if len(stack) > 0:
-        logging.error("A startRepeat still needs closing.")
-        OK = False
-        repeat_structure.append(stack[-1])
-        return repeat_structure
-    else:
-        if OK:
-            logging.debug("Repeat structure OK.")
-        return repeat_structure
-
-
 
 def get_volta_structure(df):
+    """
+    Returns
+    -------
+    :obj:`list` of :obj:`list` of :obj:`list` of :obj:`int`
+        For every volta group, one list of integers per volta containing the measure
+        counts that this volta spans.
+    """
     OK = True
     repeats = df.repeats
     voltas = df.volta.dropna()
@@ -332,13 +338,16 @@ def get_volta_structure(df):
         I = iter(group)
         l = len(next(I))
         if not all(len(volta_range) == l for volta_range in I):
-            logging.warning(f"Volta group has voltas with different lengths: {group}")
-            OK = False
+            except_first = sum(group[1:],[])
+            if df.dont_count.loc[except_first].isna().any():
+                logging.warning(f"Voltas with measure COUNTS {group} have different lengths.\
+Check measure NUMBERS with authoritative score. To silence the warning, either make all voltas\
+the same length or exclude all measures in voltas > 1 from the bar count.")
+                OK = False
 
     if OK:
         logging.debug("Volta structure OK.")
     return volta_structure
-
 
 
 def isnan(num):
@@ -456,12 +465,12 @@ class Section(object):
         #######################
 
         # Parse all measures contained in this section
-        volta_dict = {mc: volta+1 for volta, measures in enumerate(self.voltas) for mc in measures}
         df_vals = {col: [] for col in self.notes.columns}
         for mc, measure_stack in enumerate(zip(*[[measure for mc, measure in node_dicts.items() if self.first_mc <= mc <= self.last_mc] for node_dicts in parent.measure_nodes.values()])):
             mc += self.first_mc
             nodetypes = defaultdict(list)   # keeping track of tags on the measure level
             mc_info = parent.mc_info[0].loc[mc]
+            volta = mc_info.volta
             for staff_id, measure in enumerate(measure_stack):
                 staff_id += 1
                 for tag in measure.find_all(recursive=False):
@@ -494,7 +503,7 @@ class Section(object):
                                     else:
                                         articulation = np.nan
 
-                                    grace = event.find(['grace4','grace4after','grace8','grace8after','grace16','grace16after','grace32','grace32after','grace64','grace64after'])
+                                    grace = event.find(['grace4','grace4after','grace8','grace8after','grace16','grace16after','grace32','grace32after','grace64','grace64after', 'appoggiatura'])
                                     gracenote = grace.name if grace else np.nan
 
                                     for note in event.find_all('Note'):
@@ -524,7 +533,7 @@ class Section(object):
                                             elif f == 'midi':
                                                 return int(note.pitch.string)
                                             elif f == 'volta':
-                                                return volta_dict[mc] if mc in volta_dict else np.nan
+                                                return volta
                                             elif f == 'articulation':
                                                 return articulation
                                             elif f == 'tied':
@@ -539,8 +548,10 @@ class Section(object):
                                         for f in features:
                                             df_vals[f].append(get_feature_value(f))
 
-                                if not grace:
-                                    pointer += duration
+                                    if not grace:
+                                        pointer += duration
+
+                    del nodetypes['voice']
 
                 else:
                     logging.error('Measure without <voice> tag.')
@@ -549,7 +560,7 @@ class Section(object):
                 if len(remaining_tags) > 0:
                     logging.debug(f"The following tags have not been treated: {remaining_tags}")
 
-        df = pd.DataFrame(df_vals).astype({'volta': 'Int64', 'tied': 'Int64'})
+        df = pd.DataFrame(df_vals).astype({'volta': 'Int64', 'tied': 'Int64'}, )
         df = df.groupby('mc', group_keys=False).apply(lambda df: df.sort_values(['onset', 'midi']))
         self.notes = df.reset_index(drop=True)
 
@@ -586,9 +597,6 @@ class Score(object):
         The complete XML structure of the parsed MSCX file.
     score_features : :obj:`list` of {'articulation'}
         Additional features you want to extract.
-    section_breaks : :obj:`dict`
-        Keys are the counts of the measures that have a section break, values are
-        lists of the breaking elements {startRepeat, endRepeat, BarLine, LayoutBreak}
     section_order : :obj:`list` of :obj:`int`:
         List of section IDs representing in which the sections in ``section_structure``
         are presented and repeated.
@@ -619,7 +627,6 @@ class Score(object):
         self.staff_nodes = {}
         self.measure_nodes = {}
         self.score_features = score_features
-        self.section_breaks = defaultdict(list)
         self.sections = {}
         self.section_structure = {}
         self.section_order = []
@@ -698,7 +705,7 @@ class Score(object):
                 logging.debug(f"Stored the {i}th measure of staff {staff_id}.")
 
                 mc_info = mc_info.append(get_measure_infos(measure), ignore_index=True)
-
+            mc_info.index.name = 'mc'
             self.mc_info[staff_id] = mc_info
 
         # all staves should have the same number of measures
@@ -751,10 +758,11 @@ class Score(object):
             logging.debug(f"mc_info[0] and mc_info[1] were identical before aggregation.")
         else:
             logging.warning(f"mc_info[0] and mc_info[1] were not identical before aggregation.\
-                            This means that lower staves contain information that's missing in\
-                            the first staff (as shown in previous warning).")
+This means that lower staves contain information that's missing in\
+the first staff (as shown in previous warning).")
         # complete measure durations
-        self.mc_info[0].act_dur.fillna(self.mc_info[0].timesig.apply(lambda x: frac(x)), inplace=True)
+        self.mc_info[0].insert(2, 'duration', self.mc_info[0]['timesig'].apply(lambda x: frac(x)))
+        self.mc_info[0].act_dur.fillna(self.mc_info[0].duration, inplace=True)
         # Aggregate values in self.mc_info[0]
         for df in (self.mc_info[k] for k in self.mc_info.keys() if k > 1):
             self.mc_info[0].voices += df.voices
@@ -763,27 +771,13 @@ class Score(object):
         #############################
         # Compute section structure #
         #############################
-        repeat_structure = get_repeat_structure(self.mc_info[0].repeats)
-        volta_structure = get_volta_structure(self.mc_info[0])
-        # extending repeated sections that have voltas
-        volta_dict = defaultdict(lambda: None)
 
+        # Spreading volta information
+        volta_structure = get_volta_structure(self.mc_info[0])
         for group in volta_structure:
-            for i, volta in enumerate(group):
-                self.mc_info[0].loc[volta, 'volta'] = i+1
-            endRepeat = group[0][-1] # last mc of the first volta
-            ixs = search_in_list_of_tuples(repeat_structure, 1, endRepeat)
-            if len(ixs) == 1:
-                fro, to = repeat_structure[ixs[0]]
-                measures_in_group = [item for nextvolta in group[1:] for item in nextvolta]
-                if len(measures_in_group) > 0:
-                    newto = max(measures_in_group)
-                    repeat_structure[ixs[0]] = (fro, newto)
-                    volta_dict[(fro, newto)] = group
-                else:
-                    logging.error(f"Volta group {group} does not seem to have more than one volta. Section {(fro, to)} keeps its length.")
-            else:
-                logging.error(f"The last measure {endRepeat} of this group's first volta: {group} does not contain an endRepeat sign (or repeat_structure has been incorrectly computed).")
+            for i, mc in enumerate(group):
+                self.mc_info[0].loc[mc, 'volta'] = i+1
+        repeat_structure = compute_repeat_structure(self.mc_info[0][['repeats', 'volta']][self.mc_info[0].repeats.notna() | self.mc_info[0].volta.notna()])
 
 
         def create_section(fro, to, repeated=False, volta_group=None):
@@ -795,27 +789,27 @@ class Score(object):
             if end_reason == 'end':
                 end_reason = 'endRepeat' if repeated else 'endNormal'
 
-            inner_structure = self.mc_info[0].loc[fro+1:to]
+            inner_structure = self.mc_info[0].loc[fro+1:to-1]   # measure infos excluding starting and ending measure
+            # check whether this section contains separating barlines: then, subsections have to be created
             splits = inner_structure.barline.isin(self.separating_barlines)
-            if splits.any(): # check whether this section contains separating barlines: then, subsections have to be created
+            if splits.any():
                 subsections = []
                 boundaries = inner_structure.barline[splits].apply(lambda x: x + '_barline')
-                ixs = boundaries.index.to_list()
-                bounds = sorted([fro, to] + ixs + [i+1 for i in ixs])
+                split_mcs = boundaries.index.to_list()
+                bounds = sorted([fro, to] + split_mcs + [i+1 for i in split_mcs])
                 reasons = [start_reason] + [reason for reason in boundaries.to_list() for _ in (0,1)] + [end_reason]
                 if len(reasons) != len(bounds):
                     logging.critical("Implementation error.")
                 for i in range(len(bounds)//2):
-                    f, t = bounds[2*i], bounds[2*i+1]
+                    f, t = bounds[2*i], bounds[2*i+1]   # "from mc" and "to mc", but for subsections
                     f_reason, t_reason = reasons[2*i], reasons[2*i+1]
                     self.section_structure[section_counter] = (f, t)
                     self.sections[section_counter] = Section(self, f, t, section_counter, repeated, f_reason, t_reason)
                     subsections.append(section_counter)
                     section_counter += 1
-                self.sections[section_counter-1].voltas = volta_group
             else:
                 self.section_structure[section_counter] = (fro, to)
-                self.sections[section_counter] = Section(self, fro, to, section_counter, repeated, start_reason, end_reason, volta_group)
+                self.sections[section_counter] = Section(self, fro, to, section_counter, repeated, start_reason, end_reason)
                 subsections = [section_counter]
                 section_counter += 1
 
@@ -837,13 +831,29 @@ class Score(object):
         for fro, to in repeat_structure:
             if fro != last_to + 1:
                 create_section(last_to+1, fro-1)                    # create unrepeated section
-            create_section(fro, to, True, volta_dict[(fro, to)])    # create repeated   section
+            create_section(fro, to, True)    # create repeated   section
         if to != self.last_node:
             create_section(to+1, self.last_node)
 
+        # Add volta groups to section objects
+        sections = (t for t in self.section_structure.items())
+        section, (fro, to) = next(sections)
+        for group in volta_structure:
+            volta_mcs = sum(group, [])
+            while any(True for mc in volta_mcs if mc > to):
+                section, (fro, to) = next(sections)
+            self.sections[section].voltas = group
+
+        # Add sections to info frame
+        self.mc_info[0].insert(0, 'section', pd.Series(np.nan, dtype='Int64'))
+        for s, (fro, to) in self.section_structure.items():
+            self.mc_info[0].loc[fro:to, 'section'] = s
+
+        if self.mc_info[0].section.isna().any():
+            logging.critical("Not all measure nodes have been assigned to a section.")
+
         # check that no note crosses measure boundary
         check_measure_boundaries(self.get_notes(), self.mc_info[0].act_dur)
-
 
         ##################################################
         # Calculate and check measure numbers (MN != MC) #
@@ -851,18 +861,95 @@ class Score(object):
         # mn_in_score shows bar numbers as they are shown in MuseScore
         self.mc_info[0]['mn_in_score'] = compute_mn(self.mc_info[0][['dont_count','numbering_offset']])
 
+        # Compute the subsequent mc for every mc
+        self.mc_info[0]['next'] = np.nan
+        mcs = self.mc_info[0].reset_index()['mc']
+        before_volta = {}
+        for section in self.sections.values():
+            fro, to = section.first_mc, section.last_mc
+            volta_mcs = sum(section.voltas, [])
+            repeat_slice = None
+            if len(volta_mcs) == 0:                     # if this section has no voltas
+                normal_slice = list(range(fro, to+1))   # all measures are followed by +1 ("normal")
+                if section.repeated:                    # and when repeated, the last one
+                    repeat_slice = [to]                 # will also be followed by the section's beginning
+            else:
+                normal_slice = [i for i in range(fro, to+1) if not i in volta_mcs]
+                n_voltas = len(section.voltas)
+                for i, group in enumerate(reversed(section.voltas)):        # iterate backwards through voltas
+                    if i < n_voltas - 1:                                    # check for all voltas but the first
+                        group_info = self.mc_info[0].loc[group]             # whether they are exluded from bar count
+                        wrongly_counted = group_info.dont_count.isna() & group_info.numbering_offset.isna()
+                        if wrongly_counted.any():
+                            logging.warning(f"MC(s) {mcs[group][wrongly_counted].values} in volta {group} in section {section.index} is/are not excluded from barcount.")
+                    if i == 0:                                              # last volta:
+                        normal_slice.extend(group)                          # just normal
+                        # check
+                        repeat_vals = self.mc_info[0].repeats.loc[group].values
+                        if any(rep in repeat_vals for rep in ['startRepeat', 'endRepeat']):
+                            logging.warning(f"Final volta with MC {group} contains a repeat sign.")
+                    else:                                                   # previous voltas:
+                        for j, mc in enumerate(reversed(group)):            # iterate backwards through measure counts
+                            if j == 0:                                      # the last one goes back to section's beginning
+                                # check
+                                self.mc_info[0].loc[mc, 'next'] = [[fro]]
+                                if self.mc_info[0].loc[mc, 'repeats'] != 'endRepeat':
+                                    logging.warning(f"Volta with MC {group} is missing the endRepeat.")
+                            else:                                           # previous MCs just normal
+                                normal_slice.append(mc)
+                before_volta[mc-1] = [group[0] for group in section.voltas] # store measure before the first volta and a list holding
+                                                                            # the first measure of each volta which can follow it
+        # Fill the column 'next'
+            self.mc_info[0].loc[normal_slice, 'next'] = mcs.loc[normal_slice].apply(lambda x: [x+1])
+            if repeat_slice:
+                self.mc_info[0].loc[repeat_slice, 'next'] = self.mc_info[0].loc[repeat_slice, 'next'].apply(lambda x: x + [fro])
+        self.mc_info[0].loc[before_volta.keys(), 'next'] = pd.Series(before_volta)
+        self.mc_info[0].iloc[-1, self.mc_info[0].columns.get_loc('next')] = np.nan
 
-        # mn_correct are should-be measure numbers that can deviate from mn_in_score
+        # Calculate offsets for split measures and check for correct counting
+        not_excluded = lambda r: isnan(r.dont_count) and isnan(r.numbering_offset)
+        measures_to_check = (self.mc_info[0].act_dur != self.mc_info[0].duration) | (self.mc_info[0].repeats == 'endRepeat')
+        check = self.mc_info[0][measures_to_check]
+        self.mc_info[0].insert(5, 'offset', 0)
+        for ix, r in check.iterrows():
+            if r.act_dur > r.duration:
+                logging.info(f"MC {ix} is longer than its nominal value.")
+            elif r.act_dur == r.duration:           # endRepeat
+                next_mcs = self.mc_info[0].loc[r.next]
+                irregular = next_mcs.act_dur != next_mcs.duration
+                if irregular.any():
+                    logging.warning(f"The endRepeat in MC {ix} ({r.act_dur}) is not adapted to the irregular measure length(s) in MC(s) {next_mcs[irregular].index.to_list()} ({[str(fr) for fr in next_mcs[irregular].act_dur.values]})")
+            elif ix == 0:   # anacrusis
+                self.mc_info[0].loc[ix, 'offset'] = r.duration - r.act_dur
+                if not_excluded(r):
+                    logging.warning(f"MC {ix} seems to be a pickup measure but has not been excluded from bar count!")
+            else:
+                if self.mc_info[0].loc[ix, 'offset'] == 0:
+                    missing = r.duration - r.act_dur
+                    if not isnan(r.next):
+                        for n in r.next:
+                            if self.mc_info[0].loc[n].act_dur == missing:
+                                self.mc_info[0].loc[n, 'offset'] = r.act_dur
+                                if not_excluded(self.mc_info[0].loc[n]):
+                                    logging.warning(f"MC {n}  is completing MC {ix} but has not been excluded from bar count!")
+                            else:
+                                logging.warning(f"MC {ix} ({r.act_dur}) and MC {n} ({self.mc_info[0].loc[n].act_dur}) don't add up to {r.duration}.")
 
 
 
 
-    def get_notes(self, sections=None, octaves=False, pitch_names=False):
 
-        if sections:
+    def get_notes(self, sections=None, octaves=False, pitch_names=False, mc=None):
+
+        if mc is not None:
+            df = self.get_notes()
+            df = df[df.mc == mc]
+            if len(df) == 0:
+                raise ValueError(f"Measure count {mc} does not exist")
+        elif sections is not None:
             if sections.__class__ == int:
                 if sections in self.sections:
-                    df = self.sections[sections].notes
+                    df = pd.concat([self.sections[sections].notes], keys=[sections])
                 else:
                     raise ValueError(f"Section {sections} does not exist.")
             else:
@@ -881,25 +968,18 @@ class Score(object):
             df['pitch_names'] = spell_tpc(df.tpc)
         return df
 
+    @property
+    def info(self):
+        return self.mc_info[0]
+
+
+
 # %% Playground
-
-
-
-
-S = Score('./scores/041/D041menuett01diff.mscx')
-S.mc_info[0]
-S.get_notes(1,).iloc[:20]
+# S = Score('BWV806_08_Bourée_I.mscx')
+# S.info
+# S = Score('./scores/041/D041menuett01diff.mscx')
 
 # S.get_notes(1, True, True)
-#
-# act = S.mc_info[0].act_dur[S.mc_info[0].act_dur.notna()]
-# act
-# volta_structure = get_volta_structure(S.mc_info[0])
-# volta_structure
-
-# S.mc_info[0]
-#S = Score('BWV806_08_Bourée_I.mscx')
-#S.sections[0].notes
 # S.sections[1].events[S.sections[1].events.mc == 11]
 # S.sections
 # S.section_structure
