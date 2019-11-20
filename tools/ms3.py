@@ -115,23 +115,28 @@ TREATED_TAGS = ['accidental',   # within <KeySig>
 ################################################################################
 #                     HELPER FUNCTIONS in alphabetical order
 ################################################################################
-def a_n_range(a, n):
-    """Generates `a` and the `n-1` following characters.
+def a_n_range(c, n):
+    """Generates character `a` and the `n-1` following characters.
     Parameters
     ----------
-    a : :obj:`char`
+    c : :obj:`char`
         Start character.
     n : :obj:`int`
         Number of total characters.
+
+    Example
+    -------
+    >>> list(a_n_range('b', 4))
+    ['b', 'c', 'd', 'e']
     """
-    a = ord(a)
-    for c in range(a, a+n):
-        yield chr(c)
+    c = ord(c)
+    for a in range(c, c+n):
+        yield chr(a)
 
 
 
 def check_measure_boundaries(notes, measure_durations):
-    """ Check that no note surpasses the barline.
+    """ Check that no note surpasses the barline and log errors.
 
     Parameters
     ----------
@@ -139,6 +144,10 @@ def check_measure_boundaries(notes, measure_durations):
         DataFrame with columns ['mc', 'onset', 'duration']
     measure_durations : :obj:`pandas.Series`
         A series where the index matches notes.mc
+
+    Returns
+    -------
+    `None`
     """
     OK = True
     for ix, mc, onset, duration in notes[['mc', 'onset', 'duration']].itertuples():
@@ -155,7 +164,17 @@ def check_measure_boundaries(notes, measure_durations):
 
 
 def check_mn(mn_series):
-    """Check measure numbers for gaps and overlaps."""
+    """Check measure numbers for gaps and overlaps and logs errors.
+
+    Parameters
+    ----------
+    mn_series : :obj:`pandas.Series`
+        Series of measure numbers.
+
+    Returns
+    -------
+    `None`
+    """
     # Check that numbers are strictly ascending
     ensure_ascending = mn_series < mn_series.shift()
     if ensure_ascending.any():
@@ -198,20 +217,20 @@ def compute_mn(df, check=True):
 
     ix = df.index
     regular_ix = ix[excluded.isna()]
-    mn_in_score = pd.Series(range(1, 1 + len(regular_ix)), index=regular_ix)
-    mn_in_score = mn_in_score.reindex(ix)
-    if isnan(mn_in_score[0]):   # if anacrusis
-        mn_in_score[0] = 0
-    mn_in_score.fillna(method='ffill', inplace=True)
+    mn = pd.Series(range(1, 1 + len(regular_ix)), index=regular_ix)
+    mn = mn.reindex(ix)
+    if isnan(mn[0]):   # if anacrusis
+        mn[0] = 0
+    mn.fillna(method='ffill', inplace=True)
     if offset is not None and offset.notna().any():
         if isnan(offset[0]):
             offset[0] = 0
         offset = offset.cumsum().fillna(method='ffill')
-        mn_in_score += offset
-    mn_in_score = mn_in_score.astype('int')
+        mn += offset
+    mn = mn.astype('int')
     if check:
-        check_mn(mn_in_score)
-    return mn_in_score
+        check_mn(mn)
+    return mn
 
 
 
@@ -232,8 +251,8 @@ def compute_repeat_structure(mc_repeats_volta):
     Example
     -------
         >>> df
-            repeats	        volta
-        0	firstMeasure	NaN
+                repeats	        volta
+        0	firstMeasure	 NaN
         16	NaN	            1
         17	endRepeat	    1
         18	NaN	            2
@@ -271,6 +290,14 @@ def compute_repeat_structure(mc_repeats_volta):
 def convert_timesig(tag):
     """Turns a TimeSig-tag into a fraction. If you pass a list of tags, all need
     to represent the same time signature. In case of errors, None is returned.
+
+    Parameters
+    ----------
+    tag : :class:`bs4.element.Tag` (or :obj:`list`)
+
+    Returns
+    -------
+    :obj:`fractions.Fraction`
     """
     if tag.__class__ == list:
         res = set([convert_timesig(t) for t in tag])
@@ -297,12 +324,24 @@ def convert_timesig(tag):
             return None
 
         return f"{N}/{D}"
+    elif tag.find('TimeSig'):
+        return convert_timesig(tag.find('TimeSig'))
+    else:
+        raise ValueError("Does not contain <TimeSig> tag.")
 
 
 
 def feature_from_node(tag, nodes):
     """Gets a tag name and a list of corresponding tags and
-    computes a useful value from it."""
+    computes a useful value from it.
+
+    Parameters
+    ----------
+    tag : :obj:`str`
+        Tag name
+    nodes : :obj:`list` of :class:`bs4.element.Tag` (or :obj:`list`)
+        Tags from which to extract values.
+    """
     if len(nodes) == 0:
         logging.error("Got empty node list. This shouldn't have happened:\
 check construction of defaultdict 'infos' in function get_measure_infos")
@@ -342,6 +381,13 @@ check construction of defaultdict 'infos' in function get_measure_infos")
 
 def get_volta_structure(df):
     """
+    Parameters
+    ----------
+    df : :obj:`pandas.DataFrame`
+        Needs to have the two columns ['repeats', 'volta'] where for every measure count
+        in the index a tag {'startRepeat', 'endRepeat', 'firstMeasure', 'lastMeasure'}
+        and/or a volta number (typically {1, 2, 3}) is given.
+
     Returns
     -------
     :obj:`list` of :obj:`list` of :obj:`list` of :obj:`int`
@@ -382,13 +428,23 @@ the same length or exclude all measures in voltas > 1 from the bar count.")
 
 
 def isnan(num):
-    """Return True if `num` is np.NaN (not a number)"""
+    """Return True if `num` is numpy.nan (not a number)"""
     return num != num
 
 
 def nan_eq(a, b):
-    """Check for equality, including NaNs"""
-    if a.__class__ == pd.core.series.Series:
+    """Check for equality, including NaNs.
+
+    Parameters
+    ----------
+    a, b : Values to compare or :obj:`pandas.Series` of values to compare.
+
+    Returns
+    -------
+    :obj:`bool` or :obj:`pandas.Series` of :obj:`bool`
+    """
+    if a.__class__ == pd.core.series.Series or b.__class__ == pd.core.series.Series:
+        assert a.__class__ == pd.core.series.Series, f"If b is a Series, a should not be a {type(b)}"
         assert b.__class__ == pd.core.series.Series, f"If a is a Series, b should not be a {type(b)}"
         return (a == b) | ((a != a) & (b != b))
     return a == b or (isnan(a) and isnan(b))
@@ -396,12 +452,17 @@ def nan_eq(a, b):
 
 
 def midi2octave(val):
-    """Sets midi notes 60-71 to octave 4"""
+    """Returns 4 for values 60-71 and correspondingly for other notes.
+
+    Parameters
+    ----------
+    val : :obj:`int` or :obj:`pandas.Series` of `int`
+    """
     return val // 12 - 1
 
 
 def search_in_list_of_tuples(L, pos, search, add=0):
-    """ Returns a list of indices.
+    """ Returns a list of indices for tuples that contain `search` at position `pos`.
 
     Parameters
     ----------
@@ -412,7 +473,7 @@ def search_in_list_of_tuples(L, pos, search, add=0):
     search : :obj:`object`
         What to look for.
     add : :obj:`int`, opt
-        How much you want to add to each index value.
+        How much you want to add to each returned index value.
     """
     return [i+add for i, item in enumerate(L) if item[pos] == search]
 
@@ -479,7 +540,7 @@ class Section(object):
         self.start_break, self.end_break = start_break, end_break
         self.voltas = [] if voltas is None else voltas
         self.subsection_of = None
-        features = ['mc', 'onset', 'duration', 'gracenote', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta']
+        features = ['mc', 'mn', 'onset', 'duration', 'gracenote', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta']
         for f in ['articulation']:
             if f in parent.score_features:
                 features.append(f)
@@ -491,12 +552,10 @@ class Section(object):
             self.previous_section = None
         self.next_section = None
 
-        #######################
-        # THINK ABOUT WHAT TO DO IMMEDIATELY AND WHAT TO DO IN POSTPROCESSING!
-        #######################
 
         # Parse all measures contained in this section
         df_vals = {col: [] for col in self.notes.columns}
+        # iterate through stacks of simultaneous measure nodes
         for mc, measure_stack in enumerate(zip(*[[measure for mc, measure in node_dicts.items() if self.first_mc <= mc <= self.last_mc] for node_dicts in parent.measure_nodes.values()])):
             mc += self.first_mc
             nodetypes = defaultdict(list)   # keeping track of tags on the measure level
@@ -542,6 +601,8 @@ class Section(object):
                                         def get_feature_value(f):
                                             if   f == 'mc':
                                                 return mc
+                                            elif f == 'mn':
+                                                return mc_info.mn
                                             elif f == 'staff':
                                                 return staff_id
                                             elif f == 'voice':
@@ -605,8 +666,10 @@ class Score(object):
     """ Parser for MuseScore3 MSCX files.
 
     NOTE: Measure count ``mc`` refers to the `mc` th measure node, whereas measure
-    number ``mn`` refers to the `mn` th measure in the score. The latter can consist
-    of several measure nodes and can be split across sections.
+    number ``mn`` refers to the `mn` th measure in the score. The former is the number
+    `Bar` displayed in the MuseScore status bar, minus 1 (MS starts counting at 1,
+    the parser at 0). The latter can consist of several measure nodes and can be
+    split across sections.
 
     Attributes
     ----------
@@ -620,10 +683,11 @@ class Score(object):
         Aggregation and strongly expanded version of the dataframes in `mc_info`.
         Useful for everyday work.
     last_node : :obj:`int`
-        Count of the score's last measure node.
+        Measure count of the score's last measure node.
     mc_info : :obj:`dict` of :obj:`pandas.DataFrame`
         One DataFrame per staff where measure counts are index values and columns
-        hold corresponding structural information.
+        hold corresponding structural information. This information is best accessed
+        in aggregated form in `self.info`.
     measure_nodes : :obj:`dict` of :obj:`dict` of :class:`bs4.element.Tag`
         Keys of the first dict are staff IDs, keys of each inner dict are incremental
         measure counts (NOT measure numbers) and values are XML nodes.
@@ -632,7 +696,7 @@ class Score(object):
     score_features : :obj:`list` of {'articulation'}
         Additional features you want to extract.
     section_order : :obj:`list` of :obj:`int`:
-        List of section IDs representing in which the sections in ``section_structure``
+        List of section IDs representing in which order the sections in ``section_structure``
         are presented and repeated.
     section_structure : :obj:`list` of :obj:`tuple` of :obj:`int`
         Keys are section IDs, values are a tuple of two measure counts, the
@@ -643,6 +707,7 @@ class Score(object):
         The sections of this score.
     separating_barlines : :obj:`list` of :obj:`str`
         List of barline types that cause the score to be split in separate sections.
+        Defaults to `['double']`.
     staff_nodes : :obj:`dict` of :class:`bs4.element.Tag`
         Keys are staff IDs starting with 1, values are XML nodes.
     super_sections : :obj:`dict` of :obj:`list`
@@ -692,8 +757,8 @@ class Score(object):
             self.measure_nodes[staff_id] = {}
             logging.debug(f"Stored staff with ID {staff_id}.")
 
-        # Tags to extract from measures and corresponding column names after
-        # having a value computed by feature_from_node()
+        # Tags to extract from measures and corresponding column to store their values
+        # in the df `self.mc_info[staff_id]` after computing them via feature_from_node().
         tag_to_col = {'accidental': 'keysig',
                       'TimeSig': 'timesig',
                       'voice': 'voices',
@@ -788,8 +853,7 @@ class Score(object):
         self.info = self.mc_info[1].copy()
         for df in (self.mc_info[k] for k in self.mc_info.keys() if k > 1):
             self.info.fillna(df, inplace=True)
-        same = self.info.equals(self.mc_info[1])
-        if same:
+        if self.info.equals(self.mc_info[1]):
             logging.debug(f"info and mc_info[1] were identical before aggregation.")
         else:
             logging.warning(f"info and mc_info[1] were not identical before aggregation.\
@@ -803,19 +867,34 @@ the first staff (as shown in previous warning).")
             self.info.voices += df.voices
 
 
+        ##################################################
+        # Calculate and check measure numbers (MN != MC) #
+        ##################################################
+        # mn are bar numbers as they are shown in MuseScore in the score
+        # mc are bar numbers as they are shown in MuseScore in the status bar, minus one
+        self.info['mn'] = compute_mn(self.info[['dont_count','numbering_offset']])
+
+
         #############################
         # Compute section structure #
         #############################
 
-        # Spreading volta information
+        # Spreading out volta information
         volta_structure = get_volta_structure(self.info)
         for group in volta_structure:
             for i, mc in enumerate(group):
                 self.info.loc[mc, 'volta'] = i+1
-        repeat_structure = compute_repeat_structure(self.info[['repeats', 'volta']][self.info.repeats.notna() | self.info.volta.notna()])
 
 
-        def create_section(fro, to, repeated=False, volta_group=None):
+        def create_section(fro, to, repeated=False):
+            """
+            Parameters
+            ----------
+            fro, to : `int`
+                First and last measure count of the new section.
+            repeated : bool, opt
+                Whether or not the new section is repeated.
+            """
             nonlocal section_counter, super_counter
             start_reason = 'start' if isnan(self.info.repeats[fro]) else self.info.repeats[fro]
             end_reason   = 'end'   if isnan(self.info.repeats[to])  else self.info.repeats[to]
@@ -836,7 +915,7 @@ the first staff (as shown in previous warning).")
                 if len(reasons) != len(bounds):
                     logging.critical("Implementation error.")
                 for i in range(len(bounds)//2):
-                    f, t = bounds[2*i], bounds[2*i+1]   # "from mc" and "to mc", but for subsections
+                    f, t = bounds[2*i], bounds[2*i+1]   # "from mc" and "to mc" for subsections
                     f_reason, t_reason = reasons[2*i], reasons[2*i+1]
                     self.section_structure[section_counter] = (f, t)
                     self.sections[section_counter] = Section(self, f, t, section_counter, repeated, f_reason, t_reason)
@@ -858,15 +937,16 @@ the first staff (as shown in previous warning).")
             logging.debug(f"Created {'repeated ' if repeated else ''}section from {fro} to {to}.")
             nonlocal last_to
             last_to = to
-        ########################## end of create_section()
+            ########################## end of create_section()
 
-
+        # Compute (from_mc, to_mc) tuples of all repeated sections and create sections
+        repeat_structure = compute_repeat_structure(self.info[['repeats', 'volta']][self.info.repeats.notna() | self.info.volta.notna()])
         last_to = -1
         section_counter, super_counter = 0, 0
         for fro, to in repeat_structure:
             if fro != last_to + 1:
-                create_section(last_to+1, fro-1)                    # create unrepeated section
-            create_section(fro, to, True)    # create repeated   section
+                create_section(last_to+1, fro-1)    # create unrepeated section
+            create_section(fro, to, True)           # create repeated   section
         if to != self.last_node:
             create_section(to+1, self.last_node)
 
@@ -890,11 +970,12 @@ the first staff (as shown in previous warning).")
         # check that no note crosses measure boundary
         check_measure_boundaries(self.get_notes(), self.info.act_dur)
 
-        ##################################################
-        # Calculate and check measure numbers (MN != MC) #
-        ##################################################
-        # mn_in_score shows bar numbers as they are shown in MuseScore
-        self.info['mn_in_score'] = compute_mn(self.info[['dont_count','numbering_offset']])
+        # store first_mn and last_mn for all sections
+        for k, v in self.sections.items():
+            mns = self.info.mn[self.info.section == k]
+            v.first_mn = mns.iloc[0]
+            v.last_mn = mns.iloc[-1]
+
 
         # Compute the subsequent mc for every mc
         self.info['next'] = np.nan
@@ -972,24 +1053,59 @@ the first staff (as shown in previous warning).")
 
 
 
-    def get_notes(self, selector=None, element='section', octaves=False, pitch_names=False, beats=False, multiindex=True, mc=None):
+    def get_notes(self, selector=None, element='section', octaves=False, pitch_names=False, beats=False, pcs=False, multiindex=True):
         """ Retrieve list of notes as a DataFrame.
 
         Parameters
         ----------
-        selector : :obj:`int` or :obj:`collection` of :obj:`int`
-            Index/Indices of the sections of which you want to see the notes.
-            By default, all sections are shown.
-            Special case 2-tuple (a,b) yields a slice from section a to section b (inclusive).
-            The parameter is ignored if `mc` is passed.
-            If you don't want the respective sections to be displayed as first level of a
-            multiindex with sequential index on the second, pass `multiindex=False`.
-        element : {'section', }
+        selector : {:obj:`int` or other val} or :obj:`collection` of {:obj:`int` or other val}, optional
+            Lets you select notes with certain features. By default, `selector` selects sections,
+            unless `element` specifies something else.
+            * None: All notes
+            * Single value: Only notes where `element` equals `selector`.
+            * 2-tuple (a,b): Slice from `element` == a to `element` == b (inclusive).
+            * Collection: All notes where `element` is in `selector`. If `element` == 'section', repeated
+              values yield repetitions of the corresponding sections.
+        element : {'section', 'n', 'mc', 'mn', 'onset', 'duration', 'gracenote', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta', 'octaves', 'pitch_names', 'beats'}, optional
+            * section:  select section(s)
+            * n:        select nth or first n notes of each section
+            * mc:       select measure count(s)
+            * mn:       select measure number(s)
+            * etc.
+        octaves : :obj:`bool`, optional
+            If True, a column is added showing in which octave every note is.
+            MIDIs 60-71 (Helmholtz C'-B') = octave 4
+        pitch_names : :obj:`bool`, optional
+            If True, a column is added showing the English pitch names, e.g. 'Eb' or 'D#'.
+        beats : :obj:`bool` or :obj:`dict` or `fraction`, optional
+            If True, the dict TIMESIG_BEAT is used to determine the beat size according to the time signature.
+            By passing a dictionary you can overwrite or enhance the information in TIMESIG_BEAT.
+            If you pass a fraction (such as '1/4' or frac(1/4) or 0.25), this beat size is used for all time signatures.
+        pcs : :obj:`bool`, optional
+            If True, a column with (MIDI) pitch classes is added.
+        multiindex : :obj:`bool`, optional
+            Is True by default, in which case section numbers are displayed as the first level of a
+            MultiIndex and a sequential index as the second. Pass `multiindex=False` to yield a note list
+            with a single RangeIndex.
+
+        Examples
+        --------
+        S.get_notes()                           # all notes
+        S.get_notes(beats='1/4')                # Added column with every note's quarter beat
+        S.get_notes(multiindex=False)           # all notes with single RangeIndex
+        S.get_notes(1)                          # notes from the second section only
+        S.get_notes(0,3)                        # sections [0,1,2,3]
+        S.get_notes(1, 'mn')                    # all notes with measure number 1
+        S.get_notes([0.5, 1], 'duration')       # all notes with duration of a half or a whole note
+        S.get_notes((0.5, 1), 'duration')       # all notes with d# all notes with duration of a half, a wholeuration of a half, a whole, or in between
+        S.get_notes(['F#', 'G#', 'A#'], 'pitch_names')
+        S.get_notes([1,3,6,8,10],'pcs')         # only notes on black piano keys
         """
         features = {}
         features['octaves'] = octaves
         features['pitch_names'] = pitch_names
         features['beats'] = beats
+        features['pcs'] = pcs
 
         if element == 'section':
             if selector is None:
@@ -1042,12 +1158,14 @@ the first staff (as shown in previous warning).")
                 beatsize.update(beats)
                 for k in beatsize.keys():
                     beatsize[k] = frac(beatsize[k])
-            elif beats.__class__ == str:
-                beatsize = defaultdict(lambda: frac(beats))
             elif beats.__class__ == frac:
                 beatsize = defaultdict(lambda: beats)
             else:
-                raise ValueError(f"Datatype of beats = {beats} not understood")
+                try:
+                    val = frac(beats)
+                    beatsize = defaultdict(lambda: val)
+                except:
+                    raise ValueError(f"Datatype of beats = {beats} not understood")
 
             def compute_beat(r):
                 size = beatsize[r.timesig]
@@ -1058,9 +1176,12 @@ the first staff (as shown in previous warning).")
                     return f"{beat}.{subbeat}"
                 else:
                     return str(beat)
-            print(self.info[['timesig','offset']].merge(df[['mc', 'onset']], on='mc').apply(compute_beat, axis=1))
-            df['beats'] = df.merge(self.info[['timesig', 'offset']], on='mc', right_index=True)\
+
+            df['beats'] = self.info[['timesig','offset']].merge(df[['mc', 'onset']], on='mc', left_index=True)\
                            .apply(compute_beat, axis=1)
+
+        if features['pcs']:
+            df['pcs'] = df.midi % 12
 
         if element != 'section' and selector is not None:
             if selector.__class__ == int:
@@ -1078,45 +1199,25 @@ the first staff (as shown in previous warning).")
         if not multiindex:
             df.reset_index(drop=True, inplace=True)
 
-
-
         return df
+
 
 
 # %% Playground
 S = Score('BWV806_08_Bourée_I.mscx')
-S.get_notes(6)
+S.get_notes(pcs=True)
+S.get_notes([1,3,6,8,10],'pcs')
+S.info[['timesig', 'offset']]
+S.info[['timesig','offset']].merge(df[['mc', 'onset']], on='mc', left_index=True)
+df
+df.merge(S.info[['timesig', 'offset']], on='mc', right_index=True)
+df.merge(S.info[['timesig', 'offset']], on='mc', right_index=True)\
+   .apply(compute_beat, axis=1)
+S.info.groupby('section').apply(lambda df: print(df.iloc[0].section))
+S.get_notes(None, 'mc')
 S.get_notes((0,2,2)).iloc[:30]
 S.get_notes(0, beats={'2/2':'1/8'})
 info = S.info[['timesig','offset']]
-notes.append(info.loc[notes.mc])
-pd.concat([notes, info.loc[notes.mc]], axis=1, ignore_index=True)
-notes
-notes.merge(info, on='mc', right_index=True).apply(compute_beat, axis=1)
-info.reset_index()
-info.loc[notes.mc]
-info.loc[notes.mc]
-info.index = pd.MultiIndex.from_product([[''], info.index])
-
-notes.merge(info, on='mc')
-notes = S.get_notes(0, beats=True)
-S.info[['timesig','offset']].merge(notes[['mc', 'onset']],on = 'mc').apply(compute_beat, axis=1)
-S.info.set_index('section', append=True).swaplevel().merge(notes[['mc', 'onset']],on = 'mc')
-pd.merge(S.info[['timesig','offset','section']].set_index('section', append=True).swaplevel(), notes[['mc', 'onset']], left_on = 'mc', right_on='mc')
-info = S.info[['timesig','offset','section']].reset_index().set_index(['section', 'mc'], append=True, drop=False).droplevel(0)
-info = S.info[['timesig','offset','section']].set_index('section', append=True).reset_index(0)
-notes.index.names = ['section', 'id']
-notes.merge(info, on='mc')
-notes
-info
-info[['timesig','offset','mc']].merge(notes[['mc', 'onset']],on = 'mc')
-beatsize = TIMESIG_BEAT
-for k in beatsize.keys():
-    beatsize[k] = frac(beatsize[k])
-
-test = infos
-test['beat'] = test.apply(compute_beat, axis=1)
-test
 # S = Score('./scores/041/D041menuett01diff.mscx')
 
 # S.get_notes(1, True, True)
