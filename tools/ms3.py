@@ -501,6 +501,40 @@ def spell_tpc(tpc):
 
 
 
+def treat_section_index(i, n):
+    """Check whether the index exists and convert negative index.
+
+    Parameters
+    ----------
+    i: (`collection` of) :obj:`int`
+        Section index/indices to treat.
+    n: :obj:`int`:
+        Number of available sections.
+    """
+    try:
+        int(i)
+    except:
+        try:
+            treated = [treat_section_index(e, n) for e in i]
+        except:
+            raise ValueError(f"Error in input {i}.")
+        if i.__class__ == tuple:
+            return tuple(treated)
+        else:
+            return treated
+    if i < 0:
+        if i < -n:
+            logging.warning(f"Section {i} does not exist.")
+            return None
+        else:
+            return n + i
+    else:
+        if i > n-1:
+            logging.warning(f"Section {i} does not exist.")
+            return None
+        return i
+
+
 
 ################################################################################
 #                             SECTION CLASS
@@ -1053,20 +1087,45 @@ the first staff (as shown in previous warning).")
 
 
 
-    def get_notes(self, selector=None, element='section', octaves=False, pitch_names=False, beats=False, pcs=False, multiindex=True):
+    def get_notes(self, section=None, multiindex=True, beatsize=None, **kwargs):
         """ Retrieve list of notes as a DataFrame.
 
         Parameters
         ----------
+        section : (`collection` of) :obj:`int`
+            Sections of which you want to see the notes. 0 = first, -1 = last
+            (a, b) = sections from a to b; [a, b] = sections a and b
+            Defaults to None which shows all sections. Repeating values in a collection
+            leads to the corresponding note lists being repeated.
+        multiindex : :obj:`bool`, optional
+            Is True by default, in which case section numbers are displayed as the first level of a
+            MultiIndex and a sequential index as the second. Pass `multiindex=False` to yield a note list
+            with a single RangeIndex.
+        beatsize : :obj:`bool` or :obj:`dict` or `fraction`, optional
+            Adds a column with a beat for every note.
+            If True, the dict TIMESIG_BEAT is used to determine the beat size according to the time signature.
+            By passing a dictionary you can overwrite or enhance the information in TIMESIG_BEAT.
+            If you pass a fraction (such as '1/4', 1/4, frac(1/4) or 0.25), this beat size is used for all time signatures.
+        **kwargs
+            The following columns can be added by setting them to True:
+            * octaves
+            * note_names
+            * beats
+            * pcs (pitch classes 0-11)
+            These and all other columns of the notelist can be filtered by passing feature=selector.
+            The features are {'n', 'mc', 'mn', 'onset', 'duration', 'gracenote',
+            'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice',
+            'volta', 'octaves', 'note_names', 'beats'}
+            The selectors can be:
+            * Single value: Only notes where `feature` equals `selector`.
+            * 2-tuple (a,b): Slice where `a <= feature <= b`.
+            * Collection: All notes where `feature` is in `selector`.
         selector : {:obj:`int` or other val} or :obj:`collection` of {:obj:`int` or other val}, optional
             Lets you select notes with certain features. By default, `selector` selects sections,
             unless `element` specifies something else.
             * None: All notes
-            * Single value: Only notes where `element` equals `selector`.
-            * 2-tuple (a,b): Slice from `element` == a to `element` == b (inclusive).
-            * Collection: All notes where `element` is in `selector`. If `element` == 'section', repeated
-              values yield repetitions of the corresponding sections.
-        element : {'section', 'n', 'mc', 'mn', 'onset', 'duration', 'gracenote', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta', 'octaves', 'pitch_names', 'beats'}, optional
+
+        element :
             * section:  select section(s)
             * n:        select nth or first n notes of each section
             * mc:       select measure count(s)
@@ -1075,100 +1134,111 @@ the first staff (as shown in previous warning).")
         octaves : :obj:`bool`, optional
             If True, a column is added showing in which octave every note is.
             MIDIs 60-71 (Helmholtz C'-B') = octave 4
-        pitch_names : :obj:`bool`, optional
+        note_names : :obj:`bool`, optional
             If True, a column is added showing the English pitch names, e.g. 'Eb' or 'D#'.
-        beats : :obj:`bool` or :obj:`dict` or `fraction`, optional
-            If True, the dict TIMESIG_BEAT is used to determine the beat size according to the time signature.
-            By passing a dictionary you can overwrite or enhance the information in TIMESIG_BEAT.
-            If you pass a fraction (such as '1/4' or frac(1/4) or 0.25), this beat size is used for all time signatures.
         pcs : :obj:`bool`, optional
             If True, a column with (MIDI) pitch classes is added.
-        multiindex : :obj:`bool`, optional
-            Is True by default, in which case section numbers are displayed as the first level of a
-            MultiIndex and a sequential index as the second. Pass `multiindex=False` to yield a note list
-            with a single RangeIndex.
+
 
         Examples
         --------
         S.get_notes()                           # all notes
-        S.get_notes(beats='1/4')                # Added column with every note's quarter beat
-        S.get_notes(multiindex=False)           # all notes with single RangeIndex
-        S.get_notes(1)                          # notes from the second section only
-        S.get_notes(0,3)                        # sections [0,1,2,3]
-        S.get_notes(1, 'mn')                    # all notes with measure number 1
-        S.get_notes([0.5, 1], 'duration')       # all notes with duration of a half or a whole note
-        S.get_notes((0.5, 1), 'duration')       # all notes with d# all notes with duration of a half, a wholeuration of a half, a whole, or in between
-        S.get_notes(['F#', 'G#', 'A#'], 'pitch_names')
-        S.get_notes([1,3,6,8,10],'pcs')         # only notes on black piano keys
+        S.get_notes(0)                          # notes from the first section only
+        S.get_notes(-1)                         # notes from the last section only
+        S.get_notes((0,3))                      # sections [0,1,2,3]
+        S.get_notes((3,0))                      # section [3,2,1,0]
+        S.get_notes((-4,-1))                    # fourth last to last section
+        S.get_notes(None, False)                # all notes with single RangeIndex
+        S.get_notes(beatsize=True)              # added column with beat sizes according to time signature
+        S.get_notes(beatsize=1/4)               # added column with every note's quarter beat
+        S.get_notes(note_names=True)            # added column with note names
+        S.get_notes(note_names=['A', 'D', 'G']) # Only these notenames
+        S.get_notes(octaves=True)               # added column with notes' octaves
+        S.get_notes(octaves=(6,10))             # Only notes in octaves 6 through 10
+        S.get_notes(pcs=True)                   # added column with (MIDI) pitch classes
+        S.get_notes(pcs=[1,3,6,8,10])           # only black keys on the piano
+        S.get_notes(mn=1)                       # all notes with measure number 1
+        S.get_notes(duration=[0.5, 1])          # all notes with duration of a half or a whole note
+        S.get_notes(duration=(0.5, 1))          # all notes with duration of a half, a whole, or in between
+        S.get_notes(n=(0,5))                    # get first 5 notes from every section
         """
-        features = {}
-        features['octaves'] = octaves
-        features['pitch_names'] = pitch_names
-        features['beats'] = beats
-        features['pcs'] = pcs
 
-        if element == 'section':
-            if selector is None:
-                selector = self.sections.keys()
-                df = pd.concat([self.sections[s].notes for s in selector], keys=selector, names=['section', 'ix'])
-            elif selector.__class__ == int:
-                if selector in self.sections:
-                    df = pd.concat([self.sections[selector].notes], keys=[selector], names=['section', 'ix'])
+
+        # Get note lists for requested sections and save as df
+        n = len(self.sections)
+        if section is None:
+            section = self.sections.keys()
+            df = pd.concat([self.sections[s].notes for s in section], keys=section, names=['section', 'ix'])
+        elif section.__class__ == int:
+            s = treat_section_index(section, n)
+            if s is None:
+                raise ValueError(f"Section {section} does not exist.")
+            df = pd.concat([self.sections[s].notes], keys=[s], names=['section', 'ix'])
+        else:
+            treated = treat_section_index(section, n)
+            if section.__class__ == tuple and len(section) == 2:
+                fro, to = treated[0], treated[1]
+                if fro is None:
+                    fro = 0
+                    logging.warning(f"Replaced {section[0]} in {section} by first section 0.")
+                if to is None:
+                    to = n-1
+                    logging.warning(f"Replaced {section[1]} in {section} by last section {to}.")
+                if to >= fro:
+                    treated = list(range(fro, to+1))
                 else:
-                    raise ValueError(f"Section {selector} does not exist.")
-            else:
-                if selector.__class__ == tuple and len(selector) == 2:
-                    selector = list(range(selector[0], selector[1]+1))
-                nonex = [s for s in selector if not s in self.sections]
-                if len(nonex) > 0:
-                    logging.warning(f"Section{'s ' + str(nonex) + ' do' if len(nonex) > 1 else ' ' + str(nonex[0]) + ' does'} not exist.")
-                    selector = [s for s in selector if not s in nonex]
-                c = Counter(selector)
+                    treated = list(reversed(range(to, fro+1)))
+                treated = treat_section_index(treated, n)
+            treated = [t for t in treated if t is not None]
+            if len(treated) > 0:
+                c = Counter(treated)
                 multiples = {k: v for k, v in c.items() if v > 1}
                 if len(multiples) == 0:
-                    df = pd.concat([self.sections[s].notes for s in selector], keys=selector, names=['section', 'ix'])
+                    df = pd.concat([self.sections[s].notes for s in treated], keys=treated, names=['section', 'ix'])
                 else:
                     new_keys = {k: a_n_range('a',v) for k,v in multiples.items()}
-                    keys = [f"{s}{next(new_keys[s])}" if s in new_keys else s for s in selector]
-                    df = pd.concat([self.sections[s].notes for s in selector], keys=keys, names=['section', 'ix'])
-        else:
-
-            if element == 'n':
-                df = S.get_notes().reset_index(1, drop=False)\
-                                  .set_index('ix',drop=False, append=True)\
-                                  .rename(columns={'ix': 'n'})
+                    keys = [f"{s}{next(new_keys[s])}" if s in new_keys else s for s in treated]
+                    df = pd.concat([self.sections[s].notes for s in treated], keys=keys, names=['section', 'ix'])
             else:
-                df = self.get_notes()
-                if not element in df.columns:
-                    if not element in features.keys():
-                        raise ValueError(f"{element} is not part of the note features.")
-                    elif not features[element]:
-                        features[element] = True
+                return None
 
+
+        # activate requested features
+        available_features = ['octaves', 'note_names', 'beats', 'pcs', 'n']
+        features = {f: False for f in available_features}
+        if beatsize is not None:
+            features['beats'] = True
+        for feature, val in kwargs.items():
+            if not feature in df.columns:
+                if not feature in features.keys():
+                    logging.warning(f"{feature} is not part of the note features.")
+                features[feature] = True
+
+        # compute additional feature columns
         if features['octaves']:
             df['octaves'] = midi2octave(df.midi)
-        if features['pitch_names']:
-            df['pitch_names'] = spell_tpc(df.tpc)
+        if features['note_names']:
+            df['note_names'] = spell_tpc(df.tpc)
         if features['beats']:
-            if beats.__class__ == bool:
-                beats = {}
-            if beats.__class__ == dict:
-                beatsize = defaultdict(lambda: frac(1/4))
-                beatsize.update(TIMESIG_BEAT)
-                beatsize.update(beats)
-                for k in beatsize.keys():
-                    beatsize[k] = frac(beatsize[k])
-            elif beats.__class__ == frac:
-                beatsize = defaultdict(lambda: beats)
+            if beatsize is None or beatsize.__class__ == bool:
+                beatsize = {}
+            if beatsize.__class__ == dict:
+                beatsizedict = defaultdict(lambda: frac(1/4))
+                beatsizedict.update(TIMESIG_BEAT)
+                beatsizedict.update(beatsize)
+                for k in beatsizedict.keys():
+                    beatsizedict[k] = frac(beatsizedict[k])
+            elif beatsize.__class__ == frac:
+                beatsizedict = defaultdict(lambda: beatsize)
             else:
                 try:
-                    val = frac(beats)
-                    beatsize = defaultdict(lambda: val)
+                    val = frac(beatsize)
+                    beatsizedict = defaultdict(lambda: val)
                 except:
-                    raise ValueError(f"Datatype of beats = {beats} not understood")
+                    raise ValueError(f"Datatype of beats = {beatsize} not understood")
 
             def compute_beat(r):
-                size = beatsize[r.timesig]
+                size = beatsizedict[r.timesig]
                 onset = r.onset + r.offset
                 beat = onset // size + 1
                 subbeat = (onset % size) / size
@@ -1177,25 +1247,48 @@ the first staff (as shown in previous warning).")
                 else:
                     return str(beat)
 
-            df['beats'] = self.info[['timesig','offset']].merge(df[['mc', 'onset']], on='mc', left_index=True)\
-                           .apply(compute_beat, axis=1)
-
+            df['beats'] = self.info[['timesig','offset']]\
+                              .merge(df[['mc', 'onset']], on='mc', left_index=True)\
+                              .apply(compute_beat, axis=1)
         if features['pcs']:
             df['pcs'] = df.midi % 12
+        if features['n']:
+            df = df.reset_index(1, drop=False)\
+                              .set_index('ix',drop=False, append=True)\
+                              .rename(columns={'ix': 'n'})
 
-        if element != 'section' and selector is not None:
-            if selector.__class__ == int:
-                sel = df[element] == selector
+        # apply requested filters
+        for feature, selector in kwargs.items():
+            if selector.__class__ == int or selector.__class__ == str:
+                sel = df[feature] == selector
+            elif selector.__class__ == bool:
+                if selector:
+                    if feature == 'tied':
+                        sel = df.tied.isin([0,1])
+                    else:
+                        sel = df[feature].notna()
+                else:
+                    continue
             elif selector.__class__ == tuple and len(selector) == 2:
-                sel = (selector[0] <= df[element]) & (df[element] <= selector[1])
+                sel = (selector[0] <= df[feature]) & (df[feature] <= selector[1])
             else:
-                sel = df[element].isin(selector)
-            df = df[sel]
-            if element == 'n':
-                df.drop(columns='n', inplace=True)
+                try:
+                    if len(selector) == 1:
+                        sel = df[feature] == selector
+                    else:
+                        sel = df[feature].isin(selector)
+                except:
+                    sel = df[feature] == selector
+            try:
+                df = df[sel]
+            except:
+                raise ValueError(f"Error while applying filter to {feature}: df[{sel}] caused an error.")
+
+        # Postprocessing
         if len(df) == 0:
             logging.info(f"No notes exist for this selection.")
-
+        if 'n' in df.columns:
+            df.drop(columns='n', inplace=True)
         if not multiindex:
             df.reset_index(drop=True, inplace=True)
 
@@ -1204,22 +1297,11 @@ the first staff (as shown in previous warning).")
 
 
 # %% Playground
-S = Score('BWV806_08_Bourée_I.mscx')
-S.get_notes(pcs=True)
-S.get_notes([1,3,6,8,10],'pcs')
-S.info[['timesig', 'offset']]
-S.info[['timesig','offset']].merge(df[['mc', 'onset']], on='mc', left_index=True)
-df
-df.merge(S.info[['timesig', 'offset']], on='mc', right_index=True)
-df.merge(S.info[['timesig', 'offset']], on='mc', right_index=True)\
-   .apply(compute_beat, axis=1)
-S.info.groupby('section').apply(lambda df: print(df.iloc[0].section))
-S.get_notes(None, 'mc')
-S.get_notes((0,2,2)).iloc[:30]
-S.get_notes(0, beats={'2/2':'1/8'})
-info = S.info[['timesig','offset']]
-# S = Score('./scores/041/D041menuett01diff.mscx')
+#S = Score('BWV806_08_Bourée_I.mscx')
 
+
+# S = Score('./scores/041/D041menuett01diff.mscx')
+#S.get_notes((12,6))
 # S.get_notes(1, True, True)
 # S.sections[1].events[S.sections[1].events.mc == 11]
 # S.sections
