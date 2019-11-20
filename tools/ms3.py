@@ -1120,25 +1120,7 @@ the first staff (as shown in previous warning).")
             * Single value: Only notes where `feature` equals `selector`.
             * 2-tuple (a,b): Slice where `a <= feature <= b`.
             * Collection: All notes where `feature` is in `selector`.
-        selector : {:obj:`int` or other val} or :obj:`collection` of {:obj:`int` or other val}, optional
-            Lets you select notes with certain features. By default, `selector` selects sections,
-            unless `element` specifies something else.
-            * None: All notes
-
-        element :
-            * section:  select section(s)
-            * n:        select nth or first n notes of each section
-            * mc:       select measure count(s)
-            * mn:       select measure number(s)
-            * etc.
-        octaves : :obj:`bool`, optional
-            If True, a column is added showing in which octave every note is.
-            MIDIs 60-71 (Helmholtz C'-B') = octave 4
-        note_names : :obj:`bool`, optional
-            If True, a column is added showing the English pitch names, e.g. 'Eb' or 'D#'.
-        pcs : :obj:`bool`, optional
-            If True, a column with (MIDI) pitch classes is added.
-
+            * True yields all values that are not numpy.nan
 
         Examples
         --------
