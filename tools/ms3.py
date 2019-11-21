@@ -70,7 +70,8 @@ TIMESIG_BEAT = {
                 }
 
 # XML tags of MuseScore 3 format that this parser takes care of
-TREATED_TAGS = ['accidental',   # within <KeySig>
+TREATED_TAGS = ['acciaccatura',
+                'accidental',   # within <KeySig>
                 'Accidental',   # within <Note>, ignored
                 'actualNotes',  # within <Tuplet>
                 'appoggiatura',
@@ -627,7 +628,7 @@ class Section(object):
                                     else:
                                         articulation = np.nan
 
-                                    grace = event.find(['grace4','grace4after','grace8','grace8after','grace16','grace16after','grace32','grace32after','grace64','grace64after', 'appoggiatura'])
+                                    grace = event.find(['grace4','grace4after','grace8','grace8after','grace16','grace16after','grace32','grace32after','grace64','grace64after', 'appoggiatura', 'acciaccatura'])
                                     gracenote = grace.name if grace else np.nan
 
                                     for note in event.find_all('Note'):
@@ -978,6 +979,7 @@ the first staff (as shown in previous warning).")
         repeat_structure = compute_repeat_structure(self.info[['repeats', 'volta']][self.info.repeats.notna() | self.info.volta.notna()])
         last_to = -1
         section_counter, super_counter = 0, 0
+        to = 0    # In case there are no repeats
         for fro, to in repeat_structure:
             if fro != last_to + 1:
                 create_section(last_to+1, fro-1)    # create unrepeated section
@@ -1048,14 +1050,17 @@ the first staff (as shown in previous warning).")
                                     logging.warning(f"Volta with MC {group} is missing the endRepeat.")
                             else:                                           # previous MCs just normal
                                 normal_slice.append(mc)
-                before_volta[mc-1] = [group[0] for group in section.voltas] # store measure before the first volta and a list holding
-                                                                            # the first measure of each volta which can follow it
+                try:
+                    before_volta[mc-1] = [group[0] for group in section.voltas] # store measure before the first volta and a list holding
+                                                                                # the first measure of each volta which can follow it
+                except:
+                    print(section.voltas, mc)
         # Fill the column 'next'
             self.info.loc[normal_slice, 'next'] = mcs.loc[normal_slice].apply(lambda x: [x+1])
             if repeat_slice:
                 self.info.loc[repeat_slice, 'next'] = self.info.loc[repeat_slice, 'next'].apply(lambda x: x + [fro])
         self.info.loc[before_volta.keys(), 'next'] = pd.Series(before_volta)
-        self.info.iloc[-1, self.info.columns.get_loc('next')] = np.nan
+        self.info.iloc[-1:, self.info.columns.get_loc('next')].apply(lambda x: x.remove(self.last_node+1))
 
         # Calculate offsets for split measures and check for correct counting
         not_excluded = lambda r: isnan(r.dont_count) and isnan(r.numbering_offset)
