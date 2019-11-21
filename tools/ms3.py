@@ -12,7 +12,7 @@ from fractions import Fraction as frac
 ###################
 #External libraries
 ###################
-from bs4 import BeautifulSoup as bs         # python -m pip install beautifulsoup4
+from bs4 import BeautifulSoup as bs         # python -m pip install beautifulsoup4, lxml
 import pandas as pd
 import numpy as np
 
@@ -770,6 +770,7 @@ class Score(object):
         self.info = pd.DataFrame()
 
         # Load file
+        logging.info(f"Attempting to parse {self.filename}")
         with open(self.file, 'r') as file:
             self.score = bs(file.read(), 'xml')
 
@@ -1084,6 +1085,7 @@ the first staff (as shown in previous warning).")
                                     logging.warning(f"MC {n}  is completing MC {ix} but has not been excluded from bar count!")
                             else:
                                 logging.warning(f"MC {ix} ({r.act_dur}) and MC {n} ({self.info.loc[n].act_dur}) don't add up to {r.duration}.")
+        logging.info(f"Done parsing {self.filename}")
 
 
 
