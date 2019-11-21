@@ -639,12 +639,16 @@
             <Volta>
               <endHookType>1</endHookType>
               <beginText>1.</beginText>
+              <Segment>
+                <subtype>0</subtype>
+                <offset x="0.149978" y="-3.59991"/>
+                <off2 x="0" y="0"/>
+                </Segment>
               <endings>1</endings>
               </Volta>
             <next>
               <location>
                 <measures>1</measures>
-                <fractions>1/4</fractions>
                 </location>
               </next>
             </Spanner>
@@ -662,10 +666,18 @@
           </voice>
         </Measure>
       <Measure>
+        <irregular>1</irregular>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
+          <Spanner type="Volta">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Spanner type="Volta">
             <Volta>
               <endHookType>1</endHookType>
@@ -685,14 +697,6 @@
               <tpc>12</tpc>
               </Note>
             </Chord>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
@@ -1663,6 +1667,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <irregular>1</irregular>
         <voice>
           <Spanner type="Volta">
             <prev>

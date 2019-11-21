@@ -344,8 +344,8 @@ def feature_from_node(tag, nodes):
         Tags from which to extract values.
     """
     if len(nodes) == 0:
-        logging.error("Got empty node list. This shouldn't have happened:\
-check construction of defaultdict 'infos' in function get_measure_infos")
+        logging.error("""Got empty node list. This shouldn't have happened:
+check construction of defaultdict 'infos' in function get_measure_infos""")
         return None
     if len(nodes) > 1 and tag != 'voice':
         logging.warning(f"{len(nodes)} {tag}-nodes in one <Measure>.")
@@ -402,11 +402,15 @@ def get_volta_structure(df):
     nxt = -1
     for i, length in voltas.iteritems():
         volta_range = list(range(i, i + int(length)))
+        overlaps = [mc for mc in volta_range if mc in voltas.index[voltas.index>i]]
+        if len(overlaps) > 0:
+            logging.warning(f"Voltas overlap in MC(s) {overlaps}")
+            volta_range = [mc for mc in volta_range if mc not in overlaps]
         if i != nxt:    # new volta group
             volta_structure.append([volta_range])
         else:           # extend volta group
             volta_structure[-1].append(volta_range)
-        nxt = i+length
+        nxt = i+len(volta_range)
         if 'startRepeat' in repeats.loc[volta_range,].values:
             logging.error(f"Volta with range {volta_range} contains startRepeat!")
             OK = False
@@ -418,9 +422,9 @@ def get_volta_structure(df):
         if not all(len(volta_range) == l for volta_range in I):
             except_first = sum(group[1:],[])
             if df.dont_count.loc[except_first].isna().any():
-                logging.warning(f"Voltas with measure COUNTS {group} have different lengths.\
-Check measure NUMBERS with authoritative score. To silence the warning, either make all voltas\
-the same length or exclude all measures in voltas > 1 from the bar count.")
+                logging.warning(f"""Voltas with measure COUNTS {group} have different lengths.
+Check measure NUMBERS with authoritative score. To silence the warning, either make all voltas
+the same length or exclude all measures in voltas > 1 from the bar count.""")
                 OK = False
 
     if OK:
@@ -892,9 +896,9 @@ class Score(object):
         if self.info.equals(self.mc_info[1]):
             logging.debug(f"info and mc_info[1] were identical before aggregation.")
         else:
-            logging.warning(f"info and mc_info[1] were not identical before aggregation.\
-This means that lower staves contain information that's missing in\
-the first staff (as shown in previous warning).")
+            logging.warning(f"""info and mc_info[1] were not identical before aggregation.
+This means that lower staves contain information that's missing in
+the first staff (as shown in previous warning).""")
         # complete measure durations
         self.info.insert(2, 'duration', self.info['timesig'].apply(lambda x: frac(x)))
         self.info.act_dur.fillna(self.info.duration, inplace=True)
@@ -1015,7 +1019,8 @@ the first staff (as shown in previous warning).")
 
 
         # Compute the subsequent mc for every mc
-        self.info['next'] = np.nan
+        ix = self.info.index
+        self.info['next'] = pd.Series(len(ix)*[[]], index=ix, dtype=object)
         mcs = self.info.reset_index()['mc']
         before_volta = {}
         for section in self.sections.values():
@@ -1283,15 +1288,19 @@ the first staff (as shown in previous warning).")
 
         return df
 
-for subdir, dirs, files in os.walk('scores'):
-    for file in files:
-        if file.endswith('mscx'):
-            S = Score(os.path.join(subdir,file))
+#for subdir, dirs, files in os.walk('scores'):
+#    for file in files:
+#        if file.endswith('mscx'):
+#            S = Score(os.path.join(subdir,file))
 
 # %% Playground
-#S = Score('BWV806_08_Bourée_I.mscx')
-
-
+S = Score('../data/MuseScore_3/128/D128deutscher08.mscx')
+# %%
+S.sections
+S.sections[0].voltas
+S.sections[1].voltas
+S.info
+S.mc_info[1]
 # S = Score('./scores/041/D041menuett01diff.mscx')
 #S.get_notes((12,6))
 # S.get_notes(1, True, True)
