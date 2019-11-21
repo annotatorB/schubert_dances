@@ -869,7 +869,7 @@ class Score(object):
             first_row = mc_info.iloc[0]
             last_row = mc_info.iloc[-1]
             if isnan(first_row.keysig):
-                first_row.keysig = 0
+                mc_info.loc[first_row.name,'keysig'] = 0
                 logging.debug("Key signature has been set to C major.")
             if isnan(first_row.timesig):
                 logging.error(f"Time signature not defined in the first measure of staff {staff}.")
@@ -1278,7 +1278,10 @@ the first staff (as shown in previous warning).")
 
         return df
 
-
+for subdir, dirs, files in os.walk('scores'):
+    for file in files:
+        if file.endswith('mscx'):
+            S = Score(os.path.join(subdir,file))
 
 # %% Playground
 #S = Score('BWV806_08_Bourée_I.mscx')
@@ -1295,7 +1298,7 @@ the first staff (as shown in previous warning).")
 # S.super_section_order
 # logging.basicConfig(level=logging.DEBUG)
 # logging.getLogger().setLevel(logging.DEBUG)
-# logging.getLogger().setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.INFO)
 # %% Exclude this from the main cell
 
 ################################################################################
