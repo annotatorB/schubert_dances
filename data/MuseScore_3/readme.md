@@ -1,4 +1,12 @@
 # Filenames
+This listing includes the IDs used by Yosef Goldenberg and excludes those dances that are doublings (the files are nonetheless accessible but don't have an ID):
+* D 299 Ecossaise No. 1 = #90, D.145 Ecossaise no.1
+* D 421 Ecossaise No. 1 = #94, D.145 Ecossaise no.5
+* D 529 Ecossaise No. 3 = #93, D.145 Ecossaise no.4
+* D 790 Deutscher No. 2 = #338, D.783 German dance no. 1
+* D 977 Ecossaise No. 1 = #287, D.735 Ecossaise no.6
+* D 980b/679 Ländler No. 1  = #227, D.420 German dance no.10
+
 |id | D |no |     dance      |              path              |
 |--:|--:|--:|----------------|--------------------------------|
 |  1| 41|  1|menuett         |41/D041menuett01a.mscx          |
