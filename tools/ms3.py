@@ -1288,19 +1288,12 @@ the first staff (as shown in previous warning).""")
 
         return df
 
+
+# %% Playground
 #for subdir, dirs, files in os.walk('scores'):
 #    for file in files:
 #        if file.endswith('mscx'):
 #            S = Score(os.path.join(subdir,file))
-
-# %% Playground
-S = Score('../data/MuseScore_3/128/D128deutscher08.mscx')
-# %%
-S.sections
-S.sections[0].voltas
-S.sections[1].voltas
-S.info
-S.mc_info[1]
 # S = Score('./scores/041/D041menuett01diff.mscx')
 #S.get_notes((12,6))
 # S.get_notes(1, True, True)
@@ -1312,7 +1305,7 @@ S.mc_info[1]
 # S.super_section_order
 # logging.basicConfig(level=logging.DEBUG)
 # logging.getLogger().setLevel(logging.DEBUG)
-logging.getLogger().setLevel(logging.INFO)
+#logging.getLogger().setLevel(logging.INFO)
 # %% Exclude this from the main cell
 
 ################################################################################
