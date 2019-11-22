@@ -531,6 +531,7 @@ D.779 Nr.l8</text>
         </Measure>
       <Measure len="1/4">
         <startRepeat/>
+        <irregular>1</irregular>
         <voice>
           <Dynamic>
             <subtype>f</subtype>

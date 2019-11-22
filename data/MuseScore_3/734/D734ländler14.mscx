@@ -1202,6 +1202,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <irregular>1</irregular>
         <voice>
           <Spanner type="Volta">
             <prev>

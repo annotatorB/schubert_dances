@@ -840,6 +840,7 @@ D779 Nr. 14</text>
         </Measure>
       <Measure len="1/4">
         <startRepeat/>
+        <irregular>1</irregular>
         <voice>
           <Dynamic>
             <subtype>p</subtype>

@@ -409,7 +409,8 @@ def get_volta_structure(df):
         volta_range = list(range(i, i + int(length)))
         overlaps = [mc for mc in volta_range if mc in voltas.index[voltas.index>i]]
         if len(overlaps) > 0:
-            logging.warning(f"Voltas overlap in MC(s) {overlaps}")
+            plural = 1 if len(overlaps) > 1 else 0
+            logging.warning(f"Voltas overlap in MC{'s' if plural else ''} {overlaps}")
             volta_range = [mc for mc in volta_range if mc not in overlaps]
         if i != nxt:    # new volta group
             volta_structure.append([volta_range])
@@ -701,7 +702,7 @@ class Section(object):
         self.notes = df.reset_index(drop=True)
 
     def __repr__(self):
-        return f"{'Repeated s' if self.repeated else 'S'}{'' if self.subsection_of is None else 'ubs'}ection from node {self.first_mc} ({self.start_break}) to node {self.last_mc} ({self.end_break}), {'with ' + str(len(self.voltas)) if len(self.voltas) > 0 else 'without'} voltas."
+        return f"{'Repeated s' if self.repeated else 'S'}{'' if self.subsection_of is None else 'ubs'}ection from MC {self.first_mc} ({self.start_break}) to MC {self.last_mc} ({self.end_break}), {'with ' + str(len(self.voltas)) if len(self.voltas) > 0 else 'without'} voltas."
 
 ################################################################################
 #                             SCORE CLASS
@@ -1044,7 +1045,9 @@ the first staff (as shown in previous warning).""")
                         group_info = self.info.loc[group]             # whether they are exluded from bar count
                         wrongly_counted = group_info.dont_count.isna() & group_info.numbering_offset.isna()
                         if wrongly_counted.any():
-                            logging.warning(f"MC(s) {mcs[group][wrongly_counted].values} in volta {group} in section {section.index} is/are not excluded from barcount.")
+                            not_ex = mcs[group][wrongly_counted].values
+                            plural = 1 if len(not_ex) > 1 else 0
+                            logging.warning(f"MC{'s' if plural else ''} {not_ex if plural else not_ex[0]} in volta {group} {'have' if plural else 'has'} not been excluded from barcount.")
                     if i == 0:                                              # last volta:
                         normal_slice.extend(group)                          # just normal
                         # check
@@ -1084,7 +1087,10 @@ the first staff (as shown in previous warning).""")
                 next_mcs = self.info.loc[r.next]
                 irregular = next_mcs.act_dur != next_mcs.duration
                 if irregular.any():
-                    logging.warning(f"The endRepeat in MC {ix} ({r.act_dur}) is not adapted to the irregular measure length(s) in MC(s) {next_mcs[irregular].index.to_list()} ({[str(fr) for fr in next_mcs[irregular].act_dur.values]})")
+                    irr_mcs = next_mcs[irregular].index.to_list()
+                    irr_vals = ', '.join([str(fr) for fr in next_mcs[irregular].act_dur.values])
+                    plural = 1 if len(irr_mcs) > 1 else 0
+                    logging.warning(f"The endRepeat in MC {ix} ({r.act_dur}) is not adapted to the irregular measure length{'s' if plural else ''} in MC{'s' if plural else ''} {irr_mcs if plural else irr_mcs[0]} ({irr_vals})")
             elif ix == 0:                           # anacrusis
                 self.info.loc[ix, 'offset'] = r.duration - r.act_dur
                 if not_excluded(r):
@@ -1097,7 +1103,7 @@ the first staff (as shown in previous warning).""")
                             if self.info.loc[n].act_dur == missing:
                                 self.info.loc[n, 'offset'] = r.act_dur
                                 if not_excluded(self.info.loc[n]):
-                                    logging.warning(f"MC {n}  is completing MC {ix} but has not been excluded from bar count!")
+                                    logging.warning(f"MC {n} is completing MC {ix} but has not been excluded from bar count!")
                             else:
                                 logging.warning(f"MC {ix} ({r.act_dur}) and MC {n} ({self.info.loc[n].act_dur}) don't add up to {r.duration}.")
         logging.info(f"Done parsing {self.filename}")

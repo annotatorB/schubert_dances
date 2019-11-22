@@ -84,21 +84,21 @@
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer">Franz Schubert D 783 (op. 33)
+    <metaTag name="composer">Franz Schubert
 
 </metaTag>
-    <metaTag name="copyright">Copyright © 2010 by Stefan Immler</metaTag>
-    <metaTag name="creationDate">2019-08-09</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate"></metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="originalFormat">xml</metaTag>
-    <metaTag name="platform">Linux</metaTag>
+    <metaTag name="originalFormat"></metaTag>
+    <metaTag name="platform"></metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
-    <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Deutsche Tänze op. 33 Nr. 1 A-Dur und Nr. 2 D-Dur</metaTag>
+    <metaTag name="workNumber">Opus 33, D 783</metaTag>
+    <metaTag name="workTitle">Deutscher</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">

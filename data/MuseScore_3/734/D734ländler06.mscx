@@ -189,6 +189,7 @@
           </voice>
         </Measure>
       <Measure>
+        <startRepeat/>
         <voice>
           <Spanner type="HairPin">
             <HairPin>
