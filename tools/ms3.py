@@ -269,17 +269,21 @@ def compute_repeat_structure(mc_repeats_volta):
     """
     df = mc_repeats_volta[['repeats', 'volta']].reset_index() # -> 3 columns: [indexname, 'repeats', 'volta']
     df = df[df.repeats.notna() | df.volta.notna()]
-    if df.repeats.iloc[-1] == 'lastMeasure':
+    last_row = df.iloc[-1]
+    if last_row.repeats == 'lastMeasure' and isnan(last_row.volta):
         df = df.iloc[:-1]
+    if len(df) == 1:
+        return []
     # Check whether beginning is an implicit startRepeat
     if df.iloc[0,1] == 'firstMeasure':
         i = 1
-        while isnan(df.iloc[i,1]):
+        while i < len(df)-1 and isnan(df.iloc[i,1]):
             i += 1
         if df.iloc[i,1] == 'endRepeat':
             df.iloc[0,1] = 'startRepeat'
         else:
             df.drop(index=0, inplace=True)
+
 
     startRepeats = df.repeats == 'startRepeat'
     start_mcs = df.iloc[:,0][startRepeats].to_list() # measure counts of startRepeats
@@ -981,7 +985,7 @@ the first staff (as shown in previous warning).""")
             ########################## end of create_section()
 
         # Compute (from_mc, to_mc) tuples of all repeated sections and create sections
-        repeat_structure = compute_repeat_structure(self.info[['repeats', 'volta']][self.info.repeats.notna() | self.info.volta.notna()])
+        repeat_structure = compute_repeat_structure(self.info)
         last_to = -1
         section_counter, super_counter = 0, 0
         to = 0    # In case there are no repeats
@@ -1068,7 +1072,7 @@ the first staff (as shown in previous warning).""")
         self.info.loc[before_volta.keys(), 'next'] = pd.Series(before_volta)
         self.info.iloc[-1:, self.info.columns.get_loc('next')].apply(lambda x: x.remove(self.last_node+1))
 
-        # Calculate offsets for split measures and check for correct counting
+        # Calculate offsets for split measures and check for correct measure numbering
         not_excluded = lambda r: isnan(r.dont_count) and isnan(r.numbering_offset)
         measures_to_check = (self.info.act_dur != self.info.duration) | (self.info.repeats == 'endRepeat')
         check = self.info[measures_to_check]
@@ -1081,12 +1085,12 @@ the first staff (as shown in previous warning).""")
                 irregular = next_mcs.act_dur != next_mcs.duration
                 if irregular.any():
                     logging.warning(f"The endRepeat in MC {ix} ({r.act_dur}) is not adapted to the irregular measure length(s) in MC(s) {next_mcs[irregular].index.to_list()} ({[str(fr) for fr in next_mcs[irregular].act_dur.values]})")
-            elif ix == 0:   # anacrusis
+            elif ix == 0:                           # anacrusis
                 self.info.loc[ix, 'offset'] = r.duration - r.act_dur
                 if not_excluded(r):
                     logging.warning(f"MC {ix} seems to be a pickup measure but has not been excluded from bar count!")
-            else:
-                if self.info.loc[ix, 'offset'] == 0:
+            else:                                   # incomplete measure
+                if self.info.loc[ix, 'offset'] == 0:                            # beginning of an incomplete measure
                     missing = r.duration - r.act_dur
                     if not isnan(r.next):
                         for n in r.next:
@@ -1295,10 +1299,10 @@ the first staff (as shown in previous warning).""")
 #    for file in files:
 #        if file.endswith('mscx'):
 #            S = Score(os.path.join(subdir,file))
-S = Score('./scores/366/D366ländler11.mscx')
-S.section_structure
-compute_repeat_structure(S.info)
-S.sections[0]
+# S = Score('./scores/366/D366ländler11.mscx')
+# S.section_structure
+# compute_repeat_structure(S.info)
+# S.sections[0]
 #S.get_notes((12,6))
 # S.get_notes(1, True, True)
 # S.sections[1].events[S.sections[1].events.mc == 11]
