@@ -502,6 +502,15 @@ def spell_tpc(tpc):
     """
     if tpc.__class__ == pd.core.series.Series:
         return tpc.apply(spell_tpc)
+    if tpc.__class__ in [np.ndarray, list, tuple, set]:
+        result = [spell_tpc(pc) for pc in tpc]
+        if tpc.__class__ == np.ndarray:
+            return np.array(result).reshape(tpc.shape)
+        if tpc.__class__ == tuple:
+            return tuple(result)
+        if tpc.__class__ == set:
+            return set(result)
+        return result
 
     tpc += 1 # to make the lowest name F = 0 instead of -1
     if tpc < 0:
