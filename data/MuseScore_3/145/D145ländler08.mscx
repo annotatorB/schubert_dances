@@ -167,7 +167,6 @@
           </Text>
         </VBox>
       <Measure len="1/4">
-        <startRepeat/>
         <irregular>1</irregular>
         <voice>
           <KeySig>
@@ -177,9 +176,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>88</velocity>
@@ -1200,9 +1196,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>

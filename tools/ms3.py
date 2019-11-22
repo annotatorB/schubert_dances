@@ -268,7 +268,9 @@ def compute_repeat_structure(mc_repeats_volta):
         [(0, 18), (19, 25), (31, 40)]
     """
     df = mc_repeats_volta[['repeats', 'volta']].reset_index() # -> 3 columns: [indexname, 'repeats', 'volta']
-
+    df = df[df.repeats.notna() | df.volta.notna()]
+    if df.repeats.iloc[-1] == 'lastMeasure':
+        df = df.iloc[:-1]
     # Check whether beginning is an implicit startRepeat
     if df.iloc[0,1] == 'firstMeasure':
         i = 1
@@ -285,7 +287,6 @@ def compute_repeat_structure(mc_repeats_volta):
     endRepeats.iloc[-1] = True
     end_mcs = df.iloc[:,0][endRepeats].to_list()
     return list(zip(start_mcs, end_mcs))
-
 
 
 def convert_timesig(tag):
@@ -989,7 +990,7 @@ the first staff (as shown in previous warning).""")
                 create_section(last_to+1, fro-1)    # create unrepeated section
             create_section(fro, to, True)           # create repeated   section
         if to != self.last_node:
-            create_section(to+1, self.last_node)
+            create_section(to+1 if to > 0 else 0, self.last_node)
 
         # Add volta groups to section objects
         sections = (t for t in self.section_structure.items())
@@ -1294,7 +1295,10 @@ the first staff (as shown in previous warning).""")
 #    for file in files:
 #        if file.endswith('mscx'):
 #            S = Score(os.path.join(subdir,file))
-# S = Score('./scores/041/D041menuett01diff.mscx')
+S = Score('./scores/366/D366ländler11.mscx')
+S.section_structure
+compute_repeat_structure(S.info)
+S.sections[0]
 #S.get_notes((12,6))
 # S.get_notes(1, True, True)
 # S.sections[1].events[S.sections[1].events.mc == 11]

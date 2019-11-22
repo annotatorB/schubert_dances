@@ -1135,7 +1135,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure>
+      <Measure len="2/4">
         <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="HairPin">
@@ -1160,12 +1160,6 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <BarLine>
-            <subtype>end-repeat</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -2149,7 +2143,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure>
+      <Measure len="2/4">
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -2173,12 +2167,6 @@
               <tpc>23</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
-          <BarLine>
-            <subtype>end-repeat</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

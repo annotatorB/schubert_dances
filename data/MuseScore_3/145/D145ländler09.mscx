@@ -168,7 +168,6 @@
           </Text>
         </VBox>
       <Measure len="5/16">
-        <startRepeat/>
         <irregular>1</irregular>
         <voice>
           <KeySig>
@@ -178,9 +177,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Chord>
             <durationType>16th</durationType>
             <Note>
@@ -1226,9 +1222,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Rest>
             <durationType>16th</durationType>
             </Rest>

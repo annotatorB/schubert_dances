@@ -185,7 +185,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
         <voice>
           <Chord>
             <durationType>half</durationType>

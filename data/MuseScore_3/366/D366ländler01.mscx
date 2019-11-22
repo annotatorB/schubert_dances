@@ -1534,7 +1534,6 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <startRepeat/>
         <voice>
           <KeySig>
             <accidental>3</accidental>
@@ -1543,9 +1542,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
@@ -2446,9 +2442,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Chord>
             <durationType>quarter</durationType>
             <Note>

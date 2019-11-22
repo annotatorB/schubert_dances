@@ -618,6 +618,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <irregular>1</irregular>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -1097,7 +1098,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure>
+      <Measure len="2/4">
         <endRepeat>2</endRepeat>
         <voice>
           <Chord>
@@ -1108,9 +1109,6 @@
               <tpc>22</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
           </voice>
         </Measure>
       </Staff>
@@ -1835,7 +1833,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure>
+      <Measure len="2/4">
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -1857,9 +1855,6 @@
               <tpc>22</tpc>
               </Note>
             </Chord>
-          <Rest>
-            <durationType>quarter</durationType>
-            </Rest>
           </voice>
         </Measure>
       </Staff>

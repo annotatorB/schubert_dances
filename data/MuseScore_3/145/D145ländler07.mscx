@@ -167,7 +167,6 @@
           </Text>
         </VBox>
       <Measure len="1/4">
-        <startRepeat/>
         <irregular>1</irregular>
         <voice>
           <KeySig>
@@ -177,9 +176,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Rest>
             <dots>1</dots>
             <durationType>eighth</durationType>
@@ -1168,9 +1164,6 @@
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>

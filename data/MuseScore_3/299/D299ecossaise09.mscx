@@ -886,6 +886,7 @@
           </voice>
         </Measure>
       <Measure>
+        <irregular>1</irregular>
         <Marker>
           <style>Repeat Text Right</style>
           <placement>below</placement>
