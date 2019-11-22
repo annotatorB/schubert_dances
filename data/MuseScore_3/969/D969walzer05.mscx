@@ -1063,6 +1063,7 @@
         </Measure>
       <Measure len="1/4">
         <startRepeat/>
+        <irregular>1</irregular>
         <voice>
           <Dynamic>
             <subtype>f</subtype>

@@ -147,6 +147,7 @@
           </Text>
         </VBox>
       <Measure len="3/8">
+        <irregular>1</irregular>
         <voice>
           <TimeSig>
             <sigN>3</sigN>
@@ -1170,15 +1171,6 @@
             </Dynamic>
           <Chord>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <up>down</up>
-                </Slur>
-              <next>
-                <location>
-                  </location>
-                </next>
-              </Spanner>
             <Articulation>
               <subtype>articTenutoBelow</subtype>
               </Articulation>
@@ -1191,11 +1183,13 @@
           <Chord>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
-              <prev>
+              <Slur>
+                <up>down</up>
+                </Slur>
+              <next>
                 <location>
-                  <grace>0</grace>
                   </location>
-                </prev>
+                </next>
               </Spanner>
             <Articulation>
               <subtype>articAccentAbove</subtype>
@@ -1320,6 +1314,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <irregular>1</irregular>
         <voice>
           <Spanner type="Volta">
             <prev>

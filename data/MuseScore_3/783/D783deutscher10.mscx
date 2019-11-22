@@ -203,7 +203,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
         <voice>
           <Chord>
             <durationType>quarter</durationType>

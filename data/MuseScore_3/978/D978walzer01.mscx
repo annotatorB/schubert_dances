@@ -2866,6 +2866,7 @@
           </voice>
         </Measure>
       <Measure>
+        <irregular>1</irregular>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -2981,6 +2982,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <irregular>1</irregular>
         <voice>
           <Chord>
             <durationType>quarter</durationType>

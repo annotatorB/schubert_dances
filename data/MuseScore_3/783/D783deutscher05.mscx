@@ -178,7 +178,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -661,6 +660,7 @@
           </voice>
         </Measure>
       <Measure len="1/4">
+        <startRepeat/>
         <irregular>1</irregular>
         <voice>
           <Dynamic>
@@ -668,22 +668,6 @@
             <velocity>80</velocity>
             <offset x="0.329141" y="1.39677"/>
             </Dynamic>
-          <Spanner type="Volta">
-            <Volta>
-              <beginText>2</beginText>
-              <endings>2</endings>
-              </Volta>
-            <next>
-              <location>
-                </location>
-              </next>
-            </Spanner>
-          <Spanner type="Volta">
-            <prev>
-              <location>
-                </location>
-              </prev>
-            </Spanner>
           <Beam>
             <StemDirection>down</StemDirection>
             </Beam>
@@ -706,7 +690,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>

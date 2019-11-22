@@ -193,6 +193,7 @@
           </voice>
         </Measure>
       <Measure>
+        <startRepeat/>
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -488,6 +489,9 @@
         </Measure>
       <Measure>
         <endRepeat>2</endRepeat>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <voice>
           <Chord>
             <durationType>quarter</durationType>

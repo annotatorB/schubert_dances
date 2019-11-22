@@ -176,7 +176,7 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>begin</BeamMode>
+            <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
               <pitch>70</pitch>
@@ -184,6 +184,7 @@
               </Note>
             </Chord>
           <Chord>
+            <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -200,7 +201,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
         <voice>
           <Dynamic>
             <subtype>fz</subtype>

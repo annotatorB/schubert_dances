@@ -1217,6 +1217,7 @@ D779 Nr. 16</text>
           </voice>
         </Measure>
       <Measure len="2/4">
+        <irregular>1</irregular>
         <voice>
           <Spanner type="Volta">
             <prev>

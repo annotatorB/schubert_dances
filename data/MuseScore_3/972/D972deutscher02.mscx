@@ -195,6 +195,7 @@
           </voice>
         </Measure>
       <Measure>
+        <startRepeat/>
         <voice>
           <Chord>
             <durationType>eighth</durationType>

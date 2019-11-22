@@ -142,19 +142,12 @@
       <VBox>
         <height>9.9326</height>
         <Text>
-          <style>Lyricist</style>
-          <text><font size="19"></font><font face="Times New Roman"></font>Deutsche Tänze Nr. 13 und Nr. 14</text>
-          </Text>
-        <Text>
           <style>Composer</style>
           <text><font size="9"></font><font face="Times New Roman"></font>Franz Schubert</text>
           </Text>
-        <Text>
-          <style>Lyricist</style>
-          <text><font size="14"></font><font face="Times New Roman"></font><b>Nr. 13</b></text>
-          </Text>
         </VBox>
       <Measure len="1/4">
+        <irregular>1</irregular>
         <voice>
           <TimeSig>
             <sigN>3</sigN>

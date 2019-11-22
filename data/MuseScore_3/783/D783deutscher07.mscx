@@ -186,7 +186,6 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
         <voice>
           <Chord>
             <dots>1</dots>

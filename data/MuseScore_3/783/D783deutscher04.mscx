@@ -165,16 +165,6 @@
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <up>up</up>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <pitch>74</pitch>
               <tpc>16</tpc>
@@ -215,12 +205,7 @@
           </voice>
         </Measure>
       <Measure>
-        <startRepeat/>
         <voice>
-          <TimeSig>
-            <sigN>3</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Dynamic>
             <subtype>fz</subtype>
             <velocity>112</velocity>
@@ -228,13 +213,6 @@
             </Dynamic>
           <Chord>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
               </Articulation>
@@ -248,9 +226,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -318,9 +293,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>32nd</durationType>
@@ -343,11 +315,6 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
-              <Segment>
-                <subtype>0</subtype>
-                <offset x="0" y="2.5"/>
-                <off2 x="0" y="0"/>
-                </Segment>
               </HairPin>
             <next>
               <location>
@@ -454,9 +421,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -507,9 +471,6 @@
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Chord>
             <durationType>half</durationType>
@@ -527,9 +488,6 @@
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -627,9 +585,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -719,9 +674,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -789,9 +741,6 @@
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -823,9 +772,6 @@
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Beam>
-            <StemDirection>up</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -874,11 +820,12 @@
             </Chord>
           <Rest>
             <offset x="0" y="0.5"/>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
@@ -894,10 +841,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
-        <endRepeat>1</endRepeat>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
+        <endRepeat>2</endRepeat>
         <voice>
           <Chord>
             <durationType>half</durationType>
@@ -917,25 +861,9 @@
         <startRepeat/>
         <irregular>1</irregular>
         <voice>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <up>up</up>
-                </Slur>
-              <next>
-                <location>
-                  <measures>1</measures>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -998,13 +926,6 @@
             </Dynamic>
           <Chord>
             <durationType>eighth</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-1</measures>
-                  </location>
-                </prev>
-              </Spanner>
             <Articulation>
               <subtype>articStaccatoAbove</subtype>
               </Articulation>
@@ -1018,9 +939,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1154,11 +1072,6 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
-              <Segment>
-                <subtype>0</subtype>
-                <offset x="0" y="2.5"/>
-                <off2 x="0" y="0"/>
-                </Segment>
               </HairPin>
             <next>
               <location>
@@ -1176,9 +1089,6 @@
               <text>6</text>
               </Number>
             </Tuplet>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -1264,9 +1174,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1305,9 +1212,6 @@
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Dynamic>
             <subtype>fz</subtype>
@@ -1326,9 +1230,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1385,9 +1286,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1496,7 +1394,6 @@
           </voice>
         </Measure>
       <Measure len="2/4">
-        <endRepeat>1</endRepeat>
         <voice>
           <Chord>
             <durationType>half</durationType>
@@ -1537,10 +1434,6 @@
         </Measure>
       <Measure>
         <voice>
-          <TimeSig>
-            <sigN>3</sigN>
-            <sigD>4</sigD>
-            </TimeSig>
           <Chord>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
@@ -1557,9 +1450,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1661,9 +1551,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1762,9 +1649,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1846,9 +1730,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -1930,9 +1811,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -2000,9 +1878,6 @@
         </Measure>
       <Measure len="1/4">
         <voice>
-          <BarLine>
-            <subtype>start-repeat</subtype>
-            </BarLine>
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
@@ -2133,9 +2008,6 @@
               <text>6</text>
               </Number>
             </Tuplet>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
@@ -2212,9 +2084,6 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             </Clef>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -2281,9 +2150,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
@@ -2334,14 +2200,14 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             </Clef>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
           <Chord>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
@@ -2354,9 +2220,6 @@
             <offset x="0" y="0.5"/>
             <durationType>eighth</durationType>
             </Rest>
-          <Beam>
-            <StemDirection>down</StemDirection>
-            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>

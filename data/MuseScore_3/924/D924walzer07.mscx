@@ -744,6 +744,7 @@
         </Measure>
       <Measure len="1/4">
         <startRepeat/>
+        <irregular>1</irregular>
         <voice>
           <Dynamic>
             <subtype>p</subtype>
@@ -1363,6 +1364,7 @@
           </voice>
         </Measure>
       <Measure>
+        <irregular>1</irregular>
         <voice>
           <Dynamic>
             <subtype>ff</subtype>
@@ -1446,6 +1448,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <irregular>1</irregular>
         <voice>
           <Chord>
             <durationType>half</durationType>
