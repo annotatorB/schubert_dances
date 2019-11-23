@@ -42,6 +42,14 @@ PITCH_NAMES = {0: 'F',
                5: 'E',
                6: 'B'}
 
+PITCH_DEGREES={0: 'IV',
+               1: 'I',
+               2: 'V',
+               3: 'II',
+               4: 'VI',
+               5: 'III',
+               6: 'VII'}
+
 class SliceMaker(object):
     """ This class serves for passing slice notation such as :3 as function arguments.
     Example
@@ -133,6 +141,22 @@ def a_n_range(c, n):
     c = ord(c)
     for a in range(c, c+n):
         yield chr(a)
+
+
+
+def apply_function(f, val, **kwargs):
+    """Applies function f to a collection."""
+    if val.__class__ == pd.core.series.Series:
+        return val.apply(f, **kwargs)
+    if val.__class__ in [np.ndarray, list, tuple, set]:
+        result = [f(pc, **kwargs) for pc in val]
+        if val.__class__ == np.ndarray:
+            return np.array(result).reshape(val.shape)
+        if val.__class__ == tuple:
+            return tuple(result)
+        if val.__class__ == set:
+            return set(result)
+        return result
 
 
 
@@ -496,21 +520,12 @@ def sort_dict(D):
 
 
 
-def spell_tpc(tpc):
+def tpc2name(tpc):
     """Return name of a tonal pitch class where
        0 = C, -1 = F, -2 = Bb, 1 = G etc.
     """
-    if tpc.__class__ == pd.core.series.Series:
-        return tpc.apply(spell_tpc)
-    if tpc.__class__ in [np.ndarray, list, tuple, set]:
-        result = [spell_tpc(pc) for pc in tpc]
-        if tpc.__class__ == np.ndarray:
-            return np.array(result).reshape(tpc.shape)
-        if tpc.__class__ == tuple:
-            return tuple(result)
-        if tpc.__class__ == set:
-            return set(result)
-        return result
+    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+        return apply_function(tpc2name, tpc)
 
     tpc += 1 # to make the lowest name F = 0 instead of -1
     if tpc < 0:
@@ -518,6 +533,34 @@ def spell_tpc(tpc):
     else:
         acc = tpc // 7 * '#'
     return PITCH_NAMES[tpc % 7] + acc
+
+
+
+def tpc2degree(tpc, major=True):
+    """Return name of a tonal pitch class where
+       0 = I, -1 = IV, -2 = bVII, 1 = V etc.
+    """
+    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+        return apply_function(tpc2degree, tpc, major=major)
+    if major:
+        tpc += 1 # to make the lowest name F = 0 instead of -1
+    else:
+        tpc -= 2
+
+    if tpc < 0:
+        acc = abs(tpc // 7) * 'b'
+    else:
+        acc = tpc // 7 * '#'
+    return acc + PITCH_DEGREES[tpc % 7]
+
+
+
+def tpc2pc(tpc):
+    """Turn a tonal pitch class into a MIDI pitch class"""
+    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+        return apply_function(tpc2pc, tpc)
+
+    return 7 * tpc % 12
 
 
 
@@ -1232,7 +1275,7 @@ the first staff (as shown in previous warning).""")
         if features['octaves']:
             df['octaves'] = midi2octave(df.midi)
         if features['note_names']:
-            df['note_names'] = spell_tpc(df.tpc)
+            df['note_names'] = tpc2name(df.tpc)
         if features['beats']:
             if beatsize is None or beatsize.__class__ == bool:
                 beatsize = {}
