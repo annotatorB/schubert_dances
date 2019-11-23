@@ -537,7 +537,7 @@ def tpc2name(tpc):
 
 
 def tpc2degree(tpc, major=True):
-    """Return name of a tonal pitch class where
+    """Return scale degree of a tonal pitch class where
        0 = I, -1 = IV, -2 = bVII, 1 = V etc.
     """
     if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
