@@ -1069,11 +1069,6 @@ the first staff (as shown in previous warning).""")
         # check that no note crosses measure boundary
         check_measure_boundaries(self.get_notes(), self.info.act_dur)
 
-        # store first_mn and last_mn for all sections
-        for k, v in self.sections.items():
-            mns = self.info.mn[self.info.section == k]
-            v.first_mn = mns.iloc[0]
-            v.last_mn = mns.iloc[-1]
 
 
         # Compute the subsequent mc for every mc
@@ -1125,7 +1120,25 @@ the first staff (as shown in previous warning).""")
             if repeat_slice:
                 self.info.loc[repeat_slice, 'next'] = self.info.loc[repeat_slice, 'next'].apply(lambda x: x + [fro])
         self.info.loc[before_volta.keys(), 'next'] = pd.Series(before_volta)
+        #self.info.loc[before_volta.keys(), 'volta'] = 0           # this value for the bar before voltas could help to find it
         self.info.iloc[-1:, self.info.columns.get_loc('next')].apply(lambda x: x.remove(self.last_node+1))
+
+
+        # store first_mn and last_mn for all sections
+        for k, v in self.sections.items():
+            mns = self.info.mn[self.info.section == k]
+            v.first_mn = mns.iloc[0]
+            v.last_mn = mns.iloc[-1]
+            if len(v.voltas) > 0:                           # Correct measure numbers of voltas
+                mn = self.info.loc[v.voltas[0][0], 'mn']    # number of the first volta
+                for group in v.voltas[1:]:                  # let every volta begin with the same measure number
+                    if len(group) > 1:
+                        for mc in group:
+                            self.info.loc[mc, 'mn'] = mn
+                            mn += 1
+
+
+
 
         # Calculate offsets for split measures and check for correct measure numbering
         not_excluded = lambda r: isnan(r.dont_count) and isnan(r.numbering_offset)
@@ -1357,7 +1370,9 @@ the first staff (as shown in previous warning).""")
 #    for file in files:
 #        if file.endswith('mscx'):
 #            S = Score(os.path.join(subdir,file))
-# S = Score('./scores/366/D366ländler11.mscx')
+# S = Score('./scores/781/D781ecossaise07.mscx')
+# S.info
+# S.sections[1].voltas
 # S.section_structure
 # compute_repeat_structure(S.info)
 # S.sections[0]
