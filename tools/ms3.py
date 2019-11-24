@@ -1035,7 +1035,7 @@ the first staff (as shown in previous warning).""")
             logging.debug(f"Created {'repeated ' if repeated else ''}section from {fro} to {to}.")
             nonlocal last_to
             last_to = to
-            ########################## end of create_section()
+            ############################################ end of create_section()
 
         # Compute (from_mc, to_mc) tuples of all repeated sections and create sections
         repeat_structure = compute_repeat_structure(self.info)
@@ -1067,9 +1067,7 @@ the first staff (as shown in previous warning).""")
             logging.critical("Not all measure nodes have been assigned to a section.")
 
         # check that no note crosses measure boundary
-        check_measure_boundaries(self.get_notes(), self.info.act_dur)
-
-
+        check_measure_boundaries(self.get_notes(volta_warning=False), self.info.act_dur)
 
         # Compute the subsequent mc for every mc
         ix = self.info.index
@@ -1123,8 +1121,7 @@ the first staff (as shown in previous warning).""")
         #self.info.loc[before_volta.keys(), 'volta'] = 0           # this value for the bar before voltas could help to find it
         self.info.iloc[-1:, self.info.columns.get_loc('next')].apply(lambda x: x.remove(self.last_node+1))
 
-
-        # store first_mn and last_mn for all sections
+        # store first_mn and last_mn for all sections and correct mns in voltas
         for k, v in self.sections.items():
             mns = self.info.mn[self.info.section == k]
             v.first_mn = mns.iloc[0]
@@ -1136,9 +1133,6 @@ the first staff (as shown in previous warning).""")
                         for mc in group:
                             self.info.loc[mc, 'mn'] = mn
                             mn += 1
-
-
-
 
         # Calculate offsets for split measures and check for correct measure numbering
         not_excluded = lambda r: isnan(r.dont_count) and isnan(r.numbering_offset)
@@ -1172,10 +1166,56 @@ the first staff (as shown in previous warning).""")
                             else:
                                 logging.warning(f"MC {ix} ({r.act_dur}) and MC {n} ({self.info.loc[n].act_dur}) don't add up to {r.duration}.")
         logging.info(f"Done parsing {self.filename}")
+        ######################## end of __init__() #############################
 
 
 
-    def get_notes(self, section=None, multiindex=True, beatsize=None, **kwargs):
+    def get_section(self, section=None, volta_warning=True):
+        """
+        Parameters
+        ----------
+        section : (`collection` of) :obj:`int`
+            Sections of which you want to see the notes. 0 = first, -1 = last
+            (a, b) = sections from a to b; [a, b] = sections a and b
+            Defaults to None which shows all sections. Repeating values in a collection
+            leads to the corresponding note lists being repeated.
+        volta_warning : :obj:`bool`, optional
+            If the requested section (e.g. `section`=8) has voltas you need to specify which volta
+            you want, e.g. using `section`='8a' or '8b'. It this is not specified, a warning
+            is thrown and the notes from the last volta are chosen. Set `volta_warning` to False to
+            silence the warning and get the notes of all voltas.
+        """
+        n = len(self.sections)
+        volta = None
+        if section.__class__ == str:
+            try:
+                section = int(section)
+            except:
+                volta = ord(section[-1]) - 96 # 'a' -> 1, 'b' -> 2 etc.
+                section = int(section[:-1])
+        if section.__class__ == int:
+            s = treat_section_index(section, n)
+            if s is None:
+                logging.warning(f"Section {section} does not exist.")
+            df = self.sections[s].notes
+            if len(df.volta.notna()) > 0:
+                last_volta = len(self.sections[s].voltas)
+                if volta is None:
+                    if volta_warning:
+                        logging.warning(f"Section {s} has voltas and you haven't selected any. Therefore, the last one is being returned. If you need all, pass parameter volta_warning=False.")
+                        volta = last_volta
+                    else:
+                        return df
+                elif volta > last_volta:
+                    volta = last_volta
+                return df[df.volta.isna() | (df.volta == volta)]
+            return df
+        else:
+            logging.error(f'get_section() only works for individual sections. Check input {section}.')
+
+
+
+    def get_notes(self, section=None, multiindex=True, beatsize=None, volta_warning=True, **kwargs):
         """ Retrieve list of notes as a DataFrame.
 
         Parameters
@@ -1237,13 +1277,11 @@ the first staff (as shown in previous warning).""")
         # Get note lists for requested sections and save as df
         n = len(self.sections)
         if section is None:
+            keys = list(self.sections.keys())
+            df = pd.concat([self.get_section(s, volta_warning) for s in keys], keys=keys, names=['section', 'ix'])
+        elif section.__class__ in [int, str]:
             section = self.sections.keys()
-            df = pd.concat([self.sections[s].notes for s in section], keys=section, names=['section', 'ix'])
-        elif section.__class__ == int:
-            s = treat_section_index(section, n)
-            if s is None:
-                raise ValueError(f"Section {section} does not exist.")
-            df = pd.concat([self.sections[s].notes], keys=[s], names=['section', 'ix'])
+            df = pd.concat([self.get_section(section, volta_warning)], keys=[section], names=['section', 'ix'])
         else:
             treated = treat_section_index(section, n)
             if section.__class__ == tuple and len(section) == 2:
@@ -1264,13 +1302,14 @@ the first staff (as shown in previous warning).""")
                 c = Counter(treated)
                 multiples = {k: v for k, v in c.items() if v > 1}
                 if len(multiples) == 0:
-                    df = pd.concat([self.sections[s].notes for s in treated], keys=treated, names=['section', 'ix'])
+                    df = pd.concat([self.get_section(s, volta_warning) for s in treated], keys=treated, names=['section', 'ix'])
                 else:
                     new_keys = {k: a_n_range('a',v) for k,v in multiples.items()}
                     keys = [f"{s}{next(new_keys[s])}" if s in new_keys else s for s in treated]
-                    df = pd.concat([self.sections[s].notes for s in treated], keys=keys, names=['section', 'ix'])
+                    df = pd.concat([self.get_section(s, volta_warning) for s in keys], keys=keys, names=['section', 'ix'])
             else:
                 return None
+
 
 
         # activate requested features
@@ -1363,14 +1402,16 @@ the first staff (as shown in previous warning).""")
             df.reset_index(drop=True, inplace=True)
 
         return df
-
+########################## End of class Score ##################################
 
 # %% Playground
+# S = Score('./scores/781/D781ecossaise07.mscx')
+# S.get_notes([1,1,1])
+# test[test.volta.notna()]
 #for subdir, dirs, files in os.walk('scores'):
 #    for file in files:
 #        if file.endswith('mscx'):
 #            S = Score(os.path.join(subdir,file))
-# S = Score('./scores/781/D781ecossaise07.mscx')
 # S.info
 # S.sections[1].voltas
 # S.section_structure
