@@ -1,4 +1,4 @@
-### Relevant notebook for correction of milestone 2: `schubert_dances.ipynb`
+### _Relevant notebook for correction of milestone 2:_ `schubert_project.ipynb`
 
 # Schubert's Dances
 
