@@ -24,7 +24,7 @@ Here with the arbitrary name `schubert`.
 ## (Or) Install them in an existing environment
     conda install nb_conda_kernels jupyter
     conda install -c plotly plotly-orca psutil requests
-    python -m pip install cufflinks Beautifulsoup4 lxml scipy
+    python -m pip install --upgrade cufflinks Beautifulsoup4 lxml scipy
     
 ## (Optional) If you need Jupyter Lab
 
