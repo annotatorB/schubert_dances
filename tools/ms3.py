@@ -520,22 +520,6 @@ def sort_dict(D):
 
 
 
-def tpc2name(tpc):
-    """Return name of a tonal pitch class where
-       0 = C, -1 = F, -2 = Bb, 1 = G etc.
-    """
-    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
-        return apply_function(tpc2name, tpc)
-
-    tpc += 1 # to make the lowest name F = 0 instead of -1
-    if tpc < 0:
-        acc = abs(tpc // 7) * 'b'
-    else:
-        acc = tpc // 7 * '#'
-    return PITCH_NAMES[tpc % 7] + acc
-
-
-
 def tpc2degree(tpc, major=True):
     """Return scale degree of a tonal pitch class where
        0 = I, -1 = IV, -2 = bVII, 1 = V etc.
@@ -552,6 +536,32 @@ def tpc2degree(tpc, major=True):
     else:
         acc = tpc // 7 * '#'
     return acc + PITCH_DEGREES[tpc % 7]
+
+
+
+def tpc2name(tpc):
+    """Return name of a tonal pitch class where
+       0 = C, -1 = F, -2 = Bb, 1 = G etc.
+    """
+    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+        return apply_function(tpc2name, tpc)
+
+    tpc += 1 # to make the lowest name F = 0 instead of -1
+    if tpc < 0:
+        acc = abs(tpc // 7) * 'b'
+    else:
+        acc = tpc // 7 * '#'
+    return PITCH_NAMES[tpc % 7] + acc
+
+
+
+def tpc2key(tpc):
+    """Return the name of a key signature, e.g.
+    0 = C/a, -1 = F/d, 6 = F#/d# etc."""
+    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+        return apply_function(tpc2key, tpc)
+
+    return f"{tpc2name(tpc)}/{tpc2name(tpc+3).lower()}"
 
 
 
