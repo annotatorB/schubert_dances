@@ -32,11 +32,11 @@ So far the notebook should run in Jupyter Notebook, but if, in addition, you wan
 
 Install via `pip`:
 
-    python -m pip install jupyterlab==1.2 ipywidgets>=7.5
+    python -m pip install jupyterlab==1.2.1 ipywidgets>=7.5
     
 or `conda:`
 
-    conda install -c conda-forge jupyterlab=1.2
+    conda install -c conda-forge jupyterlab=1.2.1
     conda install "ipywidgets=7.5"
     
 Set system variable to avoid "JavaScript heap out of memory" errors during extension installation:
