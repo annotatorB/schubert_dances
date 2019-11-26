@@ -1,0 +1,42 @@
+id	D	op	name	dance	timesig	modulation	length	form	lieu			
+56	128		10	wiener Deutsche	3 quarters	to rel. major	36	binary within S1, before mid-S1	before middle			
+63	145	18	waltz 3	waltz	3 quarters	to par. major	48	ternary S[3]; S1 to rel. major	after middle			
+65	145	18	waltz 5	waltz	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		S2 starts V/III
+66	145	18	waltz 6	waltz	3 quarters	to par. major	32	RB: m, m-R,m,P	after middle			
+68	145	18	waltz 8	waltz	3 quarters	to rel. major	16	binary end of S1	middle			
+80	145	18	landler 8	Landler	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		
+92	145	18	ecossaise 3	Ecossaise	2 quarters	to rel. major	16/24 endings]	binary S2 start	middle	after PAC		
+97	145	18	ecossaise 8 v1	Ecossaise	2 quarters	to rel. major	8	binary S2 start	middle	after PAC		
+121	146	post.127	12	waltz	3 quarters	to par. major	24	ternary S[3]	after middle			
+124	146	post.127	15	waltz	3 quarters	to rel. major	16	binary end of S1	middle			starts V6/m with chrom.clash
+131	158			Ecossaise	2 quarters	to rel. major	16	binary no db end of phrase 3	after middle		phrase 4= phrase 3	
+171	365	9	22	waltz	3 quarters	to rel. minor	16	binary S2 start	middle	after PAC		
+176	365	9	27	waltz	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		S2 starts V/III
+189	366		4	German dance/landler	3 quarters	to par. major	16	binary phrase 4	after middle			
+194	366		9	German dance/landler	3 quarters	to par. major	16	binary phrase 2	before middle			
+230	421		2	Ecossaise	2 quarters	to rel. major	16	binary, process in phrase 2	before middle			
+245	643		1	Deutscher	3 quarters	to par. major	16	RB phrase 4 indirect	after middle			
+298	779	50	7	Waltz	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		
+314	779	50	23	Waltz	3 quarters	to VI of minor	16	binary end of phrase 1	middle			
+315	779	50	24	Waltz	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		
+322	779	50	31	Waltz	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		
+331	781		6	Ecossaise	2 quarters	to rel. major	16	binary, phrase 4 after V/III phrase 3	after middle			
+332	781		7	Ecossaise	2 quarters	to par. major	16/24 S2 endings	binary S2 start	middle	after PAC		S2 starts V/III 2mm
+335	781		10	Ecossaise	2 quarters	to rel. major	16	binary S2 start	middle	after IAC5		
+336	781		11	Ecossaise	2 quarters	to rel. major	16	binary end of phrase 2	middle			
+342	783	33	Deutsche 5	Duetscher Tanz	3 quarters	to rel. major	16	binary end of phrase 1	before middle			
+348	783	33	Deutsche 11	Duetscher Tanz	3 quarters	to rel. major	16	binary phrase 2	before middle			
+351	783	33	Deutsche 14	Duetscher Tanz	3 quarters	to par. major	16	binary S2 start; S1 to rel. major	before middle	III		
+352	783	33	Deutsche 15	Duetscher Tanz	3 quarters	to rel. major	16	binary, phrase 2 and again m to M	twice			
+354	783	33	Ecossaise 1	Ecossaise	2 quarters	to rel. major	16	binary, during phrase 3	after middle			
+355	783	33	Ecossaise 2	Ecossaise	2 quarters	to rel. major	16	binary, during phrase 1, again in phrase 4	before middle			
+359	790		5	Deutscher	3 quarters	to par. major	24	ternary, S[3]; rel. in phrase 2	after middle			
+367	816					to rel. major	16		before middle	VI to I in P1		
+381	924	91	3	Waltz	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		
+384	924	91	6	Waltz	3 quarters	to rel. major	16	binary S2 start	middle	after PAC		
+387	924	91	9	Waltz	3 quarters	to rel. major	16	binary S2 start; phrase 2 in par. major	middle	after I#		
+389	924	91	11	Waltz	3 quarters	to rel. major	24	ternary, phrase 2, again during middle	after middle			
+397	969	77	5	Waltz	3 quarters	to rel. major	32	ternary, during phrase 2	after middle			
+427	977		5	Ecossaise	2 quarters	to rel. minor	16	binary S2 start	middle	after PAC		
+430	977		8	Ecossaise	2 quarters	to rel. major	16 [24 S2 endings]	binary S2 start	middle	after HC		S2 starts V/III
+432	979			Waltz	3 quarters	to rel. major	16	binary during phrase 3	after middle			
