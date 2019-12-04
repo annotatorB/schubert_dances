@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.3.0</programVersion>
-  <programRevision>4761df6</programRevision>
+  <programVersion>3.2.3</programVersion>
+  <programRevision>d2d863f</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -382,9 +382,6 @@
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -523,10 +520,6 @@
               </Spanner>
             <Spanner type="Slur">
               <Slur>
-                <SlurSegment no="0">
-                  <o2 x="-5.55077e-18" y="-1.39698"/>
-                  <o3 x="-5.55077e-18" y="-1.39698"/>
-                  </SlurSegment>
                 </Slur>
               <next>
                 <location>
@@ -652,9 +645,6 @@
         </Measure>
       <Measure len="2/4">
         <endRepeat>2</endRepeat>
-        <LayoutBreak>
-          <subtype>page</subtype>
-          </LayoutBreak>
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -790,10 +780,6 @@
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
-                <SlurSegment no="0">
-                  <o2 x="-1.04993" y="-0.599962"/>
-                  <o3 x="-0.299981" y="-1.49991"/>
-                  </SlurSegment>
                 </Slur>
               <next>
                 <location>
@@ -910,19 +896,12 @@
           </voice>
         </Measure>
       <Measure>
-        <LayoutBreak>
-          <subtype>line</subtype>
-          </LayoutBreak>
         <voice>
           <Chord>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
-                <SlurSegment no="0">
-                  <o2 x="-1.04993" y="-0.599962"/>
-                  <o3 x="-0.299981" y="-1.49991"/>
-                  </SlurSegment>
                 </Slur>
               <next>
                 <location>
@@ -1652,18 +1631,6 @@
           <Chord>
             <dots>1</dots>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <Slur>
-                <SlurSegment no="0">
-                  <o4 x="-15.7488" y="0.899943"/>
-                  </SlurSegment>
-                </Slur>
-              <next>
-                <location>
-                  <measures>3</measures>
-                  </location>
-                </next>
-              </Spanner>
             <Note>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -1861,13 +1828,6 @@
         <voice>
           <Chord>
             <durationType>half</durationType>
-            <Spanner type="Slur">
-              <prev>
-                <location>
-                  <measures>-3</measures>
-                  </location>
-                </prev>
-              </Spanner>
             <Note>
               <pitch>54</pitch>
               <tpc>20</tpc>
