@@ -140,6 +140,7 @@ TREATED_TAGS = ['acciaccatura',
                 'Note',         # within <Chord>
                 'notes',        # layout information, ignored
                 'NoteDot',      # layout information about dots, ignored
+                'noStem',       # layout information, ignore
                 'Number',       # within <Tuplet>, ignored
                 'o1','o2','o3','o4', # layout information, ignored
                 'offset',       # layout information, ignored
@@ -166,6 +167,7 @@ TREATED_TAGS = ['acciaccatura',
                 'style',        # layout information, ignored
                 'subtype',      # part of <Articulation>, <BarLine>, <Dynamic>
                 'swing',        # playback information, ignored
+                'Symbol',       # layout information, ignored
                 'SystemText',   # score_feature 'texts'
                 'Tempo',        # playback information, ignored
                 'text',         # part of <Lyrics> <StaffText> <SystemText>
@@ -175,6 +177,7 @@ TREATED_TAGS = ['acciaccatura',
                 'tpc',          # Tonal pitch class C = 0, F = -1, Bb = -2, G = 1,
                                 # D = 2 etc. (i.e. MuseScore format minus 14: https://musescore.org/en/plugin-development/tonal-pitch-class-enum)
                 'transposingClefType', # ignored, usually a doubling of concertClefType
+                'tuning',       # playback information, ignored
                 'Tuplet',       # for note duration
                 'up',           # layout information, ignored
                 'userLen',      # layout information, ignored
@@ -187,6 +190,7 @@ TREATED_TAGS = ['acciaccatura',
                 'voices',       # part of 'slur' spanner, ignored
                 'Volta',
                 'vspacerUp',    # layout information, ignored
+                'vspacerDown',  # layout information, ignored
                 ]
 
 
