@@ -1,5 +1,8 @@
-# %% Run this cell with ALT + SHIFT + ENTER
-"""MuseScore3 Parser"""
+# %% Run this cell with ALT + SHIFT + ENTER (e.g. with Hydrogen package within Atom)
+"""MuseScore3 Parser by Johannes Hentschel
+
+!!! Textual information in the score which is linked to rests will be silently ignored. !!!
+"""
 
 ###################
 #Internal libraries
@@ -82,43 +85,113 @@ TREATED_TAGS = ['acciaccatura',
                 'accidental',   # within <KeySig>
                 'Accidental',   # within <Note>, ignored
                 'actualNotes',  # within <Tuplet>
-                'appoggiatura',
+                'anchor',       # layout information, ignored
+                'appoggiatura', # stored in note list
                 'Articulation', # optional
+                'autoplace',    # layout information, ignored
+                'b',            # layout information, ignored
                 'baseNote',     # within <Tuplet>, ignored
-                'BarLine',
-                'Chord',
-                'dots',
-                'durationType',
-                'endRepeat',
-                'endTuplet',
-                'fractions',    # ignored (part of Spanner)
+                'BarLine',      # stored in self.info
+                'Beam',         # ignored
+                'BeamMode',     # ignored
+                'bold',         # layout information, ignored
+                'bracket',      # layout information, ignored
+                'bracketType',  # layout information, ignored
+                'channelSwitch',# playback information, ignored
+                'Clef',         # score_feature 'clefs'
+                'Chord',        # main information contained in note list
+                'Chordline',    # layout information, ignored
+                'concertClefType', # score_feature 'clefs'
+                'direction',    # layout information, ignored
+                'dotPosition',  # layout information, ignored
+                'dots',         # for note duration
+                'duration',     # in <Rest>, ignored because seemed to double <durationType>
+                'durationType', # note duration
+                'Dynamic',      # score_feature 'dynamics'
+                'Element',      # layout information, ignored
+                'endRepeat',    # when a repeated section ends
+                'endTuplet',    # used for note duration
+                'family',       # layout information, ignored
+                'Fingering',    # ignored
+                'font',         # layout information, ignored
+                'fractions',    # duration of <location> (part of Spanner)
+                'grace',        # part of 'slur' spanner, ignored
                 'grace4','grace4after','grace8','grace8after','grace16','grace16after',
-                'grace32','grace32after','grace64','grace64after',
+                'grace32','grace32after','grace64','grace64after', # stored in note list
+                'Harmony',
+                'Hook',         # layout information, ignored
+                'i',            # layout information, ignored
+                'InstrumentChange', # ignored
                 'irregular',    # measure exluded from bar count
+                'italic',       # layout information, ignored
+                'Jump',         # score features 'texts' and 'jumps'
+                'KeySig',       # Key signature
                 'LayoutBreak',  # subtype 'section' taken into account for repeat structure
-                'location',     # within <Volta>
+                'Lyrics',       # score_feature 'lyrics'
+                'location',     # between <Chord> to replace hidden rest (or within <Volta>)
+                'Marker',       # score feature 'jumps'
                 'Measure',
                 'measures',     # within <next> within <Volta>
+                'minDistance',  # layout information, ignored
+                'name',         # score feature 'chords'
                 'next',         # within <Volta>
                 'noOffset',     # vlue to add to bar count from here on
                 'normalNotes',  # within <Tuplet>
                 'Note',         # within <Chord>
+                'notes',        # layout information, ignored
+                'NoteDot',      # layout information about dots, ignored
+                'noStem',       # layout information, ignore
                 'Number',       # within <Tuplet>, ignored
+                'o1','o2','o3','o4', # layout information, ignored
+                'offset',       # layout information, ignored
+                'p1', 'p2',     # layout information, ignored
+                'Path',         # layout information, ignored
                 'pitch',
+                'placement',    # layout information, ignored
                 'prev',         # within <Volta>, ignored
-                'Rest',
+                'RehearsalMark',# layout information, ignored
+                'Rest',         # only used to calculate positions but not stored as events
+                'role',         # part of <Accidental>, ignored
+                'size',         # layout information, ignored
                 'Slur',         # ignored
+                'SlurSegment',  # layout information, ignored
                 'Spanner',      # several cases; used: "Tie" (test 8va)
-                'startRepeat',
-                'subtype',      # as part of <Articulation> or <BarLine>
+                'staffMove',    # layout information, ignored
+                'StaffText',    # score_feature 'texts'
+                'StaffTypeChange', # layout information, ignored
+                'startRepeat',  # when a repeated section begins
+                'Stem',         # layout information, ignored
+                'StemDirection',# ignored
+                'straight',     # layout information, ignored
+                'stretch',      # layout information, ignored
+                'style',        # layout information, ignored
+                'subtype',      # part of <Articulation>, <BarLine>, <Dynamic>
+                'swing',        # playback information, ignored
+                'Symbol',       # layout information, ignored
+                'SystemText',   # score_feature 'texts'
+                'Tempo',        # playback information, ignored
+                'text',         # part of <Lyrics> <StaffText> <SystemText>
                 'Tie',          # see Spanner
-                'TimeSig',
+                'TieSegment',   # layout information, ignored
+                'TimeSig',      # stored in self.info
                 'tpc',          # Tonal pitch class C = 0, F = -1, Bb = -2, G = 1,
                                 # D = 2 etc. (i.e. MuseScore format minus 14: https://musescore.org/en/plugin-development/tonal-pitch-class-enum)
-                'Tuplet',
+                'transposingClefType', # ignored, usually a doubling of concertClefType
+                'tuning',       # playback information, ignored
+                'Tuplet',       # for note duration
+                'up',           # layout information, ignored
+                'userLen',      # layout information, ignored
+                'userLen1',     # layout information, ignored
+                'userLen2',     # layout information, ignored
+                'velocity',     # playback information, ignored
+                'veloType',     # playback information, ignored
                 'visible',      # ignored
-                'voice',
-                'Volta']
+                'voice',        # stored in note list
+                'voices',       # part of 'slur' spanner, ignored
+                'Volta',
+                'vspacerUp',    # layout information, ignored
+                'vspacerDown',  # layout information, ignored
+                ]
 
 
 ################################################################################
@@ -361,6 +434,17 @@ def convert_timesig(tag):
 
 
 
+def disambiguate_repeats(treated):
+    c = Counter(treated)
+    multiples = {k: v for k, v in c.items() if v > 1}
+    if len(multiples) == 0:
+        return treated
+    else:
+        new_keys = {k: a_n_range('a',v) for k,v in multiples.items()}
+        return [f"{s}{next(new_keys[s])}" if s in new_keys else s for s in treated]
+
+
+
 def feature_from_node(tag, nodes):
     """Gets a tag name and a list of corresponding tags and
     computes a useful value from it.
@@ -404,6 +488,11 @@ check construction of defaultdict 'infos' in function get_measure_infos""")
     elif tag == 'BarLine':
         subtype = node.find('subtype')
         return subtype.string if subtype else 'other'
+    elif tag == 'Marker':
+        try:
+            return node.label.string
+        except:
+            return node.find('text').text
     else:
         logging.error(f"Treatment of {tag}-tags not implemented.")
 
@@ -486,6 +575,43 @@ def nan_eq(a, b):
 
 
 
+def merge_tied_notes(df):
+    """ In a note list, merge tied notes to single events with accumulated durations.
+    Input dataframe needs columns ['duration', 'tied', 'midi', 'staff', 'voice']
+    """
+    df = df.copy()
+    notna = df[df.tied.notna()]
+    starts = notna[notna.tied == 1]
+    drops = []
+
+    def merge(i, midi, staff, voice):
+        """Looks for the ending(s) and recursively accumulates."""
+        dur = 0
+        ixs = []
+        end = notna.iloc[i]
+        while end.tied == 1 or end.midi != midi\
+                            or end.staff != staff\
+                            or end.voice != voice:
+           i += 1
+           end = notna.iloc[i]
+        dur += end.duration
+        ixs.append(end.name)
+        if end.tied == 0:
+            d, i = merge(i+1, midi, staff, voice)
+            dur += d
+            ixs.extend(i)
+        return dur, ixs
+
+
+    for ix, r in starts.iterrows():
+        add_dur, ixs = merge(notna.index.get_loc(ix)+1, r.midi, r.staff, r.voice)
+        df.loc[ix, 'duration'] += add_dur
+        drops.extend(ixs)
+    df.drop(drops, inplace=True)
+    return df
+
+
+
 def midi2octave(val):
     """Returns 4 for values 60-71 and correspondingly for other notes.
 
@@ -494,6 +620,34 @@ def midi2octave(val):
     val : :obj:`int` or :obj:`pandas.Series` of `int`
     """
     return val // 12 - 1
+
+
+
+def chord_propagation(df, chord_series):
+    """`df` needs columns ['mc', 'onset', 'chords'],
+    `chord_series` needs multiindex ['mc', 'onset']"""
+    tmp = df.set_index(['mc', 'onset'], drop=False)
+    try:
+        tmp.chords.fillna(chord_series, inplace=True)
+    except:
+        print(tmp.index.is_unique, chord_series.index.is_unique)
+    if 'volta' in tmp.columns and not tmp.volta.isna().all():
+        before_voltas = tmp[tmp.volta.isna()].copy()
+        before_voltas.chords.fillna(method='ffill', inplace=True)
+        last_chord = before_voltas.chords.iloc[-1]
+        for v in tmp.volta[tmp.volta.notna()].unique():
+            volta = tmp[tmp.volta==v].copy()
+            if isnan(volta.chords.iloc[0]):
+                volta.iat[0, volta.columns.get_loc('chords')] = last_chord
+            volta.chords.fillna(method='ffill', inplace=True)
+            before_voltas = before_voltas.append(volta)
+        tmp = before_voltas
+    else:
+        tmp.chords.fillna(method='ffill', inplace=True)
+    tmp.index = df.index
+    df.chords = tmp.chords
+    return df
+
 
 
 def search_in_list_of_tuples(L, pos, search, add=0):
@@ -640,6 +794,7 @@ class Section(object):
     """
 
     def __init__(self, parent, first_mc, last_mc, index, repeated, start_break, end_break, voltas=[]):
+        self.parent = parent
         self.first_mc, self.last_mc = first_mc, last_mc
         self.first_mn, self.last_mn = None, None
         self.index = index
@@ -648,39 +803,129 @@ class Section(object):
         self.voltas = [] if voltas is None else voltas
         self.subsection_of = None
         features = ['mc', 'mn', 'onset', 'duration', 'gracenote', 'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice', 'volta']
-        for f in ['articulation']:
-            if f in parent.score_features:
-                features.append(f)
-        self.notes = pd.DataFrame(columns=features)
-        if index > 0:
-            self.previous_section = index-1
-            parent.sections[index-1].next_section = index
+        # this deals with additional features that have been requested and stored in parent.score_features
+        before_chord_tags = {'chords':       ['Harmony'],
+                             'clefs':        ['Clef'],
+                             'dynamics':     ['Dynamic'],
+                             'texts':        ['StaffText', 'SystemText', 'Jump'],}
+        within_chord_tags = {'articulation': ['Articulation'],
+                             'lyrics':       ['Lyrics']}
+        found_flags = {k: False for k in within_chord_tags}
+
+        def score_feature_value(node):
+            """for before_chord_tags return tuple,
+               for within_chord_tags return dict
+            """
+            if node.name == 'Articulation':
+                return {'articulation': node.subtype.string}
+            elif node.name == 'Clef':
+                clef = node.concertClefType.string
+                if node.transposingClefType.string != clef:
+                    logging.info("Contains deviating keys in transposing parts.")
+                return 'clefs', clef
+            elif node.name == 'Dynamic':
+                return 'dynamics', node.subtype.string
+            elif node.name == 'Harmony':
+                return 'chords', node.find('name').string
+            elif node.name == 'Lyrics':
+                return {'lyrics': node.find('text').string}
+            elif node.name in ['StaffText', 'SystemText', 'Jump']:
+                return 'texts', node.find('text').text
+            else:
+                logging.warning(f"Score feature {node.name} not implemented.")
+                return {}
+
+        before_chord_features, within_chord_features = {}, {}
+        score_features = []
+        for f in ['articulation', 'chords', 'clefs', 'dynamics', 'lyrics', 'texts']:
+            if f in self.parent.score_features:
+                score_features.append(f)
+                if f in before_chord_tags:
+                    before_chord_features[f] = np.nan
+                else:
+                    within_chord_features[f] = np.nan
+
+        self.notes = pd.DataFrame(columns=features + score_features)
+        if self.index > 0:
+            self.previous_section = self.index-1
+            self.parent.sections[self.index-1].next_section = self.index
         else:
             self.previous_section = None
         self.next_section = None
 
 
         # Parse all measures contained in this section
-        df_vals = {col: [] for col in self.notes.columns}
+        def get_feature_value(f):
+            nonlocal note
+            if   f == 'mc':
+                return mc
+            elif f == 'mn':
+                return mc_info.mn
+            elif f == 'staff':
+                return staff_id
+            elif f == 'voice':
+                return voice
+            elif f == 'onset':
+                return pointer
+            elif f == 'duration':
+                if not grace:
+                    return duration
+                else:
+                    return 0
+            elif f == 'nominal_duration':
+                return nominal_duration
+            elif f == 'gracenote':
+                return gracenote
+            elif f == 'scalar':
+                return dotscalar
+            elif f == 'tpc':
+                return int(note.tpc.string) - 14
+            elif f == 'midi':
+                return int(note.pitch.string)
+            elif f == 'volta':
+                return volta
+            # elif f in within_chord_features:
+            #     return within_chord_features[f]
+            elif f == 'tied':
+                ties = note.find_all('Spanner', {'type': 'Tie'})
+                if len(ties) == 0:
+                    return np.nan
+                else:
+                    t = 0
+                    for tie in ties:
+                        if tie.find('prev'):
+                            t += -1     # -1: end of tie
+                        if tie.find('next'):
+                            t += 1 if tie.find('next') else 0   #  0: both
+                    return t
+            else:
+                logging.warning(f"Requested non-standard feature {f}.")
+
+        df_vals = {col: [] for col in features}   # to become the note list dataframe
+        sf_vals = {col: [] for col in ['mc', 'onset', 'staff', 'voice'] + score_features} # score features attached to rests
         # iterate through stacks of simultaneous measure nodes
-        for mc, measure_stack in enumerate(zip(*[[measure for mc, measure in node_dicts.items() if self.first_mc <= mc <= self.last_mc] for node_dicts in parent.measure_nodes.values()])):
+        for mc, measure_stack in enumerate(zip(*[[measure for mc, measure in node_dicts.items() if self.first_mc <= mc <= self.last_mc] for node_dicts in self.parent.measure_nodes.values()])):
             mc += self.first_mc
             nodetypes = defaultdict(list)   # keeping track of tags on the measure level
-            mc_info = parent.info.loc[mc]
+            mc_info = self.parent.info.loc[mc]
             volta = mc_info.volta
             for staff_id, measure in enumerate(measure_stack):
                 staff_id += 1
                 for tag in measure.find_all(recursive=False):
                     nodetypes[tag.name].append(tag)
-                tagtypes = set()            # keeping track of tags on the event group level
+                tagtypes = set()            # keeping track of tags within elements on the voice level
                 if 'voice' in nodetypes:
                     # Parse all events within a voice within a measure within a staff
                     for voice, voice_tag in enumerate(nodetypes['voice']):
+                        for tag in voice_tag.find_all(recursive=False):
+                            nodetypes[tag.name].append(tag)
                         voice += 1
                         pointer = frac(0)
                         scalar = 1  # to manipulate note durations
                         scalar_stack = []
-                        for event in voice_tag.find_all(['Chord', 'Rest', 'Tuplet', 'endTuplet']):
+                        additional_tags = sum([before_chord_tags[f] for f in before_chord_features], [])
+                        voice_level_tags = ['Chord', 'Rest', 'Tuplet', 'endTuplet', 'location'] + additional_tags
+                        for event in voice_tag.find_all(voice_level_tags, recursive=False):
                             for tag in event.find_all(recursive=True):
                                 tagtypes.add(tag.name)
                             if event.name == 'Tuplet':
@@ -688,67 +933,67 @@ class Section(object):
                                 scalar = scalar * frac(int(event.normalNotes.string), int(event.actualNotes.string))
                             elif event.name == 'endTuplet':
                                 scalar = scalar_stack.pop()
-                            else:
-                                nominal_duration = DURATIONS[event.find('durationType').string]
-                                dots = event.find('dots')
-                                dotscalar = sum([frac(1/2) ** i for i in range(int(dots.string)+1)]) * scalar if dots else scalar
-                                duration = nominal_duration * dotscalar
+                            # additional score_features
+                            elif event.name in additional_tags:
+                                duration = 0
+                                for f in sf_vals.keys():
+                                    feat, val = score_feature_value(event)
+                                    if f == feat:
+                                        sf_vals[f].append(val)
+                                    elif f in ['mc', 'onset', 'staff', 'voice']:
+                                        sf_vals[f].append(get_feature_value(f))
+                                    else:
+                                        sf_vals[f].append(np.nan)
+
+                            elif event.name in ['Chord', 'Rest', 'location']:
+                                grace = None
+                                if event.name == 'location':
+                                    try:
+                                        duration = frac(event.fractions.string)
+                                    except:
+                                        logging.error(f"The <location> in mc {mc} has no duration given as <fractions>")
+                                else:
+                                    durationtype = event.find('durationType').string
+                                    if durationtype == 'measure':
+                                        dur = event.find('duration')
+                                        if dur:
+                                            nominal_duration = frac(dur.string)
+                                        else:
+                                            nominal_duration = self.parent.info.loc[mc].timesig
+                                    else:
+                                        nominal_duration = DURATIONS[durationtype]
+                                    dots = event.find('dots')
+                                    dotscalar = sum([frac(1/2) ** i for i in range(int(dots.string)+1)]) * scalar if dots else scalar
+                                    duration = nominal_duration * dotscalar
+
                                 if event.name == 'Chord':
 
-                                    if 'articulation' in parent.score_features and event.find('Articulation'):
-                                        articulation = event.Articulation.subtype.string
-                                    else:
-                                        articulation = np.nan
+                                    # facultative features inside <Chord> tags
+                                    for f, tags in within_chord_tags.items():
+                                        if f in within_chord_features:
+                                            found = event.find(tags)
+                                            if found:
+                                                within_chord_features.update(score_feature_value(found))
+                                        elif not found_flags[f] and event.find(tags):
+                                            found_flags[f] = True
+
 
                                     grace = event.find(['grace4','grace4after','grace8','grace8after','grace16','grace16after','grace32','grace32after','grace64','grace64after', 'appoggiatura', 'acciaccatura'])
                                     gracenote = grace.name if grace else np.nan
 
                                     for note in event.find_all('Note'):
-
-                                        def get_feature_value(f):
-                                            if   f == 'mc':
-                                                return mc
-                                            elif f == 'mn':
-                                                return mc_info.mn
-                                            elif f == 'staff':
-                                                return staff_id
-                                            elif f == 'voice':
-                                                return voice
-                                            elif f == 'onset':
-                                                return pointer
-                                            elif f == 'duration':
-                                                if not grace:
-                                                    return duration
-                                                else:
-                                                    return 0
-                                            elif f == 'nominal_duration':
-                                                return nominal_duration
-                                            elif f == 'gracenote':
-                                                return gracenote
-                                            elif f == 'scalar':
-                                                return dotscalar
-                                            elif f == 'tpc':
-                                                return int(note.tpc.string) - 14
-                                            elif f == 'midi':
-                                                return int(note.pitch.string)
-                                            elif f == 'volta':
-                                                return volta
-                                            elif f == 'articulation':
-                                                return articulation
-                                            elif f == 'tied':
-                                                tie = note.find('Spanner', {'type': 'Tie'})
-                                                if tie:                                 # -1: end of tie
-                                                    t = -1 if tie.find('prev') else 0   #  1: beginning of tie
-                                                    t += 1 if tie.find('next') else 0   #  0: both
-                                                else:
-                                                    t = np.nan
-                                                return t
-
-                                        for f in features:
+                                        for f in df_vals.keys():
                                             df_vals[f].append(get_feature_value(f))
 
-                                    if not grace:
-                                        pointer += duration
+                                if not grace:
+                                    pointer += duration
+
+                                    within_chord_features.update({k: np.nan for k in within_chord_features})
+
+                                before_chord_features.update({k: np.nan for k in before_chord_features})
+
+                            else:
+                                logging.warning(f"Treatment of {event.name} not implemented.")
 
                     del nodetypes['voice']
 
@@ -757,11 +1002,66 @@ class Section(object):
 
                 remaining_tags = [k for k in list(tagtypes) + list(nodetypes.keys()) if not k in TREATED_TAGS]
                 if len(remaining_tags) > 0:
-                    logging.debug(f"The following tags have not been treated: {remaining_tags}")
+                    logging.info(f"The following tags have not been treated: {remaining_tags}")
 
         df = pd.DataFrame(df_vals).astype({'volta': 'Int64', 'tied': 'Int64'}, )
         df = df.groupby('mc', group_keys=False).apply(lambda df: df.sort_values(['onset', 'midi']))
+        for f in score_features:
+            df[f] = np.nan
+        sf = pd.DataFrame(sf_vals)
+        if len(self.parent.leftovers) > 0:
+            sf = sf.append(self.parent.leftovers)
+            self.parent.leftovers = pd.DataFrame()
+        self.parent.sf.append(sf.copy())
+        def fill_in():
+            nonlocal r, fill
+            changed = None
+            for f in score_features:
+                if not isnan(r[f]):
+                    changed = f
+                    F = df.loc[fill.index, f]
+                    notna = F.notna()
+                    if notna.any():
+                        df.loc[F[notna].index, f] += f"-{r[f]}"
+                        logging.info(f"Feature {r[f]} was concatenated to existing using - as separator:{NL}{df.loc[F[notna].index, ['mc', 'onset', 'staff', 'voice', f]]}")
+                        df.loc[F[~notna].index, f] = r[f]
+                    else:
+                        df.loc[fill.index, f] = r[f]
+            return changed
+
+        for i, r in sf.iterrows():
+            same_os = df.loc[(df.mc == r.mc) & (df.onset == r.onset)]
+            if len(same_os) > 0:
+                same_staff = same_os.loc[same_os.staff == r.staff]
+                same_voice = same_staff.loc[same_staff.voice == r.voice]
+                if len(same_voice) > 0:
+                    fill = same_voice
+                elif len(same_staff) > 0:
+                    fill = same_staff
+                else:
+                    fill = same_os
+                _ = fill_in()
+            else:
+                following = df.loc[(df.mc == r.mc) & (df.onset > r.onset)]
+                if len(following) == 0:
+                    following = df.loc[df.mc == r.mc+1]
+                    mc = r.mc+1
+                else:
+                    mc = r.mc
+                if len(following) > 0:
+                    next_os = following.iloc[0].onset
+                    fill = following.loc[following.onset == next_os]
+                    f = fill_in()
+                    logging.info(f"Feature was attached to rest, position was changed to mc {mc}, onset {next_os}:{NL}{r[['mc', 'onset', 'staff', 'voice', f]]}")
+                else:
+                    logging.warning(f"Feature was attached to rest and hat to be moved to the next section to mc {mc}:{NL}{r[['mc', 'onset', 'staff', 'voice', f]]}")
+                    r.mc = mc
+                    r.onset = 0
+                    self.parent.leftovers = self.parent.leftovers.append(r)
         self.notes = df.reset_index(drop=True)
+        if any(found_flags.values()):
+            available = ', '.join([feature for feature, flag in found_flags.items() if flag])
+            logging.debug(f"Section {self.index} has more features available via Score({self.parent.filename}, score_features=['{available}'])")
 
     def __repr__(self):
         return f"{'Repeated s' if self.repeated else 'S'}{'' if self.subsection_of is None else 'ubs'}ection from MC {self.first_mc} ({self.start_break}) to MC {self.last_mc} ({self.end_break}), {'with ' + str(len(self.voltas)) if len(self.voltas) > 0 else 'without'} voltas."
@@ -780,6 +1080,8 @@ class Score(object):
 
     Attributes
     ----------
+    chord_series : :obj:`pandas.Series`
+        If score_feature=['chords'], the chords are stored in this series with multiindex ['mc', 'onset']
     dir : :obj:`str`
         Directory where the parsed file is stored.
     file : :obj:`str`
@@ -791,6 +1093,8 @@ class Score(object):
         Useful for everyday work.
     last_node : :obj:`int`
         Measure count of the score's last measure node.
+    leftovers : obj:`pandas.DataFrame`
+        Temporary container holding overflowing score_features during creation of sections.
     mc_info : :obj:`dict` of :obj:`pandas.DataFrame`
         One DataFrame per staff where measure counts are index values and columns
         hold corresponding structural information. This information is best accessed
@@ -800,7 +1104,7 @@ class Score(object):
         measure counts (NOT measure numbers) and values are XML nodes.
     score : :class:`bs4.BeautifulSoup`
         The complete XML structure of the parsed MSCX file.
-    score_features : :obj:`list` of {'articulation'}
+    score_features : :obj:`list` of {'all', 'articulation', 'chords', 'clefs', 'dynamics', 'jumps', 'lyrics', 'texts'}
         Additional features you want to extract.
     section_order : :obj:`list` of :obj:`int`:
         List of section IDs representing in which order the sections in ``section_structure``
@@ -828,11 +1132,18 @@ class Score(object):
     def __init__(self, file, score_features=[], separating_barlines=['double']):
 
         # Initialize attributes
+        self.sf = []
         self.file = file
         self.dir, self.filename = os.path.split(os.path.abspath(file))
         self.staff_nodes = {}
         self.measure_nodes = {}
-        self.score_features = score_features
+        if not score_features.__class__ == list:
+            score_features = [score_features]
+        if 'all' in score_features:
+            score_features = ['articulation', 'chords', 'clefs', 'dynamics', 'jumps', 'lyrics', 'texts']
+        elif 'jumps' in score_features and not 'texts' in score_features:
+            score_features.append('texts')
+        self.score_features =  score_features
         self.sections = {}
         self.section_structure = {}
         self.section_order = []
@@ -841,6 +1152,8 @@ class Score(object):
         self.super_section_order = []
         self.mc_info = {}
         self.info = pd.DataFrame()
+        self.chord_series = None
+        self.leftovers = pd.DataFrame()
 
         # Load file
         logging.info(f"Attempting to parse {self.filename}")
@@ -876,10 +1189,13 @@ class Score(object):
                       'Volta': 'volta',
                       'BarLine': 'barline',
                       'noOffset': 'numbering_offset',
-                      'irregular': 'dont_count'
+                      'irregular': 'dont_count',
                       }
 
         cols = ['keysig', 'timesig', 'act_dur', 'voices', 'repeats', 'volta', 'barline', 'numbering_offset', 'dont_count']
+        if 'jumps' in self.score_features:
+            cols.append('marker')
+            tag_to_col['Marker'] = 'marker'
 
         def get_measure_infos(measure):
             """Treat <Measure> node and return info dict."""
@@ -927,7 +1243,7 @@ class Score(object):
         # Check for infos which are not included in self.mc_info[1]; i.e.,
         # infos appearing only in one of the lower staves.
         for col in self.mc_info[1].columns:
-            if not col in ['voices']:    # Exclude columns, that will be aggregated anyway
+            if not col in ['voices']:    # Exclude columns that will be aggregated anyway
                 cols = [self.mc_info[k][col] for k in self.mc_info.keys()]
                 c1 = cols[0]
                 cols = cols[1:]
@@ -1068,7 +1384,7 @@ the first staff (as shown in previous warning).""")
                 section, (fro, to) = next(sections)
             self.sections[section].voltas = group
 
-        # Add sections to info frame
+        # Add sections to self.info
         self.info.insert(0, 'section', pd.Series(np.nan, dtype='Int64'))
         for s, (fro, to) in self.section_structure.items():
             self.info.loc[fro:to, 'section'] = s
@@ -1077,7 +1393,28 @@ the first staff (as shown in previous warning).""")
             logging.critical("Not all measure nodes have been assigned to a section.")
 
         # check that no note crosses measure boundary
-        check_measure_boundaries(self.get_notes(volta_warning=False), self.info.act_dur)
+        note_list = self.get_notes(volta_warning=False, propagate_chords=False)
+        check_measure_boundaries(note_list, self.info.act_dur)
+
+        # if 'chords' are requested, store chord_series
+        if 'chords' in self.score_features and not note_list.chords.isna().all():
+            chord_series = note_list.groupby(['mc', 'onset', 'chords']).size().reset_index('chords').chords
+            if not chord_series.index.is_unique:
+                logging.warning(f"Doublings: {chord_series[chord_series.index.duplicated(keep=False)]}")
+            self.chord_series = chord_series
+
+        # if 'jumps' are requested, add textual information to self.info
+        if 'jumps' in self.score_features and not note_list.texts.isna().all():
+            jumps = note_list.texts.str.lower().str.contains(r'\bd\.|\bda|segno|capo', na=False)
+            if jumps.any():
+                for _, mc, text in note_list[['mc', 'texts']][jumps].drop_duplicates().itertuples():
+                    val = self.info.at[mc, 'marker']
+                    if isnan(val):
+                        self.info.at[mc, 'marker'] = text
+                    else:
+                        self.info.at[mc, 'marker'] = f"{val} & {text}"
+
+
 
         # Compute the subsequent mc for every mc
         ix = self.info.index
@@ -1180,7 +1517,7 @@ the first staff (as shown in previous warning).""")
 
 
 
-    def get_section(self, section=None, volta_warning=True):
+    def get_section(self, section=None, volta=None, volta_warning=True, propagate_chords=True):
         """
         Parameters
         ----------
@@ -1189,26 +1526,44 @@ the first staff (as shown in previous warning).""")
             (a, b) = sections from a to b; [a, b] = sections a and b
             Defaults to None which shows all sections. Repeating values in a collection
             leads to the corresponding note lists being repeated.
+        volta : :obj:`int`, optional
+            Instead of section='0b' you can pass section=0, volta=2 or section=0, volta=-1 (if 2 is the last)
         volta_warning : :obj:`bool`, optional
             If the requested section (e.g. `section`=8) has voltas you need to specify which volta
-            you want, e.g. using `section`='8a' or '8b'. It this is not specified, a warning
-            is thrown and the notes from the last volta are chosen. Set `volta_warning` to False to
+            you want, e.g. using `section`='8a' or '8b' or `section=8, volta=-1`. It this is not specified,
+            a warning thrown and the notes from the last volta are chosen. Set `volta_warning` to False to
             silence the warning and get the notes of all voltas.
+        propagate_chords : :obj:`bool`, optional
+            If you want to see chords only for the places where they originally appear in the score
+            instead of spreading them up to the next chord, pass False.
         """
         n = len(self.sections)
-        volta = None
         if section.__class__ == str:
             try:
                 section = int(section)
             except:
-                volta = ord(section[-1]) - 96 # 'a' -> 1, 'b' -> 2 etc.
+                no = ord(section[-1]) - 96 # 'a' -> 1, 'b' -> 2 etc.
+                if volta is None:
+                    volta = no
+                elif volta != no:
+                    logging.warning(f"Parameters section={section} -> volta {no} <!> volta={volta} are contradictory.")
                 section = int(section[:-1])
+
         if section.__class__ == int:
             s = treat_section_index(section, n)
             if s is None:
                 logging.warning(f"Section {section} does not exist.")
-            df = self.sections[s].notes
-            if len(df.volta.notna()) > 0:
+            df = self.sections[s].notes.copy()
+            if 'chords' in df.columns and not df.chords.isna().all() and propagate_chords:
+                df = chord_propagation(df, self.chord_series)
+                if isnan(df.chords.iloc[0]):
+                    if s > 0:
+                        prev = self.sections[s-1].notes.chords
+                        df.iat[0, df.columns.get_loc('chords')] = prev[prev.notna()].iloc[-1]
+                        df.chords.fillna(method='ffill', inplace=True)
+                    else:
+                        logging.error("The score's first section starts without any chord.")
+            if df.volta.notna().any():
                 last_volta = len(self.sections[s].voltas)
                 if volta is None:
                     if volta_warning:
@@ -1216,8 +1571,15 @@ the first staff (as shown in previous warning).""")
                         volta = last_volta
                     else:
                         return df
+                elif volta < 0:
+                    backwards = last_volta + 1 + volta
+                    if backwards < 1:
+                        logging.warning(f"Section {s} has {last_volta} voltas, volta {volta} does not exist. Returning 1.")
+                        backwards = 1
+                    volta = backwards
                 elif volta > last_volta:
                     volta = last_volta
+                    logging.warning(f"Section {s} has only {last_volta} voltas, volta {volta} does not exist.")
                 return df[df.volta.isna() | (df.volta == volta)]
             return df
         else:
@@ -1225,7 +1587,7 @@ the first staff (as shown in previous warning).""")
 
 
 
-    def get_notes(self, section=None, multiindex=True, beatsize=None, volta_warning=True, **kwargs):
+    def get_notes(self, section=None, volta=None, volta_warning=True, multiindex=True, beatsize=None, merge_ties=False, propagate_chords=True, **kwargs):
         """ Retrieve list of notes as a DataFrame.
 
         Parameters
@@ -1235,6 +1597,13 @@ the first staff (as shown in previous warning).""")
             (a, b) = sections from a to b; [a, b] = sections a and b
             Defaults to None which shows all sections. Repeating values in a collection
             leads to the corresponding note lists being repeated.
+        volta : :obj:`int`, optional
+            Instead of section='0b' you can pass section=0, volta=2 or section=0, volta=-1 (if 2 is the last)
+        volta_warning : :obj:`bool`, optional
+            If the requested section (e.g. `section`=8) has voltas you need to specify which volta
+            you want, e.g. using `section`='8a' or '8b' or `section=8, volta=-1`. It this is not specified,
+            a warning thrown and the notes from the last volta are chosen. Set `volta_warning` to False to
+            silence the warning and get the notes of all voltas.
         multiindex : :obj:`bool`, optional
             Is True by default, in which case section numbers are displayed as the first level of a
             MultiIndex and a sequential index as the second. Pass `multiindex=False` to yield a note list
@@ -1244,6 +1613,12 @@ the first staff (as shown in previous warning).""")
             If True, the dict TIMESIG_BEAT is used to determine the beat size according to the time signature.
             By passing a dictionary you can overwrite or enhance the information in TIMESIG_BEAT.
             If you pass a fraction (such as '1/4', 1/4, frac(1/4) or 0.25), this beat size is used for all time signatures.
+        merge_ties : :obj:`bool`, optional
+            If False (by default), all tied notes represent individual events with ties given in column `tied`.
+            Set to False to contract tied notes to single events (durations 1/2 _ 1/4 => 3/4)
+        propagate_chords : :obj:`bool`, optional
+            If you want to see chords only for the places where they originally appear in the score
+            instead of spreading them up to the next chord, pass False.
         **kwargs
             The following columns can be added by setting them to True:
             * octaves
@@ -1253,7 +1628,7 @@ the first staff (as shown in previous warning).""")
             These and all other columns of the notelist can be filtered by passing feature=selector.
             The features are {'n', 'mc', 'mn', 'onset', 'duration', 'gracenote',
             'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice',
-            'volta', 'octaves', 'note_names', 'beats'}
+            'volta', 'octaves', 'note_names', 'beats'} + self.score_features
             The selectors can be:
             * Single value: Only notes where `feature` equals `selector`.
             * 2-tuple (a,b): Slice where `a <= feature <= b`.
@@ -1288,10 +1663,9 @@ the first staff (as shown in previous warning).""")
         n = len(self.sections)
         if section is None:
             keys = list(self.sections.keys())
-            df = pd.concat([self.get_section(s, volta_warning) for s in keys], keys=keys, names=['section', 'ix'])
+            df = pd.concat([self.get_section(s, volta=volta, volta_warning=volta_warning, propagate_chords=propagate_chords) for s in keys], keys=keys, names=['section', 'ix'])
         elif section.__class__ in [int, str]:
-            section = self.sections.keys()
-            df = pd.concat([self.get_section(section, volta_warning)], keys=[section], names=['section', 'ix'])
+            df = pd.concat([self.get_section(section, volta=volta, volta_warning=volta_warning, propagate_chords=propagate_chords)], keys=[section], names=['section', 'ix'])
         else:
             treated = treat_section_index(section, n)
             if section.__class__ == tuple and len(section) == 2:
@@ -1309,18 +1683,14 @@ the first staff (as shown in previous warning).""")
                 treated = treat_section_index(treated, n)
             treated = [t for t in treated if t is not None]
             if len(treated) > 0:
-                c = Counter(treated)
-                multiples = {k: v for k, v in c.items() if v > 1}
-                if len(multiples) == 0:
-                    df = pd.concat([self.get_section(s, volta_warning) for s in treated], keys=treated, names=['section', 'ix'])
-                else:
-                    new_keys = {k: a_n_range('a',v) for k,v in multiples.items()}
-                    keys = [f"{s}{next(new_keys[s])}" if s in new_keys else s for s in treated]
-                    df = pd.concat([self.get_section(s, volta_warning) for s in keys], keys=keys, names=['section', 'ix'])
+                    keys = disambiguate_repeats(treated)
+                    df = pd.concat([self.get_section(s, volta=volta, volta_warning=volta_warning, propagate_chords=propagate_chords) for s in keys], keys=keys, names=['section', 'ix'])
             else:
                 return None
 
-
+        # merge tied notes
+        if merge_ties:
+            df = merge_tied_notes(df)
 
         # activate requested features
         available_features = ['octaves', 'note_names', 'beats', 'pcs', 'n']
@@ -1382,10 +1752,7 @@ the first staff (as shown in previous warning).""")
                 sel = df[feature] == selector
             elif selector.__class__ == bool:
                 if selector:
-                    if feature == 'tied':
-                        sel = df.tied.isin([0,1])
-                    else:
-                        sel = df[feature].notna()
+                    sel = df[feature].notna()
                 else:
                     continue
             elif selector.__class__ == tuple and len(selector) == 2:
@@ -1412,6 +1779,60 @@ the first staff (as shown in previous warning).""")
             df.reset_index(drop=True, inplace=True)
 
         return df
+
+
+
+    def itersections(self, section=None, repeats=True, volta=None, multiindex=False):
+        """ Iterate through sections' note lists.
+
+        Parameters
+        ----------
+        section : :obj:`int`, optional
+            Pass a section index if you want to iterate through all its repetitions
+            with correct voltas being taken care of. By default, iterate through all sections.
+        repeats : :obj:`bool`, optional
+            Defaults to True. If you don't want to iterate through the different repeats,
+            pass False and define the parameter `volta` (if the piece has any).
+        volta : :obj:`int`, optional
+            If you pass an integer, at every repeat the same volta is included.
+            Pass -1 to always use the last volta. Defaults to automatic behaviour.
+        multiindex : :obj:`bool`, optional
+            Defaults to False. Pass True if you want a 2-level multiindex where the
+            first level has the section number (1a for first repeat, 1b for second etc.)
+
+        Returns
+        -------
+        :obj:`generator`
+            At every iteration, a DataFrame with a list of notes is returned.
+        """
+        if section is None:
+            if repeats:
+                section_order = disambiguate_repeats(self.section_order)
+            else:
+                section_order = self.sections.keys()
+        else:
+            try:
+                int(section)
+            except:
+                raise ValueError(f"'section' needs to be an integer, not {section.__class__}")
+
+            if repeats:
+                S = self.sections[section]
+                if S.repeated:
+                    section_order = [section] * 2
+                voltas = len(S.voltas)
+                if voltas > 0:
+                    section_order = disambiguate_repeats([section] * voltas)
+            else:
+                section_order = [section]
+
+        for s in disambiguate_repeats(section_order):
+            if multiindex:
+                yield self.get_notes(s, volta=volta)
+            else:
+                yield self.get_section(s, volta=volta)
+
+
 ########################## End of class Score ##################################
 
 # %% Playground
