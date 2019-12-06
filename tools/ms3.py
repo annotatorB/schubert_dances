@@ -1,7 +1,5 @@
 # %% Run this cell with ALT + SHIFT + ENTER (e.g. with Hydrogen package within Atom)
 """MuseScore3 Parser by Johannes Hentschel
-
-!!! Textual information in the score which is linked to rests will be silently ignored. !!!
 """
 
 ###################
@@ -33,7 +31,7 @@ DURATIONS = {"measure" : 1.0,
              "64th"    : frac(1/64),
              "128th"   : frac(1/128)}
 
-NEWEST_MUSESCORE = '3.3.0'
+NEWEST_MUSESCORE = '3.3.4'
 
 NL = '\n'
 
@@ -112,6 +110,7 @@ TREATED_TAGS = ['acciaccatura',
                 'endRepeat',    # when a repeated section ends
                 'endTuplet',    # used for note duration
                 'family',       # layout information, ignored
+                'FiguredBass',  # not implemented yet
                 'Fingering',    # ignored
                 'font',         # layout information, ignored
                 'fractions',    # duration of <location> (part of Spanner)
@@ -155,6 +154,7 @@ TREATED_TAGS = ['acciaccatura',
                 'size',         # layout information, ignored
                 'Slur',         # ignored
                 'SlurSegment',  # layout information, ignored
+                'small',        # layout information, ignored
                 'Spanner',      # several cases; used: "Tie" (test 8va)
                 'staffMove',    # layout information, ignored
                 'StaffText',    # score_feature 'texts'
@@ -283,6 +283,17 @@ def check_mn(mn_series):
     missing = [i for i in range(1, highest) if not i in mn_series.values]
     if len(missing) > 0:
         logging.error(f"The score has a numbering gap, these measure numbers are missing: {missing}")
+
+
+
+def is_smaller_version(a, b):
+    """ '3.3.0' < '3.3.4' => True"""
+    for a, b in zip(a.split('.'), b.split('.')):
+        if int(a) < int(b):
+            return True
+        if int(a) > int(b):
+            return False
+    return False
 
 
 
@@ -461,22 +472,32 @@ def feature_from_node(tag, nodes):
 check construction of defaultdict 'infos' in function get_measure_infos""")
         return None
     if len(nodes) > 1 and tag != 'voice':
-        logging.warning(f"{len(nodes)} {tag}-nodes in one <Measure>.")
+        multiples = True
+    else:
+        multiples = False
 
     if tag == 'voice':
         return len(nodes)
-    else:
-        node = nodes[0]
+    elif multiples:
+        other_vals = [feature_from_node(tag, [n]) for n in nodes[1:]]
+    node = nodes[0]
+
+    def send_out(val):
+        if multiples:
+            logging.warning(f"{len(nodes)} {tag}-nodes in one <Measure>. Used first ({val}), ignored {other_vals}.")
+        return val
 
     if tag in ['accidental', 'noOffset', 'irregular']:
         try:
-            return int(node.string)
+            val = int(node.string)
+            return send_out(val)
         except:
-            print(node)
+            logging.warning(f"Empty node: {node}")
     elif tag == 'TimeSig':
-        return convert_timesig(node)
+        val = convert_timesig(node)
+        return send_out(val)
     elif tag in ['endRepeat', 'startRepeat']:
-        return tag
+        return send_out(tag)
     elif tag == 'Volta':
         loc = node.find_next('next').location
         val = 1 if loc.find('fractions') else 0
@@ -484,15 +505,17 @@ check construction of defaultdict 'infos' in function get_measure_infos""")
             val += int(loc.measures.string)
         if val == 0:
             logging.error(f"Length of volta {node} not specified.")
-        return val
+        return send_out(val)
     elif tag == 'BarLine':
         subtype = node.find('subtype')
-        return subtype.string if subtype else 'other'
+        val = subtype.string if subtype else 'other'
+        return send_out(val)
     elif tag == 'Marker':
         try:
-            return node.label.string
+            val = node.label.string
         except:
-            return node.find('text').text
+            val = node.find('text').text
+        return send_out(val)
     else:
         logging.error(f"Treatment of {tag}-tags not implemented.")
 
@@ -725,6 +748,26 @@ def tpc2pc(tpc):
         return apply_function(tpc2pc, tpc)
 
     return 7 * tpc % 12
+
+
+
+def transpose_to_C(note_list, measure_list=None):
+    """ Either `note_list` needs column `keysig` or you need to pass `measure_list` with `keysig`"""
+    if not 'keysig' in note_list.columns:
+        if note_list.index.__class__ == pd.core.indexes.multi.MultiIndex and 'id' in note_list.index.names:
+            note_list_transposed = note_list.merge(measure_list['keysig'], on=['id', 'mc'], right_index=True)
+        else:
+            note_list_transposed = note_list.merge(measure_list['keysig'], on='mc', right_index=True)   # Add a column with the corresponding key signature for every note
+    else:
+        note_list_transposed = note_list.copy()
+    note_list_transposed.tpc -= note_list_transposed.keysig                                             # subtract key signature from tonal pitch class (=transposition to C)
+    midi_transposition = tpc2pc(note_list_transposed.keysig)\
+                         .apply(lambda x: x if x <= 6 else x % -12)                                     # convert key signature to pitch class and decide whether MIDIs are shifted downwards (if <= 6) or upwards
+    up_or_down = (midi_transposition == 6)                                                              # if the shift is 6, the direction of shift depends on the key signature:
+    midi_transposition.loc[up_or_down] = note_list_transposed[up_or_down].keysig\
+                                         .apply(lambda x: 6 if x > 0 else -6)                           # If the key signature is F#, shift downwards, if it's Gb, shift upwards
+    note_list_transposed.midi -= midi_transposition
+    return note_list_transposed
 
 
 
@@ -1002,7 +1045,7 @@ class Section(object):
 
                 remaining_tags = [k for k in list(tagtypes) + list(nodetypes.keys()) if not k in TREATED_TAGS]
                 if len(remaining_tags) > 0:
-                    logging.info(f"The following tags have not been treated: {remaining_tags}")
+                    logging.debug(f"The following tags have not been treated: {remaining_tags}")
 
         df = pd.DataFrame(df_vals).astype({'volta': 'Int64', 'tied': 'Int64'}, )
         df = df.groupby('mc', group_keys=False).apply(lambda df: df.sort_values(['onset', 'midi']))
@@ -1162,8 +1205,8 @@ class Score(object):
 
         # Check Musescore version
         ms_version = self.score.find('programVersion').string
-        if ms_version != NEWEST_MUSESCORE:
-            logging.warning(f"{self.filename} was created with MuseScore {ms_version}. Auto-conversion will be implemented in the future.")
+        if is_smaller_version(ms_version, NEWEST_MUSESCORE):
+            logging.debug(f"{self.filename} was created with MuseScore {ms_version}. Auto-conversion will be implemented in the future.")
         assert ms_version.split('.')[0] == '3', f"This is a MS2 file, version {ms_version}"
         # ToDo: Auto-conversion
 
@@ -1268,6 +1311,7 @@ class Score(object):
             if isnan(last_row.repeats):
                 mc_info.loc[last_row.name, 'repeats'] = 'lastMeasure'
             mc_info[['keysig', 'timesig']] = mc_info[['keysig', 'timesig']].fillna(method='ffill')
+            mc_info['keysig'] = mc_info['keysig'].astype(int)
 
         #######################################################################
         # Create the master DataFrame self.info, combining all staves'        #
@@ -1562,7 +1606,7 @@ the first staff (as shown in previous warning).""")
                         df.iat[0, df.columns.get_loc('chords')] = prev[prev.notna()].iloc[-1]
                         df.chords.fillna(method='ffill', inplace=True)
                     else:
-                        logging.error("The score's first section starts without any chord.")
+                        logging.warning("The score's first section starts without any chord.")
             if df.volta.notna().any():
                 last_volta = len(self.sections[s].voltas)
                 if volta is None:
@@ -1623,8 +1667,9 @@ the first staff (as shown in previous warning).""")
             The following columns can be added by setting them to True:
             * octaves
             * note_names
-            * beats
+            * beats (control beat size via `beatsize`, use `beats` for filtering)
             * pcs (pitch classes 0-11)
+            * timesig (automatically shown if `beats` is shown)
             These and all other columns of the notelist can be filtered by passing feature=selector.
             The features are {'n', 'mc', 'mn', 'onset', 'duration', 'gracenote',
             'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice',
@@ -1693,7 +1738,7 @@ the first staff (as shown in previous warning).""")
             df = merge_tied_notes(df)
 
         # activate requested features
-        available_features = ['octaves', 'note_names', 'beats', 'pcs', 'n']
+        available_features = ['octaves', 'note_names', 'beats', 'pcs', 'n', 'timesig']
         features = {f: False for f in available_features}
         if beatsize is not None:
             features['beats'] = True
@@ -1702,12 +1747,16 @@ the first staff (as shown in previous warning).""")
                 if not feature in features.keys():
                     logging.warning(f"{feature} is not part of the note features.")
                 features[feature] = True
+        if features['beats']:
+            features['timesig'] = True
 
         # compute additional feature columns
         if features['octaves']:
             df['octaves'] = midi2octave(df.midi)
         if features['note_names']:
             df['note_names'] = tpc2name(df.tpc)
+        if features['timesig']:
+            df = df.merge(self.info['timesig'], how='left', on='mc', right_index=True)
         if features['beats']:
             if beatsize is None or beatsize.__class__ == bool:
                 beatsize = {}
@@ -1724,7 +1773,7 @@ the first staff (as shown in previous warning).""")
                     val = frac(beatsize)
                     beatsizedict = defaultdict(lambda: val)
                 except:
-                    raise ValueError(f"Datatype of beats = {beatsize} not understood")
+                    raise ValueError(f"Datatype of beatsize = {beatsize} not understood")
 
             def compute_beat(r):
                 size = beatsizedict[r.timesig]
@@ -1736,8 +1785,8 @@ the first staff (as shown in previous warning).""")
                 else:
                     return str(beat)
 
-            df['beats'] = self.info[['timesig','offset']]\
-                              .merge(df[['mc', 'onset']], on='mc', left_index=True)\
+            df['beats'] = self.info[['offset']]\
+                              .merge(df[['mc', 'onset', 'timesig']], on='mc', left_index=True)\
                               .apply(compute_beat, axis=1)
         if features['pcs']:
             df['pcs'] = df.midi % 12
