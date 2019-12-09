@@ -159,15 +159,28 @@
             
   <div class="section" id="module-ms3">
 <span id="ms3-module"></span><h1>ms3 module<a class="headerlink" href="#module-ms3" title="Permalink to this headline">¶</a></h1>
-<p>MuseScore3 Parser</p>
+<p>MuseScore3 Parser by Johannes Hentschel</p>
 <dl class="class">
 <dt id="ms3.Score">
 <em class="property">class </em><code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">Score</code><span class="sig-paren">(</span><em class="sig-param">file, score_features=[], separating_barlines=['double']</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Parser for MuseScore3 MSCX files.</p>
 <p>NOTE: Measure count <code class="docutils literal notranslate"><span class="pre">mc</span></code> refers to the <cite>mc</cite> th measure node, whereas measure
-number <code class="docutils literal notranslate"><span class="pre">mn</span></code> refers to the <cite>mn</cite> th measure in the score. The latter can consist
-of several measure nodes and can be split across sections.</p>
+number <code class="docutils literal notranslate"><span class="pre">mn</span></code> refers to the <cite>mn</cite> th measure in the score. The former is the number
+<cite>Bar</cite> displayed in the MuseScore status bar, minus 1 (MS starts counting at 1,
+the parser at 0). The latter can consist of several measure nodes and can be
+split across sections.</p>
+<dl class="attribute">
+<dt id="ms3.Score.chord_series">
+<code class="sig-name descname">chord_series</code><a class="headerlink" href="#ms3.Score.chord_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>If score_feature=[‘chords’], the chords are stored in this series with multiindex [‘mc’, ‘onset’]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.Series</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="ms3.Score.dir">
 <code class="sig-name descname">dir</code><a class="headerlink" href="#ms3.Score.dir" title="Permalink to this definition">¶</a></dt>
@@ -202,9 +215,21 @@ of several measure nodes and can be split across sections.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="ms3.Score.info">
+<code class="sig-name descname">info</code><a class="headerlink" href="#ms3.Score.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregation and strongly expanded version of the dataframes in <cite>mc_info</cite>.
+Useful for everyday work.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>obj:<cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="ms3.Score.last_node">
 <code class="sig-name descname">last_node</code><a class="headerlink" href="#ms3.Score.last_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Count of the score’s last measure node.</p>
+<dd><p>Measure count of the score’s last measure node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
@@ -213,10 +238,22 @@ of several measure nodes and can be split across sections.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="ms3.Score.leftovers">
+<code class="sig-name descname">leftovers</code><a class="headerlink" href="#ms3.Score.leftovers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Temporary container holding overflowing score_features during creation of sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>obj:<cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="ms3.Score.mc_info">
 <code class="sig-name descname">mc_info</code><a class="headerlink" href="#ms3.Score.mc_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>One DataFrame per staff where measure counts are index values and columns
-hold corresponding structural information.</p>
+hold corresponding structural information. This information is best accessed
+in aggregated form in <cite>self.info</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> of <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
@@ -253,7 +290,7 @@ measure counts (NOT measure numbers) and values are XML nodes.</p>
 <dd><p>Additional features you want to extract.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of {‘articulation’}</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of {‘all’, ‘articulation’, ‘chords’, ‘clefs’, ‘dynamics’, ‘jumps’, ‘lyrics’, ‘texts’}</p>
 </dd>
 </dl>
 </dd></dl>
@@ -261,7 +298,7 @@ measure counts (NOT measure numbers) and values are XML nodes.</p>
 <dl class="attribute">
 <dt id="ms3.Score.section_order">
 <code class="sig-name descname">section_order</code><a class="headerlink" href="#ms3.Score.section_order" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of section IDs representing in which the sections in <code class="docutils literal notranslate"><span class="pre">section_structure</span></code>
+<dd><p>List of section IDs representing in which order the sections in <code class="docutils literal notranslate"><span class="pre">section_structure</span></code>
 are presented and repeated.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -298,7 +335,8 @@ of only one section.</p>
 <dl class="attribute">
 <dt id="ms3.Score.separating_barlines">
 <code class="sig-name descname">separating_barlines</code><a class="headerlink" href="#ms3.Score.separating_barlines" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of barline types that cause the score to be split in separate sections.</p>
+<dd><p>List of barline types that cause the score to be split in separate sections.
+Defaults to <cite>[‘double’]</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a></p>
@@ -343,13 +381,118 @@ represented by lists of section IDs.</p>
 
 <dl class="method">
 <dt id="ms3.Score.get_notes">
-<code class="sig-name descname">get_notes</code><span class="sig-paren">(</span><em class="sig-param">sections=None</em>, <em class="sig-param">octaves=False</em>, <em class="sig-param">pitch_names=False</em>, <em class="sig-param">mc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score.get_notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score.get_notes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">get_notes</code><span class="sig-paren">(</span><em class="sig-param">section=None</em>, <em class="sig-param">volta=None</em>, <em class="sig-param">volta_warning=True</em>, <em class="sig-param">multiindex=True</em>, <em class="sig-param">beatsize=None</em>, <em class="sig-param">merge_ties=False</em>, <em class="sig-param">propagate_chords=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score.get_notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score.get_notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve list of notes as a DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> ((<cite>collection</cite> of) <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – Sections of which you want to see the notes. 0 = first, -1 = last
+(a, b) = sections from a to b; [a, b] = sections a and b
+Defaults to None which shows all sections. Repeating values in a collection
+leads to the corresponding note lists being repeated.</p></li>
+<li><p><strong>volta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Instead of section=’0b’ you can pass section=0, volta=2 or section=0, volta=-1 (if 2 is the last)</p></li>
+<li><p><strong>volta_warning</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If the requested section (e.g. <cite>section`=8) has voltas you need to specify which volta
+you want, e.g. using `section`=’8a’ or ‘8b’ or `section=8, volta=-1</cite>. It this is not specified,
+a warning thrown and the notes from the last volta are chosen. Set <cite>volta_warning</cite> to False to
+silence the warning and get the notes of all voltas.</p></li>
+<li><p><strong>multiindex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – Is True by default, in which case section numbers are displayed as the first level of a
+MultiIndex and a sequential index as the second. Pass <cite>multiindex=False</cite> to yield a note list
+with a single RangeIndex.</p></li>
+<li><p><strong>beatsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dict</span></code></a> or <cite>fraction</cite>, optional) – Adds a column with a beat for every note.
+If True, the dict TIMESIG_BEAT is used to determine the beat size according to the time signature.
+By passing a dictionary you can overwrite or enhance the information in TIMESIG_BEAT.
+If you pass a fraction (such as ‘1/4’, 1/4, frac(1/4) or 0.25), this beat size is used for all time signatures.</p></li>
+<li><p><strong>merge_ties</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If False (by default), all tied notes represent individual events with ties given in column <cite>tied</cite>.
+Set to False to contract tied notes to single events (durations 1/2 _ 1/4 =&gt; 3/4)</p></li>
+<li><p><strong>propagate_chords</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If you want to see chords only for the places where they originally appear in the score
+instead of spreading them up to the next chord, pass False.</p></li>
+<li><p><strong>**kwargs</strong> – The following columns can be added by setting them to True:
+* octaves
+* note_names
+* beats (control beat size via <cite>beatsize</cite>, use <cite>beats</cite> for filtering)
+* pcs (pitch classes 0-11)
+* timesig (automatically shown if <cite>beats</cite> is shown)
+These and all other columns of the notelist can be filtered by passing feature=selector.
+The features are {‘n’, ‘mc’, ‘mn’, ‘onset’, ‘duration’, ‘gracenote’,
+‘nominal_duration’, ‘scalar’, ‘tied’, ‘tpc’, ‘midi’, ‘staff’, ‘voice’,
+‘volta’, ‘octaves’, ‘note_names’, ‘beats’} + self.score_features
+The selectors can be:
+* Single value: Only notes where <cite>feature</cite> equals <cite>selector</cite>.
+* 2-tuple (a,b): Slice where <cite>a &lt;= feature &lt;= b</cite>.
+* Collection: All notes where <cite>feature</cite> is in <cite>selector</cite>.
+* True yields all values that are not numpy.nan</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>S.get_notes()                           # all notes
+S.get_notes(0)                          # notes from the first section only
+S.get_notes(-1)                         # notes from the last section only
+S.get_notes((0,3))                      # sections [0,1,2,3]
+S.get_notes((3,0))                      # section [3,2,1,0]
+S.get_notes((-4,-1))                    # fourth last to last section
+S.get_notes(None, False)                # all notes with single RangeIndex
+S.get_notes(beatsize=True)              # added column with beat sizes according to time signature
+S.get_notes(beatsize=1/4)               # added column with every note’s quarter beat
+S.get_notes(note_names=True)            # added column with note names
+S.get_notes(note_names=[‘A’, ‘D’, ‘G’]) # Only these notenames
+S.get_notes(octaves=True)               # added column with notes’ octaves
+S.get_notes(octaves=(6,10))             # Only notes in octaves 6 through 10
+S.get_notes(pcs=True)                   # added column with (MIDI) pitch classes
+S.get_notes(pcs=[1,3,6,8,10])           # only black keys on the piano
+S.get_notes(mn=1)                       # all notes with measure number 1
+S.get_notes(duration=[0.5, 1])          # all notes with duration of a half or a whole note
+S.get_notes(duration=(0.5, 1))          # all notes with duration of a half, a whole, or in between
+S.get_notes(n=(0,5))                    # get first 5 notes from every section</p>
+</dd></dl>
 
 <dl class="method">
-<dt id="ms3.Score.info">
-<em class="property">property </em><code class="sig-name descname">info</code><a class="headerlink" href="#ms3.Score.info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="ms3.Score.get_section">
+<code class="sig-name descname">get_section</code><span class="sig-paren">(</span><em class="sig-param">section=None</em>, <em class="sig-param">volta=None</em>, <em class="sig-param">volta_warning=True</em>, <em class="sig-param">propagate_chords=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score.get_section"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score.get_section" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> ((<cite>collection</cite> of) <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – Sections of which you want to see the notes. 0 = first, -1 = last
+(a, b) = sections from a to b; [a, b] = sections a and b
+Defaults to None which shows all sections. Repeating values in a collection
+leads to the corresponding note lists being repeated.</p></li>
+<li><p><strong>volta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Instead of section=’0b’ you can pass section=0, volta=2 or section=0, volta=-1 (if 2 is the last)</p></li>
+<li><p><strong>volta_warning</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If the requested section (e.g. <cite>section`=8) has voltas you need to specify which volta
+you want, e.g. using `section`=’8a’ or ‘8b’ or `section=8, volta=-1</cite>. It this is not specified,
+a warning thrown and the notes from the last volta are chosen. Set <cite>volta_warning</cite> to False to
+silence the warning and get the notes of all voltas.</p></li>
+<li><p><strong>propagate_chords</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – If you want to see chords only for the places where they originally appear in the score
+instead of spreading them up to the next chord, pass False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ms3.Score.itersections">
+<code class="sig-name descname">itersections</code><span class="sig-paren">(</span><em class="sig-param">section=None</em>, <em class="sig-param">repeats=True</em>, <em class="sig-param">volta=None</em>, <em class="sig-param">multiindex=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#Score.itersections"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.Score.itersections" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate through sections’ note lists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – Pass a section index if you want to iterate through all its repetitions
+with correct voltas being taken care of. By default, iterate through all sections.</p></li>
+<li><p><strong>repeats</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – Defaults to True. If you don’t want to iterate through the different repeats,
+pass False and define the parameter <cite>volta</cite> (if the piece has any).</p></li>
+<li><p><strong>volta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, optional) – If you pass an integer, at every repeat the same volta is included.
+Pass -1 to always use the last volta. Defaults to automatic behaviour.</p></li>
+<li><p><strong>multiindex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a>, optional) – Defaults to False. Pass True if you want a 2-level multiindex where the
+first level has the section number (1a for first repeat, 1b for second etc.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>At every iteration, a DataFrame with a list of notes is returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generator</span></code></p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -481,9 +624,30 @@ some_function( slice_this, SL[3:8] )</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="ms3.a_n_range">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">a_n_range</code><span class="sig-paren">(</span><em class="sig-param">c</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#a_n_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.a_n_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates character <cite>a</cite> and the <cite>n-1</cite> following characters.
+:param c: Start character.
+:type c: <code class="xref py py-obj docutils literal notranslate"><span class="pre">char</span></code>
+:param n: Number of total characters.
+:type n: <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">a_n_range</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="go">[&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.apply_function">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">apply_function</code><span class="sig-paren">(</span><em class="sig-param">f</em>, <em class="sig-param">val</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#apply_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.apply_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies function f to a collection.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="ms3.check_measure_boundaries">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">check_measure_boundaries</code><span class="sig-paren">(</span><em class="sig-param">notes</em>, <em class="sig-param">measure_durations</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#check_measure_boundaries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.check_measure_boundaries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that no note surpasses the barline.</p>
+<dd><p>Check that no note surpasses the barline and log errors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -491,13 +655,37 @@ some_function( slice_this, SL[3:8] )</p>
 <li><p><strong>measure_durations</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.Series</span></code></a>) – A series where the index matches notes.mc</p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>None</cite></p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="ms3.check_mn">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">check_mn</code><span class="sig-paren">(</span><em class="sig-param">mn_series</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#check_mn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.check_mn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check measure numbers for gaps and overlaps.</p>
+<dd><p>Check measure numbers for gaps and overlaps and logs errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mn_series</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.Series</span></code></a>) – Series of measure numbers.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>None</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.chord_propagation">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">chord_propagation</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">chord_series</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#chord_propagation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.chord_propagation" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>df</cite> needs columns [‘mc’, ‘onset’, ‘chords’],
+<cite>chord_series</cite> needs multiindex [‘mc’, ‘onset’]</p>
 </dd></dl>
 
 <dl class="function">
@@ -543,8 +731,8 @@ and/or a volta number (typically {1, 2, 3}) is given.</p>
 </dl>
 <p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
-<span class="go">    repeats             volta</span>
-<span class="go">0       firstMeasure    NaN</span>
+<span class="go">        repeats         volta</span>
+<span class="go">0       firstMeasure     NaN</span>
 <span class="go">16      NaN                 1</span>
 <span class="go">17      endRepeat           1</span>
 <span class="go">18      NaN                 2</span>
@@ -566,58 +754,116 @@ and/or a volta number (typically {1, 2, 3}) is given.</p>
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">convert_timesig</code><span class="sig-paren">(</span><em class="sig-param">tag</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#convert_timesig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.convert_timesig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turns a TimeSig-tag into a fraction. If you pass a list of tags, all need
 to represent the same time signature. In case of errors, None is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tag</strong> (<a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.html#tag" title="(in Beautiful Soup v4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bs4.element.Tag</span></code></a> (or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a>)) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/fractions.html#fractions.Fraction" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractions.Fraction</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
+
+<dl class="function">
+<dt id="ms3.disambiguate_repeats">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">disambiguate_repeats</code><span class="sig-paren">(</span><em class="sig-param">treated</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#disambiguate_repeats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.disambiguate_repeats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="function">
 <dt id="ms3.feature_from_node">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">feature_from_node</code><span class="sig-paren">(</span><em class="sig-param">tag</em>, <em class="sig-param">nodes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#feature_from_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.feature_from_node" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets a tag name and a list of corresponding tags and
 computes a useful value from it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>) – Tag name</p></li>
+<li><p><strong>nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.html#tag" title="(in Beautiful Soup v4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bs4.element.Tag</span></code></a> (or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a>)) – Tags from which to extract values.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="ms3.get_volta_structure">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">get_volta_structure</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#get_volta_structure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.get_volta_structure" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>For every volta group, one list of integers per volta containing the measure
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – Needs to have the two columns [‘repeats’, ‘volta’] where for every measure count
+in the index a tag {‘startRepeat’, ‘endRepeat’, ‘firstMeasure’, ‘lastMeasure’}
+and/or a volta number (typically {1, 2, 3}) is given.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>For every volta group, one list of integers per volta containing the measure
 counts that this volta spans.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
+<dt id="ms3.is_smaller_version">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">is_smaller_version</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#is_smaller_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.is_smaller_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>‘3.3.0’ &lt; ‘3.3.4’ =&gt; True</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="ms3.isnan">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">isnan</code><span class="sig-paren">(</span><em class="sig-param">num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#isnan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.isnan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return True if <cite>num</cite> is np.NaN (not a number)</p>
+<dd><p>Return True if <cite>num</cite> is numpy.nan (not a number)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.merge_tied_notes">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">merge_tied_notes</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#merge_tied_notes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.merge_tied_notes" title="Permalink to this definition">¶</a></dt>
+<dd><p>In a note list, merge tied notes to single events with accumulated durations.
+Input dataframe needs columns [‘duration’, ‘tied’, ‘midi’, ‘staff’, ‘voice’]</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="ms3.midi2octave">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">midi2octave</code><span class="sig-paren">(</span><em class="sig-param">val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#midi2octave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.midi2octave" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets midi notes 60-71 to octave 4</p>
+<dd><p>Returns 4 for values 60-71 and correspondingly for other notes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>val</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a> or <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.Series</span></code></a> of <cite>int</cite>) – </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="ms3.nan_eq">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">nan_eq</code><span class="sig-paren">(</span><em class="sig-param">a</em>, <em class="sig-param">b</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#nan_eq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.nan_eq" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check for equality, including NaNs</p>
+<dd><p>Check for equality, including NaNs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>b</strong> (<em>a</em><em>,</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a> or <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v0.25.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pandas.Series</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bool</span></code></a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="ms3.search_in_list_of_tuples">
 <code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">search_in_list_of_tuples</code><span class="sig-paren">(</span><em class="sig-param">L</em>, <em class="sig-param">pos</em>, <em class="sig-param">search</em>, <em class="sig-param">add=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#search_in_list_of_tuples"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.search_in_list_of_tuples" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of indices.</p>
+<dd><p>Returns a list of indices for tuples that contain <cite>search</cite> at position <cite>pos</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></a>) – List of tuples in which you want elements with value <cite>search</cite>.</p></li>
 <li><p><strong>pos</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – In which position of the tuples to search.</p></li>
 <li><p><strong>search</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a>) – What to look for.</p></li>
-<li><p><strong>add</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, opt) – How much you want to add to each index value.</p></li>
+<li><p><strong>add</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>, opt) – How much you want to add to each returned index value.</p></li>
 </ul>
 </dd>
 </dl>
@@ -630,10 +876,50 @@ counts that this volta spans.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="ms3.spell_tpc">
-<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">spell_tpc</code><span class="sig-paren">(</span><em class="sig-param">tpc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#spell_tpc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.spell_tpc" title="Permalink to this definition">¶</a></dt>
+<dt id="ms3.tpc2degree">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">tpc2degree</code><span class="sig-paren">(</span><em class="sig-param">tpc</em>, <em class="sig-param">major=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#tpc2degree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.tpc2degree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return scale degree of a tonal pitch class where
+0 = I, -1 = IV, -2 = bVII, 1 = V etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.tpc2key">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">tpc2key</code><span class="sig-paren">(</span><em class="sig-param">tpc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#tpc2key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.tpc2key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the name of a key signature, e.g.
+0 = C/a, -1 = F/d, 6 = F#/d# etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.tpc2name">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">tpc2name</code><span class="sig-paren">(</span><em class="sig-param">tpc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#tpc2name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.tpc2name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return name of a tonal pitch class where
 0 = C, -1 = F, -2 = Bb, 1 = G etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.tpc2pc">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">tpc2pc</code><span class="sig-paren">(</span><em class="sig-param">tpc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#tpc2pc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.tpc2pc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a tonal pitch class into a MIDI pitch class</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.transpose_to_C">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">transpose_to_C</code><span class="sig-paren">(</span><em class="sig-param">note_list</em>, <em class="sig-param">measure_list=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#transpose_to_C"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.transpose_to_C" title="Permalink to this definition">¶</a></dt>
+<dd><p>Either <cite>note_list</cite> needs column <cite>keysig</cite> or you need to pass <cite>measure_list</cite> with <cite>keysig</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ms3.treat_section_index">
+<code class="sig-prename descclassname">ms3.</code><code class="sig-name descname">treat_section_index</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ms3.html#treat_section_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ms3.treat_section_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the index exists and convert negative index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>i</strong> ((<cite>collection</cite> of) <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>) – Section index/indices to treat.</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code></a>:) – Number of available sections.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
