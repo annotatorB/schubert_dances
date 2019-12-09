@@ -233,6 +233,20 @@ def apply_function(f, val, **kwargs):
 
 
 
+def beat2float(beat):
+    """Converts a quarter beat in the form ``2.1/3`` to a float
+    """
+    if isinstance(beat,float):
+        return beat
+    beat = str(beat)
+    split = beat.split('.')
+    val = float(split[0])
+    if len(split) > 1:
+        val += float(frac(split[1]))
+    return val
+
+
+
 def check_measure_boundaries(notes, measure_durations):
     """ Check that no note surpasses the barline and log errors.
 
@@ -294,6 +308,43 @@ def is_smaller_version(a, b):
         if int(a) > int(b):
             return False
     return False
+
+
+
+def compute_beat(r, beatsizedict=None):
+    """ r = row of note_list"""
+    if beatsizedict is None:
+        beatsizedict = TIMESIG_BEAT
+    assert r.timesig.__class__ == str, f"Time signatures should be strings, not {r.timesig.__class__}"
+    size = frac(beatsizedict[r.timesig])
+    onset = r.onset + r.offset
+    beat = onset // size + 1
+    subbeat = (onset % size) / size
+    if subbeat > 0:
+        return f"{beat}.{subbeat}"
+    else:
+        return str(beat)
+
+
+
+def compute_beat_column(note_list, measure_list, inplace=False):
+    """ Either `note_list` needs column `timesig` or you need to pass `measure_list` for merge."""
+    if not 'timesig' in note_list.columns:
+        if note_list.index.__class__ == pd.core.indexes.multi.MultiIndex and 'id' in note_list.index.names:
+            notes = note_list.merge(measure_list['timesig'], on=['id', 'mc'], right_index=True)
+        else:
+            notes = note_list.merge(measure_list['timesig'], on='mc', right_index=True)
+    beats = notes[['mc', 'onset', 'timesig']].merge(measure_list['offset'], on=['id', 'mc'], right_index=True).apply(compute_beat, axis=1)
+    if not inplace:
+        return beats
+    if not 'timesig' in note_list.columns:
+        note_list['timesig'] = notes['timesig']
+    note_list['beats'] = beats
+    note_list['beatsize'] = note_list['timesig']
+    beatsizedict = {k: frac(v) for k, v in TIMESIG_BEAT.items()}
+    note_list['beatsize'].replace(beatsizedict, inplace=True)
+
+
 
 
 
@@ -521,6 +572,18 @@ check construction of defaultdict 'infos' in function get_measure_infos""")
 
 
 
+def float2beat(b):
+    """ 2.5 -> '2.1/2' """
+    if b.__class__ == int or (b.__class__ == float and b.is_integer()):
+        return str(b)
+    beat = str(b)
+    split = beat.split('.')
+    val = int(split[0])
+    sub = frac("0."+split[1])
+    return f"{val}.{sub}"
+
+
+
 def get_volta_structure(df):
     """
     Parameters
@@ -697,6 +760,28 @@ def sort_dict(D):
 
 
 
+def split_beat(b):
+    b = str(b)
+    components = b.split('.')
+    if len(components) == 1:
+        return int(components[0]), 0
+    else:
+        beat, subbeat = components
+        subbeat = frac(subbeat)
+        if subbeat == 0:
+            return int(beat), 0
+        else:
+            return int(beat), subbeat
+
+
+
+def split_beats(S):
+    splitbeats = S.str.split('.', expand=True)
+    splitbeats[1] = splitbeats[1].fillna(0).apply(frac)
+    return splitbeats.astype({0: int})
+
+
+
 def tpc2degree(tpc, major=True):
     """Return scale degree of a tonal pitch class where
        0 = I, -1 = IV, -2 = bVII, 1 = V etc.
@@ -803,6 +888,31 @@ def treat_section_index(i, n):
             logging.warning(f"Section {i} does not exist.")
             return None
         return i
+
+
+
+def val2beat(b):
+    """Turns any value in a beat string of format '2.1/2' (i.e. 'beat.subbeat')"""
+    if b.__class__ == str:
+        return b
+    else:
+        return float2beat(b)
+
+
+
+def volta_parameter(volta, last_volta):
+    """ Does not treat `volta=None` because you need to decide on that case."""
+    if volta < 0:
+        backwards = last_volta + 1 + volta
+        if backwards < 1:
+            logging.warning(f"Section has {last_volta} voltas, volta {volta} does not exist. Returning 1.")
+            backwards = 1
+        return backwards
+    elif volta > last_volta:
+        logging.warning(f"Section has only {last_volta} voltas, volta {volta} does not exist.")
+        return last_volta
+    else:
+        return volta
 
 
 
@@ -1615,15 +1725,8 @@ the first staff (as shown in previous warning).""")
                         volta = last_volta
                     else:
                         return df
-                elif volta < 0:
-                    backwards = last_volta + 1 + volta
-                    if backwards < 1:
-                        logging.warning(f"Section {s} has {last_volta} voltas, volta {volta} does not exist. Returning 1.")
-                        backwards = 1
-                    volta = backwards
-                elif volta > last_volta:
-                    volta = last_volta
-                    logging.warning(f"Section {s} has only {last_volta} voltas, volta {volta} does not exist.")
+                else:
+                    volta = volta_parameter(volta, last_volta)
                 return df[df.volta.isna() | (df.volta == volta)]
             return df
         else:
@@ -1673,7 +1776,8 @@ the first staff (as shown in previous warning).""")
             These and all other columns of the notelist can be filtered by passing feature=selector.
             The features are {'n', 'mc', 'mn', 'onset', 'duration', 'gracenote',
             'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice',
-            'volta', 'octaves', 'note_names', 'beats'} + self.score_features
+            'volta', 'octaves', 'note_names', 'beats'} + `score_features`
+            `n` displays the nth note of every section [or n through mth for (n,m)]
             The selectors can be:
             * Single value: Only notes where `feature` equals `selector`.
             * 2-tuple (a,b): Slice where `a <= feature <= b`.
@@ -1756,7 +1860,7 @@ the first staff (as shown in previous warning).""")
         if features['note_names']:
             df['note_names'] = tpc2name(df.tpc)
         if features['timesig']:
-            df = df.merge(self.info['timesig'], how='left', on='mc', right_index=True)
+            df = df.merge(self.info['timesig'], on='mc', right_index=True)
         if features['beats']:
             if beatsize is None or beatsize.__class__ == bool:
                 beatsize = {}
@@ -1775,19 +1879,10 @@ the first staff (as shown in previous warning).""")
                 except:
                     raise ValueError(f"Datatype of beatsize = {beatsize} not understood")
 
-            def compute_beat(r):
-                size = beatsizedict[r.timesig]
-                onset = r.onset + r.offset
-                beat = onset // size + 1
-                subbeat = (onset % size) / size
-                if subbeat > 0:
-                    return f"{beat}.{subbeat}"
-                else:
-                    return str(beat)
 
             df['beats'] = self.info[['offset']]\
                               .merge(df[['mc', 'onset', 'timesig']], on='mc', left_index=True)\
-                              .apply(compute_beat, axis=1)
+                              .apply(compute_beat, axis=1, beatsizedict=beatsizedict)
         if features['pcs']:
             df['pcs'] = df.midi % 12
         if features['n']:
