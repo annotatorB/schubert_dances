@@ -20,7 +20,7 @@
     note_list = transpose_expand(note_list, measure_list)
 """
 
-from ms3 import *
+from .ms3 import *
 
 
 
