@@ -110,6 +110,99 @@ def get_slice(note_list, mc=None, mn=None, onset=None, beat=None, staff=None,):
 
 
 
+def get_block(note_list, start, end, cut_durations=False, staff=None, merge_ties=True):
+    """ Whereas get_slice() gets sounding notes at a point, get_block() retrieves
+    sounding notes within a range.
+    The function adds the column `overlapping` whose values follow the same logic as `tied`:
+        NaN for events that lie entirely within the block.
+        -1  for events crossing `start` and ending within the block.
+        1   for events crossing `end`.
+        0   for events that start before and end after the block.
+
+    Parameters
+    ----------
+    note_list : :obj:`pandas.DataFrame`
+        Note list from which to retrieve the block.
+    start, end : :obj:`tuple` of (:obj:int, numerical)
+        Pass (mc, onset) tuples. `end` is exclusive
+    cut_durations : :obj:`bool`, optional
+        Set to True if the original note durations should be cut at the block boundaries.
+    staff : :obj:`int`, optional
+        Return block from this staff only.
+    merge_ties : :obj:`bool`, optional
+        By default, tied notes are merged so that they do not appear as two different onsets.
+    """
+    a_mc, a_onset = start
+    b_mc, b_onset = end
+    a_mc, b_mc = int(a_mc), int(b_mc)
+    assert a_mc <= b_mc, "Start MC needs to be at most end MC."
+    a_onset, b_onset = frac(a_onset), frac(b_onset)
+    if a_mc == b_mc:
+        assert a_onset <= b_onset, "Start onset needs to be at most end onset."
+
+    res = note_list[(note_list.mc >= a_mc) & (note_list.mc <= b_mc)]
+
+    if staff is not None:
+        res = res[res.staff == staff]
+
+    in_a = (res.mc == a_mc)
+    in_b = (res.mc == b_mc)
+    endpoint = res.onset + res.duration
+    crossing_left = in_a & (res.onset < a_onset) & (a_onset < endpoint)
+    on_onset = in_a & (res.onset == a_onset)
+    crossing_right = in_b & (endpoint > b_onset)
+
+    if a_mc == b_mc:
+        in_between = in_a & (res.onset >= a_onset) & (res.onset < b_onset)
+    else:
+        onset_in_a = in_a & (res.onset >= a_onset)
+        onset_in_b = in_b & (res.onset < b_onset)
+        in_between = onset_in_a | onset_in_b
+    if a_mc + 1 < b_mc:
+        in_between = in_between | ((res.mc > a_mc) & (res.mc < b_mc))
+
+
+    res = res[crossing_left | in_between].copy()
+    res['overlapping'] = pd.Series([np.nan]*len(res.index), index=res.index, dtype='Int64')
+
+    start_tie = lambda S: S.replace({np.nan:  1, -1:  0, 0: 0, 1: 1})
+    end_tie   = lambda S: S.replace({np.nan: -1, -1: -1, 0: 0, 1: 0})
+
+    if crossing_left.any():
+        res.loc[crossing_left, 'overlapping'] = end_tie(res.loc[crossing_left, 'overlapping'])
+
+    if crossing_right.any():
+        res.loc[crossing_right, 'overlapping'] = start_tie(res.loc[crossing_right, 'overlapping'])
+
+    if res.tied.notna().any():
+        tied_from_left = on_onset & res.tied.isin([-1, 0])
+        if tied_from_left.any():
+            res.loc[tied_from_left, 'overlapping'] = end_tie(res.loc[tied_from_left, 'overlapping'])
+        tied_to_right = in_b & (endpoint == b_onset) & res.tied.isin([0, 1])
+        if tied_to_right.any():
+            res.loc[tied_to_right, 'overlapping'] = start_tie(res.loc[tied_to_right, 'overlapping'])
+
+
+    if cut_durations:
+        if crossing_left.any():
+            res.loc[crossing_left, 'duration'] = res.loc[crossing_left, 'duration'] - a_onset + res.loc[crossing_left, 'onset']
+            res.loc[crossing_left, ['mc', 'onset']] = [a_mc, a_onset]
+        if crossing_right.any():
+            res.loc[crossing_right, 'duration'] = b_onset - res.loc[crossing_right, 'onset']
+
+    if merge_ties & res.tied.any():
+        merged, changes = merge_tied_notes(res, return_changed=True)
+        if len(changes) > 0:
+            old = [index_list[-1] for index_list in changes.values()]
+            new = [ix for ix, index_list in changes.items() if res.at[index_list[-1], 'overlapping'] in [0,1]]
+            tie_over = merged.index.isin(new)
+            merged.loc[tie_over] = start_tie(merged.loc[tie_over])
+            res = merged
+
+    return res
+    
+
+
 def iter_measures(note_list, volta=None, staff=None):
     """ Iterate through measures' note lists by measure number.
 
