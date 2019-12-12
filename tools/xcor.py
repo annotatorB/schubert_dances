@@ -1,4 +1,5 @@
 import collections
+import math
 import pandas
 
 from .helpers import iter_measures
@@ -102,7 +103,7 @@ class CrossCorrelation:
                 res += v
         return res
 
-    def slide(self, seg_b=None, seg_a=None, no_neg=False):
+    def slide(self, seg_b=None, seg_a=None, no_out=False):
         """ Compute the cross-correlation of B over A for every overlapping offsets.
 
         Parameters
@@ -111,31 +112,20 @@ class CrossCorrelation:
             Segment of signal B to select, all signal B if `None`.
         seg_a: `tuple` of two `int`, optional
             Segment of signal A to select, all signal A if `None`.
-        no_neg: :obj:`bool`
-            Whether not to map negative offsets
+        no_out: :obj:`bool`
+            Whether not to map offsets for which the two signals do not fully overlap.
 
         Returns
         -------
-        dict of offset -> summable
+        generator of (offset, summable)
             Map between overlapping offset and associated cross-correlation.
 
         """
-        return dict((offset, self.compute(offset, seg_b, seg_a)) for offset in range(0 if no_neg else (1 - self.len_b), self.len_a))
-
-class AutoCorrelation:
-    """ Arbitrary "interior" auto-correlation of a signal.
-    """
-
-    def __init__(self, signal):
-        """ Full fast, interior auto-correlation initialization.
-
-        Parameters
-        ----------
-        signal: generator
-            Signal, a generator on instances that product can process.
-
-        """
-        pass # TODO
+        # Compute effective lengths
+        len_a = self.len_a if seg_a is None else seg_a[1] - seg_a[0]
+        len_b = self.len_b if seg_b is None else seg_b[1] - seg_b[0]
+        # Make generator
+        return ((offset, self.compute(offset, seg_b, seg_a)) for offset in range(min(0, len_a - len_b) if no_out else (1 - len_b), (max(0, len_a - len_b) + 1) if no_out else len_a))
 
 # ---------------------------------------------------------------------------- #
 # Product functions
@@ -146,14 +136,14 @@ def product_harmorhythm(meas_a, meas_b):
     Parameters
     ----------
     meas_a: :obj:`pandas.DataFrame`
-        Measure A, internal format
+        Measure A, internal format.
     meas_b: :obj:`pandas.DataFrame`
-        Measure B, internal format
+        Measure B, internal format.
 
     Returns
     -------
     float
-        How many times at least two notes from the two measures start at the same time and match pitches
+        How many times at least two notes from the two measures start at the same time and match pitches.
     """
     res = 0
     # Get iterators
@@ -191,12 +181,12 @@ def detect_spikes(signal):
     Parameters
     ----------
     signal: generator of `tuple` of (`int`, '<, >='-comparable)
-        Signal generator, producing tuples of (index, value) by strictly increasing index
+        Signal generator, producing tuples of (index, value) by strictly increasing index.
 
     Returns
     -------
     generator of `int`
-        Indices of all the (rising edge) spikes
+        Indices of all the (rising edge) spikes.
 
     """
     try:
@@ -214,52 +204,134 @@ def detect_spikes(signal):
     except StopIteration:
         return
 
-def detect_form(piece, ac_hr=None):
-    """ Detect the form of a piece.
+def detect_structure(acor, trig=None, prec=10):
+    """ Detect the form of a signal given its auto-correlation.
 
     Parameters
     ----------
-    piece: :obj:`pandas.DataFrame`
-        Piece, internal formal.
-    ac_hr: :obj:`AutoCorrelation`, optional
-        "Harmo-rhythm" auto-correlation of the piece, computed if not provided
+    acor: :obj:`CrossCorrelation`
+        Auto-correlation of the signal to use.
+        For a piece, you want to use the "harmo-rhythm" auto-correlation.
+    trig: :obj:`float`, optional
+        Match trigger factor, fraction of matching notes above which two segments are considered to belong from the same part.
+        If not specified, it will be line-searched until the output contains at least two parts with the least different parts.
+    prec: :obj:`int`, optional
+        "Precision" to use when line-searching 'trig'.
 
     Returns
     -------
-    `tuple` of `str`
-        List of letters representing the form of the piece
+    `list` of `int`
+        List of integers representing the form of the piece.
+    `float`
+        Trigger used or found.
 
     """
-    # Get piece length (in measures)
-    length = notes["mc"].max() - notes["mc"].min() + 1
-    # Compute auto-correlation (if not already done)
-    if xcor_hr is None:
-        xcor_hr = notes_xcor(product_harmorhythm, notes, notes, no_neg=True, name="hr")
-    # Compute spike positions (if not already done)
-    if spikes is None:
-        spikes = xcor_spikes(ahr)
-    spikes = tuple(spikes)
-    # Gather the patterns
-    patterns = dict() # pid -> (notes, start, length)
+    if trig is None:
+        best  = None
+        trig  = 0.5
+        level = 1
+        for trig in range(1, prec):
+            trig /= prec
+            # Compute with current trigger
+            struct = detect_structure(acor, trig=trig)
+            ccmp = len(set(struct))
+            clen = len(struct)
+            # Check if better
+            if ccmp > 1 and (best is None or ccmp < bcmp or (ccmp == bcmp and clen >= blen)):
+                best = (struct, trig)
+                bcmp = ccmp
+                blen = clen
+        if best is None:
+            return struct, trig
+        else:
+            return best
+    # Run with non-None 'trig'
+    assert acor.len_a == acor.len_b, "Expected an auto-correlation, got cross-correlation between signals of different lengths"
+    # Make spike position generator
+    spikes = detect_spikes((off, val) for (off, val) in acor.slide() if off >= 0)
+    # Gather the pattern segments
+    patterns = dict() # pid -> (start, stop, size)
     start = 0
-    for pid, stop in enumerate(spikes + (length,)):
-        patterns[pid] = (notes[(notes["mc"] >= start) & (notes["mc"] < stop)], start, stop - start)
+    for pid, stop in enumerate(spikes):
+        pos = (start, stop)
+        patterns[pid] = (*pos, acor.compute(start, pos))
         start = stop
-    # Compute the spikes and association matching proportions for each patterns
-    props = dict() # spike positions -> list of (spike match proportion, pid)
-    for pid, (pattern, start, _) in patterns.items():
-        xcor = notes_xcor(product_harmorhythm, pattern, notes, no_neg=True) / len(pattern)
-        xspk = tuple(pos for pos in xcor_spikes(xcor) if pos != start)
-        for pos, val in zip(xspk, xcor.loc[xspk, xcor.columns[0]]):
-            # Get associated list
-            prop = props.get(pos)
-            if prop is None:
-                prop = list()
-                props[pos] = prop
-            # Append proportion
-            prop.append((val, pid))
-    # Sort the spikes by decreasing match proportions
-    for prop in props.values():
-        prop.sort(key=lambda x: x[0], reverse=True)
-    # NOTE: Debug (return proportions)
-    return props
+    pos = (start, acor.len_a)
+    patterns[pid + 1] = (*pos, acor.compute(start, pos))
+    # Compute total score and which segments match, for each pid
+    scores   = dict((pid, 0.) for pid in patterns.keys()) # pid -> total score
+    explains = dict((start, (stop - start, [pid])) for pid, (start, stop, _) in patterns.items()) # segment -> (length, list of pids)
+    for ref, dst in patterns.items():
+        len_dst = dst[1] - dst[0]
+        for pid, src in patterns.items():
+            # Ignore native pattern
+            if pid == ref:
+                continue
+            # Check if pattern roughly fit
+            len_src = src[1] - src[0]
+            if abs(len_src - len_dst) > 1:
+                continue
+            # Compute score
+            score = acor.compute(dst[0], src[:2]) / src[2]
+            scores[pid] = scores.get(pid, 0) + score
+            if score >= trig:
+                explains[dst[0]][1].append(pid)
+    # Keep only highest-scoring pid per segment
+    segments = list((segment, (length, max(pids, key=lambda pid: scores[pid]))) for segment, (length, pids) in explains.items())
+    del explains
+    segments.sort(key=lambda x: x[0])
+    # Simplification (find constrains)
+    constrains = dict() # pid -> (size, single)
+    prev_pid = None
+    prev_len = None
+    for segment, (this_len, this_pid) in segments:
+        if prev_pid is None:
+            prev_pid = this_pid
+            prev_len = this_len
+        else:
+            if prev_pid == this_pid:
+                prev_len += this_len
+            else:
+                if prev_pid in constrains:
+                    constrains[prev_pid] = (math.gcd(prev_len, constrains[prev_pid][0]), False)
+                else:
+                    constrains[prev_pid] = (prev_len, True)
+                prev_pid = this_pid
+                prev_len = this_len
+    if prev_pid in constrains:
+        spec_len = max(math.gcd(prev_len - i, constrains[prev_pid][0]) for i in range(2))
+        constrains[prev_pid] = (spec_len, False) # NOTE: Special reduce length as end might be truncated due to positive offset inside the first measure
+    else:
+        constrains[prev_pid] = (prev_len, True)
+    # Simplification (make final structure)
+    struct = list()
+    pidmap = dict() # Pid number mapping
+    def emit(pid):
+        if pid in pidmap:
+            struct.append(pidmap[pid])
+        else:
+            let = chr(ord("A") + len(pidmap))
+            pidmap[pid] = let
+            struct.append(let)
+    cursor = None
+    for start, (_, pid) in segments:
+        # Get constrains for current pid
+        pid_length, pid_single = constrains[pid]
+        # Special case: first iteration
+        if cursor is None:
+            emit(pid)
+            cursor = pid_length
+            single = pid_single
+            continue
+        # Segment already accounted for
+        if start < cursor:
+            continue
+        # Merge if single and prev single
+        if single and pid_single:
+            cursor += pid_length
+            continue
+        # Just emit pid and progress
+        emit(pid)
+        single = pid_single
+        cursor += pid_length
+    return struct
