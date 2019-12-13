@@ -1,5 +1,6 @@
 import collections
 import math
+import numpy as np
 import pandas
 
 from .helpers import iter_measures
@@ -130,6 +131,25 @@ class CrossCorrelation:
 # ---------------------------------------------------------------------------- #
 # Product functions
 
+def product_rhythm(meas_a, meas_b):
+    """ Onset matching product function.
+
+    Parameters
+    ----------
+    meas_a: :obj:`pandas.DataFrame`
+        Measure A, internal format.
+    meas_b: :obj:`pandas.DataFrame`
+        Measure B, internal format.
+
+    Returns
+    -------
+    float
+        How many times at least two notes from the two measures start at the same time.
+    """
+    set_a = set(meas_a["onset"])
+    set_b = set(meas_b["onset"])
+    return len(set_a.intersection(set_b))
+
 def product_harmorhythm(meas_a, meas_b):
     """ Hard onset and pitch matching product function.
 
@@ -145,32 +165,13 @@ def product_harmorhythm(meas_a, meas_b):
     float
         How many times at least two notes from the two measures start at the same time and match pitches.
     """
-    res = 0
-    # Get iterators
-    cols = ["onset", "midi"]
-    iter_a = meas_a[cols].iterrows()
-    iter_b = meas_b[cols].iterrows()
-    try:
-        # Current onsets, for each measure A and B
-        _, state_a = next(iter_a)
-        _, state_b = next(iter_b)
-        while True:
-            if state_a[0] < state_b[0]: # A is late and must be advanced
-                _, state_a = next(iter_a)
-            elif state_a[0] > state_b[0]: # B is late and must be advanced
-                _, state_b = next(iter_b)
-            else: # Both A and B at the same onset
-                # NB: notes are ordered by 'onset' then by 'midi' pitch
-                if state_a[1] < state_b[1]: # A is at a lower note and must be advanced
-                    _, state_a = next(iter_a)
-                elif state_a[1] > state_b[1]: # B is at a lower note and must be advanced
-                    _, state_b = next(iter_b)
-                else: # Matching notes, process accordingly
-                    res += 1
-                    _, state_a = next(iter_a)
-                    _, state_b = next(iter_b)
-    except StopIteration:
-        return float(res)
+    # Convert measures to set of occurrences (onset, midi)
+    def make_occ(meas):
+        return set((onset, midi) for _, (onset, midi) in meas[["onset", "midi"]].iterrows())
+    occ_a = make_occ(meas_a)
+    occ_b = make_occ(meas_b)
+    # Count common occurrences
+    return len(occ_a.intersection(occ_b))
 
 # ---------------------------------------------------------------------------- #
 # Detection functions
@@ -242,20 +243,21 @@ def detect_structure(acor, trig=None, prec=10):
                 bcmp = ccmp
                 blen = clen
         if best is None:
-            return struct, trig
+            return struct, 0.
         else:
             return best
     # Run with non-None 'trig'
     assert acor.len_a == acor.len_b, "Expected an auto-correlation, got cross-correlation between signals of different lengths"
-    # Make spike position generator
-    spikes = detect_spikes((off, val) for (off, val) in acor.slide() if off >= 0)
-    # Gather the pattern segments
+    # Gather the pattern segments based on spikes
     patterns = dict() # pid -> (start, stop, size)
     start = 0
-    for pid, stop in enumerate(spikes):
+    pid = None
+    for pid, stop in enumerate(detect_spikes((off, val) for (off, val) in acor.slide() if off >= 0)):
         pos = (start, stop)
         patterns[pid] = (*pos, acor.compute(start, pos))
         start = stop
+    if pid is None:
+        raise RuntimeError("No spike found in given auto-correlation")
     pos = (start, acor.len_a)
     patterns[pid + 1] = (*pos, acor.compute(start, pos))
     # Compute total score and which segments match, for each pid
