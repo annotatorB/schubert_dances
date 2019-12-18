@@ -21,7 +21,8 @@ import numpy as np
 # Constants
 ###########
 DURATIONS = {"measure" : 1.0,
-             "breve"   : 2.0,
+             "breve"   : 2.0, # in theory, of course, they could have length 1.5
+             "long"    : 4.0, # and 3 as well and other values yet
              "whole"   : 1.0,
              "half"    : frac(1/2),
              "quarter" : frac(1/4),
@@ -29,7 +30,9 @@ DURATIONS = {"measure" : 1.0,
              "16th"    : frac(1/16),
              "32nd"    : frac(1/32),
              "64th"    : frac(1/64),
-             "128th"   : frac(1/128)}
+             "128th"   : frac(1/128),
+             "256th"   : frac(1/256),
+             "512th"   : frac(1/512),}
 
 NEWEST_MUSESCORE = '3.3.4'
 
@@ -51,6 +54,24 @@ PITCH_DEGREES={0: 'IV',
                5: 'III',
                6: 'VII'}
 
+
+
+class defaultfunctiondict(defaultdict):
+    """This class lets you create a defaultdict which applies a custom function on missing keys.
+
+    Example
+    -------
+        d = defaultfunctiondict(C)
+        d[x] # returns C(x)
+    """
+    def __missing__(self, key):
+        if self.default_factory is None:
+            raise KeyError( key )
+        else:
+            ret = self[key] = self.default_factory(key)
+            return ret
+
+
 class SliceMaker(object):
     """ This class serves for passing slice notation such as :3 as function arguments.
     Example
@@ -62,21 +83,9 @@ class SliceMaker(object):
 
 SL, SM = SliceMaker(), SliceMaker()
 
-TIMESIG_BEAT = {
-                '3/16': '1/16',
-                '6/16': '3/16',
-                '3/8':  '1/8',
-                '4/8':  '1/4',
-                '6/8':  '3/8',
-                '9/8':  '3/8',
-                '12/8': '3/8',
-                '2/4':  '1/4',
-                '3/4':  '1/4',
-                '4/4':  '1/4',
-                '6/4':  '3/4',
-                '2/2':  '1/2',
-                '3/2':  '1/2',
-                }
+TIMESIG_BEAT = defaultfunctiondict(lambda x: f"1/{str(x).split('/')[1]}")
+TIMESIG_BEAT.update({'4/8':  '1/4',})
+
 
 # XML tags of MuseScore 3 format that this parser takes care of
 TREATED_TAGS = ['acciaccatura',
@@ -217,33 +226,26 @@ def a_n_range(c, n):
 
 
 
-def apply_function(f, val, **kwargs):
+def apply_function(f, val, *args, **kwargs):
     """Applies function f to a collection."""
+    if val.__class__ == float and isnan(val):
+        return val
+    if val.__class__ == pd.core.frame.DataFrame:
+        if len(args) == 0 and len(kwargs) == 0:
+            return val.applymap(f)
+        else:
+            logging.warning(f"Cannot map function {f} with arguments to entire DataFrame. Pass Series instead.")
     if val.__class__ == pd.core.series.Series:
-        return val.apply(f, **kwargs)
-    if val.__class__ in [np.ndarray, list, tuple, set]:
-        result = [f(pc, **kwargs) for pc in val]
-        if val.__class__ == np.ndarray:
-            return np.array(result).reshape(val.shape)
-        if val.__class__ == tuple:
-            return tuple(result)
-        if val.__class__ == set:
-            return set(result)
-        return result
+        return val.apply(f, *args, **kwargs)
+    result = [f(pc, *args, **kwargs) for pc in val]
+    if val.__class__ == np.ndarray:
+        return np.array(result).reshape(val.shape)
+    if val.__class__ == tuple:
+        return tuple(result)
+    if val.__class__ == set:
+        return set(result)
+    return result
 
-
-
-def beat2float(beat):
-    """Converts a quarter beat in the form ``2.1/3`` to a float
-    """
-    if isinstance(beat,float):
-        return beat
-    beat = str(beat)
-    split = beat.split('.')
-    val = float(split[0])
-    if len(split) > 1:
-        val += float(frac(split[1]))
-    return val
 
 
 
@@ -331,9 +333,11 @@ def compute_beat_column(note_list, measure_list, inplace=False):
     """ Either `note_list` needs column `timesig` or you need to pass `measure_list` for merge."""
     if not 'timesig' in note_list.columns:
         if note_list.index.__class__ == pd.core.indexes.multi.MultiIndex and 'id' in note_list.index.names:
-            notes = note_list.merge(measure_list['timesig'], on=['id', 'mc'], right_index=True)
+            notes = note_list.join(measure_list['timesig'], on=['id', 'mc'])
         else:
-            notes = note_list.merge(measure_list['timesig'], on='mc', right_index=True)
+            notes = note_list.join(measure_list['timesig'], on='mc')
+    else:
+        notes = note_list.copy()
     beats = notes[['mc', 'onset', 'timesig']].merge(measure_list['offset'], on=['id', 'mc'], right_index=True).apply(compute_beat, axis=1)
     if not inplace:
         return beats
@@ -572,17 +576,6 @@ check construction of defaultdict 'infos' in function get_measure_infos""")
 
 
 
-def float2beat(b):
-    """ 2.5 -> '2.1/2' """
-    if b.__class__ == int or (b.__class__ == float and b.is_integer()):
-        return str(b)
-    beat = str(b)
-    split = beat.split('.')
-    val = int(split[0])
-    sub = frac("0."+split[1])
-    return f"{val}.{sub}"
-
-
 
 def get_volta_structure(df):
     """
@@ -661,7 +654,7 @@ def nan_eq(a, b):
 
 
 
-def merge_tied_notes(df):
+def merge_tied_notes(df, return_changed=False):
     """ In a note list, merge tied notes to single events with accumulated durations.
     Input dataframe needs columns ['duration', 'tied', 'midi', 'staff', 'voice']
     """
@@ -674,12 +667,18 @@ def merge_tied_notes(df):
         """Looks for the ending(s) and recursively accumulates."""
         dur = 0
         ixs = []
-        end = notna.iloc[i]
+        if i == len(notna):
+            return dur, ixs
+        else:
+            end = notna.iloc[i]
         while end.tied == 1 or end.midi != midi\
-                            or end.staff != staff\
-                            or end.voice != voice:
+                            or end.staff != staff:
+                           #or end.voice != voice:  <-- caused errors
            i += 1
-           end = notna.iloc[i]
+           if i == len(notna):
+               return dur, ixs
+           else:
+               end = notna.iloc[i]
         dur += end.duration
         ixs.append(end.name)
         if end.tied == 0:
@@ -692,9 +691,12 @@ def merge_tied_notes(df):
     for ix, r in starts.iterrows():
         add_dur, ixs = merge(notna.index.get_loc(ix)+1, r.midi, r.staff, r.voice)
         df.loc[ix, 'duration'] += add_dur
-        drops.extend(ixs)
-    df.drop(drops, inplace=True)
-    return df
+        drops.append(ixs)
+    df.drop([e for l in drops for e in l], inplace=True)
+    if return_changed:
+        return df, {k: v for k, v in zip(starts.index.to_list(), drops)}
+    else:
+        return df
 
 
 
@@ -761,6 +763,7 @@ def sort_dict(D):
 
 
 def split_beat(b):
+    """ Split a beat string such as '1.1/2' into an integer and a fraction"""
     b = str(b)
     components = b.split('.')
     if len(components) == 1:
@@ -776,28 +779,14 @@ def split_beat(b):
 
 
 def split_beats(S):
+    """ Split a pandas.Series containing beat strings such as '1.1/2'. """
     splitbeats = S.str.split('.', expand=True)
     splitbeats[1] = splitbeats[1].fillna(0).apply(frac)
     return splitbeats.astype({0: int})
 
 
 
-def tpc2degree(tpc, major=True):
-    """Return scale degree of a tonal pitch class where
-       0 = I, -1 = IV, -2 = bVII, 1 = V etc.
-    """
-    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
-        return apply_function(tpc2degree, tpc, major=major)
-    if major:
-        tpc += 1 # to make the lowest name F = 0 instead of -1
-    else:
-        tpc -= 2
 
-    if tpc < 0:
-        acc = abs(tpc // 7) * 'b'
-    else:
-        acc = tpc // 7 * '#'
-    return acc + PITCH_DEGREES[tpc % 7]
 
 
 
@@ -805,7 +794,9 @@ def tpc2name(tpc):
     """Return name of a tonal pitch class where
        0 = C, -1 = F, -2 = Bb, 1 = G etc.
     """
-    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+    try:
+        tpc = int(tpc)
+    except:
         return apply_function(tpc2name, tpc)
 
     tpc += 1 # to make the lowest name F = 0 instead of -1
@@ -820,7 +811,9 @@ def tpc2name(tpc):
 def tpc2key(tpc):
     """Return the name of a key signature, e.g.
     0 = C/a, -1 = F/d, 6 = F#/d# etc."""
-    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+    try:
+        tpc = int(tpc)
+    except:
         return apply_function(tpc2key, tpc)
 
     return f"{tpc2name(tpc)}/{tpc2name(tpc+3).lower()}"
@@ -829,7 +822,9 @@ def tpc2key(tpc):
 
 def tpc2pc(tpc):
     """Turn a tonal pitch class into a MIDI pitch class"""
-    if tpc.__class__ in [list, tuple, set, np.ndarray, pd.core.series.Series]:
+    try:
+        tpc = int(tpc)
+    except:
         return apply_function(tpc2pc, tpc)
 
     return 7 * tpc % 12
@@ -840,9 +835,9 @@ def transpose_to_C(note_list, measure_list=None):
     """ Either `note_list` needs column `keysig` or you need to pass `measure_list` with `keysig`"""
     if not 'keysig' in note_list.columns:
         if note_list.index.__class__ == pd.core.indexes.multi.MultiIndex and 'id' in note_list.index.names:
-            note_list_transposed = note_list.merge(measure_list['keysig'], on=['id', 'mc'], right_index=True)
+            note_list_transposed = note_list.join(measure_list['keysig'], on=['id', 'mc'])
         else:
-            note_list_transposed = note_list.merge(measure_list['keysig'], on='mc', right_index=True)   # Add a column with the corresponding key signature for every note
+            note_list_transposed = note_list.join(measure_list['keysig'], on='mc')   # Add a column with the corresponding key signature for every note
     else:
         note_list_transposed = note_list.copy()
     note_list_transposed.tpc -= note_list_transposed.keysig                                             # subtract key signature from tonal pitch class (=transposition to C)
@@ -890,13 +885,6 @@ def treat_section_index(i, n):
         return i
 
 
-
-def val2beat(b):
-    """Turns any value in a beat string of format '2.1/2' (i.e. 'beat.subbeat')"""
-    if b.__class__ == str:
-        return b
-    else:
-        return float2beat(b)
 
 
 
@@ -1075,7 +1063,7 @@ class Section(object):
                         voice += 1
                         pointer = frac(0)
                         scalar = 1  # to manipulate note durations
-                        scalar_stack = []
+                        scalar_stack = [1]
                         additional_tags = sum([before_chord_tags[f] for f in before_chord_features], [])
                         voice_level_tags = ['Chord', 'Rest', 'Tuplet', 'endTuplet', 'location'] + additional_tags
                         for event in voice_tag.find_all(voice_level_tags, recursive=False):
@@ -1085,7 +1073,10 @@ class Section(object):
                                 scalar_stack.append(scalar)
                                 scalar = scalar * frac(int(event.normalNotes.string), int(event.actualNotes.string))
                             elif event.name == 'endTuplet':
-                                scalar = scalar_stack.pop()
+                                if len(scalar_stack) > 0:
+                                    scalar = scalar_stack.pop()
+                                else:
+                                    logging.warning("Error in the scalar_stack.")
                             # additional score_features
                             elif event.name in additional_tags:
                                 duration = 0
@@ -1438,7 +1429,15 @@ class Score(object):
 This means that lower staves contain information that's missing in
 the first staff (as shown in previous warning).""")
         # complete measure durations
-        self.info.insert(2, 'duration', self.info['timesig'].apply(lambda x: frac(x)))
+        try:
+            self.info.insert(2, 'duration', self.info.timesig.apply(lambda x: frac(x)))
+        except:
+            self.info.insert(2, 'duration', np.nan)
+            if self.info.timesig.notna().any():
+                self.info.loc[self.info.timesig.notna(), 'duration'] = self.info.loc[self.info.timesig.notna(), 'duration'].apply(lambda x: frac(x))
+                logging.error("Parts of self.info.duration are NaN.")
+            else:
+                logging.critical("self.info.duration contains only NaN values.")
         self.info.act_dur.fillna(self.info.duration, inplace=True)
         # Aggregate values in self.info
         for df in (self.mc_info[k] for k in self.mc_info.keys() if k > 1):
@@ -1642,7 +1641,7 @@ the first staff (as shown in previous warning).""")
         self.info.insert(5, 'offset', 0)
         for ix, r in check.iterrows():
             if r.act_dur > r.duration:
-                logging.info(f"MC {ix} is longer than its nominal value.")
+                logging.info(f"MC {ix} is longer {r.act_dur} than its nominal duration {r.duration}.")
             elif r.act_dur == r.duration:           # endRepeat
                 next_mcs = self.info.loc[r.next]
                 irregular = next_mcs.act_dur != next_mcs.duration
@@ -1708,6 +1707,8 @@ the first staff (as shown in previous warning).""")
             if s is None:
                 logging.warning(f"Section {section} does not exist.")
             df = self.sections[s].notes.copy()
+            if len(df) == 0:
+                return df
             if 'chords' in df.columns and not df.chords.isna().all() and propagate_chords:
                 df = chord_propagation(df, self.chord_series)
                 if isnan(df.chords.iloc[0]):
@@ -1773,6 +1774,8 @@ the first staff (as shown in previous warning).""")
             * beats (control beat size via `beatsize`, use `beats` for filtering)
             * pcs (pitch classes 0-11)
             * timesig (automatically shown if `beats` is shown)
+            * keysig
+            * act_dur (length of each MC)
             These and all other columns of the notelist can be filtered by passing feature=selector.
             The features are {'n', 'mc', 'mn', 'onset', 'duration', 'gracenote',
             'nominal_duration', 'scalar', 'tied', 'tpc', 'midi', 'staff', 'voice',
@@ -1786,25 +1789,25 @@ the first staff (as shown in previous warning).""")
 
         Examples
         --------
-        S.get_notes()                           # all notes
-        S.get_notes(0)                          # notes from the first section only
-        S.get_notes(-1)                         # notes from the last section only
-        S.get_notes((0,3))                      # sections [0,1,2,3]
-        S.get_notes((3,0))                      # section [3,2,1,0]
-        S.get_notes((-4,-1))                    # fourth last to last section
-        S.get_notes(None, False)                # all notes with single RangeIndex
-        S.get_notes(beatsize=True)              # added column with beat sizes according to time signature
-        S.get_notes(beatsize=1/4)               # added column with every note's quarter beat
-        S.get_notes(note_names=True)            # added column with note names
-        S.get_notes(note_names=['A', 'D', 'G']) # Only these notenames
-        S.get_notes(octaves=True)               # added column with notes' octaves
-        S.get_notes(octaves=(6,10))             # Only notes in octaves 6 through 10
-        S.get_notes(pcs=True)                   # added column with (MIDI) pitch classes
-        S.get_notes(pcs=[1,3,6,8,10])           # only black keys on the piano
-        S.get_notes(mn=1)                       # all notes with measure number 1
-        S.get_notes(duration=[0.5, 1])          # all notes with duration of a half or a whole note
-        S.get_notes(duration=(0.5, 1))          # all notes with duration of a half, a whole, or in between
-        S.get_notes(n=(0,5))                    # get first 5 notes from every section
+            S.get_notes()                           # all notes
+            S.get_notes(0)                          # notes from the first section only
+            S.get_notes(-1)                         # notes from the last section only
+            S.get_notes((0,3))                      # sections [0,1,2,3]
+            S.get_notes((3,0))                      # section [3,2,1,0]
+            S.get_notes((-4,-1))                    # fourth last to last section
+            S.get_notes(None, False)                # all notes with single RangeIndex
+            S.get_notes(beatsize=True)              # added column with beat sizes according to time signature
+            S.get_notes(beatsize=1/4)               # added column with every note's quarter beat
+            S.get_notes(note_names=True)            # added column with note names
+            S.get_notes(note_names=['A', 'D', 'G']) # Only these notenames
+            S.get_notes(octaves=True)               # added column with notes' octaves
+            S.get_notes(octaves=(6,10))             # Only notes in octaves 6 through 10
+            S.get_notes(pcs=True)                   # added column with (MIDI) pitch classes
+            S.get_notes(pcs=[1,3,6,8,10])           # only black keys on the piano
+            S.get_notes(mn=1)                       # all notes with measure number 1
+            S.get_notes(duration=[0.5, 1])          # all notes with duration of a half or a whole note
+            S.get_notes(duration=(0.5, 1))          # all notes with duration of a half, a whole, or in between
+            S.get_notes(n=(0,5))                    # get first 5 notes from every section
         """
 
 
@@ -1842,7 +1845,7 @@ the first staff (as shown in previous warning).""")
             df = merge_tied_notes(df)
 
         # activate requested features
-        available_features = ['octaves', 'note_names', 'beats', 'pcs', 'n', 'timesig']
+        available_features = ['octaves', 'note_names', 'beats', 'pcs', 'n', 'timesig', 'keysig', 'act_dur']
         features = {f: False for f in available_features}
         if beatsize is not None:
             features['beats'] = True
@@ -1859,8 +1862,12 @@ the first staff (as shown in previous warning).""")
             df['octaves'] = midi2octave(df.midi)
         if features['note_names']:
             df['note_names'] = tpc2name(df.tpc)
+        if features['keysig']:
+            df = df.join(self.info['keysig'], on='mc')
         if features['timesig']:
-            df = df.merge(self.info['timesig'], on='mc', right_index=True)
+            df = df.join(self.info['timesig'], on='mc')
+        if features['act_dur']:
+            df = df.join(self.info['act_dur'], on='mc')
         if features['beats']:
             if beatsize is None or beatsize.__class__ == bool:
                 beatsize = {}
