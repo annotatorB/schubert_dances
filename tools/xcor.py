@@ -2,6 +2,7 @@ import collections
 import math
 import numpy as np
 import pandas
+import plotly
 
 from .helpers import iter_measures
 
@@ -173,6 +174,33 @@ def product_harmorhythm(meas_a, meas_b):
     # Count common occurrences
     return len(occ_a.intersection(occ_b))
 
+def product_tonalrhythm(meas_a, meas_b):
+    """ Hard onset and tonal pitch class matching product function.
+
+    Parameters
+    ----------
+    meas_a: :obj:`pandas.DataFrame`
+        Measure A, internal format.
+    meas_b: :obj:`pandas.DataFrame`
+        Measure B, internal format.
+
+    Returns
+    -------
+    float
+        How many times at least two notes from the two measures start at the same time and match pitches.
+    """
+    # Convert measures to set of occurrences (onset, midi)
+    def make_occ(meas):
+        occ = dict()
+        for _, (onset, midi) in meas[["onset", "tpc"]].iterrows():
+            key = (onset, midi)
+            occ[key] = occ.get(key, 0) + 1
+        return occ
+    occ_a = make_occ(meas_a)
+    occ_b = make_occ(meas_b)
+    # Count common occurrences
+    return sum(min(occ_a[key], occ_b[key]) for key in occ_a if key in occ_b)
+
 # ---------------------------------------------------------------------------- #
 # Detection functions
 
@@ -337,3 +365,79 @@ def detect_structure(acor, trig=None, prec=10):
         single = pid_single
         cursor += pid_length
     return struct
+
+# ---------------------------------------------------------------------------- #
+# Figure generation
+
+def acor_lineplot(acor, ax=None, legend=None, normalize=False, name_for=None):
+    """ Build the (normalized) auto-correlation plot for every δ.
+
+    Parameters
+    ----------
+    acor: :obj:`CrossCorrelation`
+        Given auto-correlation
+    ax: :obj:`matplotlib.axes.Axes`, optional
+        Axes instance to plot to
+    legend: :obj:`str`, optional
+        (Convertible to) string to use in the legend
+    normalize: :obj:`bool`, optional
+        Whether to normalize the auto-correlation
+    name_for: :obj:`str`, optional
+        (Convertible to) string to display in the title
+
+    Returns
+    -------
+    Figure
+        Line-plot of measure (normalized) auto-correlation.
+
+    """
+    # Compute auto-correlation for every offset
+    slide = dict((off, val) for (off, val) in acor.slide() if off >= 0)
+    if normalize:
+        mxval = max(slide.values())
+        slide = dict((off, val / mxval) for (off, val) in slide.items())
+    # Make plot
+    plt = pandas.DataFrame.from_dict(slide, orient="index", columns=["slide" if legend is None else str(legend)]).plot(ax=ax)
+    plt.set_title("Auto-correlation" + ("" if name_for is None else " for %s" % (name_for,)))
+    plt.set_xlabel("Offset δ")
+    plt.set_ylabel("Auto-correlation value")
+    # Return plot
+    return plt
+
+def acor_heatmap(acor, normalize=False, name_for=None):
+    """ Build the (normalized) heatmap of measure auto-correlation.
+
+    Parameters
+    ----------
+    acor: :obj:`CrossCorrelation`
+        Given auto-correlation
+    normalize: :obj:`bool`, optional
+        Whether to normalize the auto-correlation
+    name_for: :obj:`str`, optional
+        (Convertible to) string to display in the title
+
+    Returns
+    -------
+    Figure
+        Heatmap of measure (normalized) auto-correlation.
+
+    """
+    # Get number of measures and assert 'acor' is an auto-correlation
+    nbm = acor.len_a
+    assert acor.len_b == nbm, "Given 'acor' is not an auto-correlation of a whole piece over itself"
+    # Gather heatmap data
+    units = acor.units
+    if normalize:
+        hm = list(list((x / units[(nbm + 1) * i]) for x in units[nbm * i:nbm * (i + 1)]) for i in range(nbm))
+    else:
+        hm = list(list(x for x in units[nbm * i:nbm * (i + 1)]) for i in range(nbm))
+    # Make the heatmap
+    fig = plotly.graph_objects.Figure(plotly.graph_objects.Heatmap(z=hm))
+    title = "Auto-correlation product of each measure with each others"
+    if name_for is not None:
+        title += " for %s" % (name_for,)
+    if normalize:
+        title += " (normalized by the rolling measure's note count)"
+    fig.update_layout(title=title, xaxis_title="Measure index", yaxis_title=("Rolling measure index" if normalize else "Measure index"))
+    # Return the heatmap
+    return fig
