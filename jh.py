@@ -3,7 +3,13 @@ import pandas as pd
 from collections import defaultdict
 from fractions import Fraction as frac
 
-
+PITCH_NAMES = {0: 'F',
+               1: 'C',
+               2: 'G',
+               3: 'D',
+               4: 'A',
+               5: 'E',
+               6: 'B'}
 
 SYLLABLES = defaultdict(lambda: 'no')
 SYLLABLES.update({ # https://www.epos.uni-osnabrueck.de/books/l/lehs007/pages/189.htm Lehmann, Silke: Bewegung und Sprache als Wege zum musikalischen Rhythmus
@@ -29,8 +35,48 @@ SYLLABLES.update({ # https://www.epos.uni-osnabrueck.de/books/l/lehs007/pages/18
 (frac(7, 32), frac(1, 32)): 'ri',
 })
 
+class defaultfunctiondict(defaultdict):
+    """This class lets you create a defaultdict which applies a custom function on missing keys.
+
+    Example
+    -------
+        d = defaultfunctiondict(C)
+        d[x] # returns C(x)
+    """
+    def __missing__(self, key):
+        if self.default_factory is None:
+            raise KeyError( key )
+        else:
+            ret = self[key] = self.default_factory(key)
+            return ret
+
+TIMESIG_BEAT = defaultfunctiondict(lambda x: f"1/{str(x).split('/')[1]}")
+TIMESIG_BEAT.update({'4/8':  '1/4',})
+
 # def get_onset_pattern(note_list):
 #     return pd.Series({'pattern': tuple(sorted(set(note_list.onset.values))), 'end': frac(note_list.timesig.values[0])})
+
+
+
+def apply_function(f, val, *args, **kwargs):
+    """Applies function f to a collection."""
+    if val.__class__ == float and isnan(val):
+        return val
+    if val.__class__ == pd.core.frame.DataFrame:
+        if len(args) == 0 and len(kwargs) == 0:
+            return val.applymap(f)
+        else:
+            logging.warning(f"Cannot map function {f} with arguments to entire DataFrame. Pass Series instead.")
+    if val.__class__ == pd.core.series.Series:
+        return val.apply(f, *args, **kwargs)
+    result = [f(pc, *args, **kwargs) for pc in val]
+    if val.__class__ == np.ndarray:
+        return np.array(result).reshape(val.shape)
+    if val.__class__ == tuple:
+        return tuple(result)
+    if val.__class__ == set:
+        return set(result)
+    return result
 
 
 
@@ -55,6 +101,43 @@ def create_os_features(onset_patterns, measure_counts):
 
 
 
+def compute_beat(r, beatsizedict=None):
+    """ r = row of note_list"""
+    if beatsizedict is None:
+        beatsizedict = TIMESIG_BEAT
+    assert r.timesig.__class__ == str, f"Time signatures should be strings, not {r.timesig.__class__}"
+    size = frac(beatsizedict[r.timesig])
+    onset = r.onset + r.offset
+    beat = onset // size + 1
+    subbeat = (onset % size) / size
+    if subbeat > 0:
+        return f"{beat}.{subbeat}"
+    else:
+        return str(beat)
+
+
+
+def compute_beat_column(note_list, measure_list, inplace=False):
+    """ Either `note_list` needs column `timesig` or you need to pass `measure_list` for merge."""
+    if not 'timesig' in note_list.columns:
+        if note_list.index.__class__ == pd.core.indexes.multi.MultiIndex and 'id' in note_list.index.names:
+            notes = note_list.join(measure_list['timesig'], on=['id', 'mc'])
+        else:
+            notes = note_list.join(measure_list['timesig'], on='mc')
+    else:
+        notes = note_list.copy()
+    beats = notes[['mc', 'onset', 'timesig']].merge(measure_list['offset'], on=['id', 'mc'], right_index=True).apply(compute_beat, axis=1)
+    if not inplace:
+        return beats
+    if not 'timesig' in note_list.columns:
+        note_list['timesig'] = notes['timesig']
+    note_list['beats'] = beats
+    note_list['beatsize'] = note_list['timesig']
+    beatsizedict = {k: frac(v) for k, v in TIMESIG_BEAT.items()}
+    note_list['beatsize'].replace(beatsizedict, inplace=True)
+
+
+
 def get_pattern_list(onset_patterns, n_most_frequent=None, occurring_in_min=None):
     """Summarize all patterns occurring in at least `occurring_in_min` pieces."""
     pattern_list = pd.DataFrame(onset_patterns.value_counts(), columns=['total'])
@@ -66,6 +149,17 @@ def get_pattern_list(onset_patterns, n_most_frequent=None, occurring_in_min=None
     if occurring_in_min is not None:
         return pattern_list[pattern_list.n_pieces >= occurring_in_min]
     return pattern_list
+
+
+
+def midi2octave(val):
+    """Returns 4 for values 60-71 and correspondingly for other notes.
+
+    Parameters
+    ----------
+    val : :obj:`int` or :obj:`pandas.Series` of `int`
+    """
+    return val // 12 - 1
 
 
 
@@ -98,7 +192,9 @@ def read_note_list(file, index_col=[0,1], converters={}, dtypes={}):
     conv = {'onset':frac,
                 'duration':frac,
                 'nominal_duration':frac,
-                'scalar':frac}
+                'scalar':frac,
+                'beatsize': frac,
+                'subbeat': frac}
     types = {'tied': 'Int64',
              'volta': 'Int64'}
     types.update(dtypes)
@@ -106,6 +202,63 @@ def read_note_list(file, index_col=[0,1], converters={}, dtypes={}):
     return pd.read_csv(file, sep='\t', index_col=index_col,
                                 dtype=types,
                                 converters=conv)
+
+
+
+def split_beats(S):
+    """ Split a pandas.Series containing beat strings such as '1.1/2'. """
+    splitbeats = S.str.split('.', expand=True)
+    splitbeats[1] = splitbeats[1].fillna(0).apply(frac)
+    return splitbeats.astype({0: int})
+
+
+
+def transpose_to_C(note_list, measure_list=None):
+    """ Either `note_list` needs column `keysig` or you need to pass `measure_list` with `keysig`"""
+    if not 'keysig' in note_list.columns:
+        if note_list.index.__class__ == pd.core.indexes.multi.MultiIndex and 'id' in note_list.index.names:
+            note_list_transposed = note_list.join(measure_list['keysig'], on=['id', 'mc'])
+        else:
+            note_list_transposed = note_list.join(measure_list['keysig'], on='mc')   # Add a column with the corresponding key signature for every note
+    else:
+        note_list_transposed = note_list.copy()
+    note_list_transposed.tpc -= note_list_transposed.keysig                                             # subtract key signature from tonal pitch class (=transposition to C)
+    midi_transposition = tpc2pc(note_list_transposed.keysig)\
+                         .apply(lambda x: x if x <= 6 else x % -12)                                     # convert key signature to pitch class and decide whether MIDIs are shifted downwards (if <= 6) or upwards
+    up_or_down = (midi_transposition == 6)                                                              # if the shift is 6, the direction of shift depends on the key signature:
+    midi_transposition.loc[up_or_down] = note_list_transposed[up_or_down].keysig\
+                                         .apply(lambda x: 6 if x > 0 else -6)                           # If the key signature is F#, shift downwards, if it's Gb, shift upwards
+    note_list_transposed.midi -= midi_transposition
+    return note_list_transposed
+
+
+
+def tpc2name(tpc):
+    """Return name of a tonal pitch class where
+       0 = C, -1 = F, -2 = Bb, 1 = G etc.
+    """
+    try:
+        tpc = int(tpc)
+    except:
+        return apply_function(tpc2name, tpc)
+
+    tpc += 1 # to make the lowest name F = 0 instead of -1
+    if tpc < 0:
+        acc = abs(tpc // 7) * 'b'
+    else:
+        acc = tpc // 7 * '#'
+    return PITCH_NAMES[tpc % 7] + acc
+
+
+
+def tpc2pc(tpc):
+    """Turn a tonal pitch class into a MIDI pitch class"""
+    try:
+        tpc = int(tpc)
+    except:
+        return apply_function(tpc2pc, tpc)
+
+    return 7 * tpc % 12
 
 
 
