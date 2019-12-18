@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from collections import defaultdict
 from fractions import Fraction as frac
@@ -33,15 +34,38 @@ SYLLABLES.update({ # https://www.epos.uni-osnabrueck.de/books/l/lehs007/pages/18
 
 
 
-def create_os_features(onset_patterns):
-    """Compute the fraction of every occurring onset pattern per piece. """
+def create_os_features(onset_patterns, measure_counts):
+    """Compute the fraction of every occurring onset pattern per piece.
+
+    Parameters
+    ----------
+    onset_patterns : :obj:`pandas.Series`
+        The measures with th eonset patterns you want to count.
+    measure_counts : :obj:`pandas.Series`
+        For every id, the amount of measures in the piece.
+    """
     def os_fraction(patterns):
+        id = patterns.index.levels[0][0]
         counts = patterns.value_counts()
-        n = counts.sum()
+        n = measure_counts[id]
         return counts / n
     res = pd.DataFrame(onset_patterns.groupby('id').apply(os_fraction)).unstack()
     res = res.droplevel(0, axis=1)
     return res
+
+
+
+def get_pattern_list(onset_patterns, n_most_frequent=None, occurring_in_min=None):
+    """Summarize all patterns occurring in at least `occurring_in_min` pieces."""
+    pattern_list = pd.DataFrame(onset_patterns.value_counts(), columns=['total'])
+    def count_pieces(onset_patterns, pattern):
+        return len(onset_patterns[onset_patterns == pattern].groupby('id').count())
+    pattern_list['n_pieces'] = pattern_list.index.map(lambda i: count_pieces(onset_patterns, i)).to_list()
+    if n_most_frequent is not None:
+        return pattern_list.iloc[:n_most_frequent]
+    if occurring_in_min is not None:
+        return pattern_list[pattern_list.n_pieces >= occurring_in_min]
+    return pattern_list
 
 
 
