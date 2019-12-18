@@ -33,8 +33,20 @@ SYLLABLES.update({ # https://www.epos.uni-osnabrueck.de/books/l/lehs007/pages/18
 
 
 
+def create_os_features(onset_patterns):
+    """Compute the fraction of every occurring onset pattern per piece. """
+    def os_fraction(patterns):
+        counts = patterns.value_counts()
+        n = counts.sum()
+        return counts / n
+    res = pd.DataFrame(onset_patterns.groupby('id').apply(os_fraction)).unstack()
+    res = res.droplevel(0, axis=1)
+    return res
+
+
+
 def os_pattern(note_list):
-    """"""
+    """Turn the onsets of a note list into rhythmical language."""
     note_list = note_list.drop_duplicates(subset='onset').sort_values('onset')
     last = note_list.iloc[-1]
     length = last.onset + last.duration
