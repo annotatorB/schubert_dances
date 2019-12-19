@@ -200,7 +200,7 @@ def get_block(note_list, start, end, cut_durations=False, staff=None, merge_ties
             res = merged
 
     return res
-    
+
 
 
 def iter_measures(note_list, volta=None, staff=None):
@@ -368,6 +368,27 @@ def index_tuples(df, sl=SL[:], nested=False):
         return res
 
 
+
+def tpc2rn(tpc, key=0, minor=False):
+    """Return scale degree of a tonal pitch class where
+       0 = I, -1 = IV, -2 = bVII, 1 = V etc.
+    """
+    try:
+        tpc = int(tpc)
+    except:
+        return apply_function(tpc2rn, tpc, key=0, minor=False)
+
+    tpc -= key - 1
+
+    if tpc < 0:
+        acc = abs(tpc // 7) * 'b'
+    else:
+        acc = tpc // 7 * '#'
+
+    if minor:
+        return acc + TPC_MIN_RN[tpc % 7]
+    else:
+        return acc + TPC_MAJ_RN[tpc % 7]
 
 def get_harmonic_collections(note_list, bass):
     """ Partition `note_list` via the bass computed by bass_per_beat().

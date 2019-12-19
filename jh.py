@@ -296,6 +296,12 @@ def get_block(note_list, start, end, cut_durations=False, staff=None, merge_ties
 
 
 
+def get_lowest(note_list):
+    lowest = note_list.midi.min()
+    return note_list[note_list.midi == lowest]
+
+
+
 def get_onset_distance(a, b, lengths=None):
     """ Get distance in fractions of whole notes.
     Parameters
