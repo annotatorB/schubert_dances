@@ -138,17 +138,27 @@ def compute_beat_column(note_list, measure_list, inplace=False):
 
 
 
-def get_pattern_list(onset_patterns, n_most_frequent=None, occurring_in_min=None):
+def get_pattern_list(onset_patterns, n_most_frequent=None, occurring_in_min=None, normalize=False, round=3):
     """Summarize all patterns occurring in at least `occurring_in_min` pieces."""
-    pattern_list = pd.DataFrame(onset_patterns.value_counts(), columns=['total'])
-    def count_pieces(onset_patterns, pattern):
+    pattern_list = pd.DataFrame(onset_patterns.value_counts(), columns=['counts'])
+
+    def count_pieces(onset_patterns, pattern=None):
+        if pattern is None:
+            return len(onset_patterns.groupby('id').count())
         return len(onset_patterns[onset_patterns == pattern].groupby('id').count())
+
     pattern_list['n_pieces'] = pattern_list.index.map(lambda i: count_pieces(onset_patterns, i)).to_list()
     if n_most_frequent is not None:
-        return pattern_list.iloc[:n_most_frequent]
-    if occurring_in_min is not None:
-        return pattern_list[pattern_list.n_pieces >= occurring_in_min]
-    return pattern_list
+        res = pattern_list.iloc[:n_most_frequent]
+    elif occurring_in_min is not None:
+        res = pattern_list[pattern_list.n_pieces >= occurring_in_min]
+    else:
+        res = pattern_list
+    if normalize:
+        res.counts = res.counts / pattern_list.counts.sum()
+        res.n_pieces = res.n_pieces / count_pieces(onset_patterns)
+    return res.round(round)
+
 
 
 
