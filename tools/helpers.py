@@ -22,7 +22,20 @@
 
 from .ms3 import *
 
-
+TPC_MAJ_RN =  {0: 'IV',
+               1: 'I',
+               2: 'V',
+               3: 'II',
+               4: 'VI',
+               5: 'III',
+               6: 'VII'}
+TPC_MIN_RN =  {0: 'VI',
+               1: 'III',
+               2: 'VII',
+               3: 'IV',
+               4: 'I',
+               5: 'V',
+               6: 'II'}
 
 
 
