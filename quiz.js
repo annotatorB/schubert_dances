@@ -83,6 +83,7 @@ function shuffle(array) {
     temporaryValue = array[currentIndex];
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
+	var test = 0;
   }
   return array;
 }
