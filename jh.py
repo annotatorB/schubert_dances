@@ -251,6 +251,14 @@ def apply_to_pieces(f, df, *args, **kwargs):
 
 
 
+def ccdf(S):
+    x = pd.DataFrame(S.value_counts().sort_values()).rename(columns={'bass': 'x'})
+    n = len(x)
+    x['y'] = [1 - i / n for i in range(n)]
+    return x
+
+
+
 def chord_notes(df, notes, **kwargs):
     """ Helper function for all_chord_notes()
     Parameters
@@ -338,6 +346,14 @@ def create_os_features(onset_patterns, measure_counts):
     res = pd.DataFrame(onset_patterns.groupby('id').apply(os_fraction)).unstack()
     res = res.droplevel(0, axis=1)
     return res
+
+
+
+def cumulative_fraction(S):
+    x = pd.DataFrame(S.value_counts()).rename(columns={S.name: 'x'})
+    total = x.x.sum()
+    x['y'] = [x.x.iloc[:i].sum() / total for i in range(1, len(x) + 1)]
+    return pd.DataFrame({'x': 0, 'y': 0}, index=[0]).append(x)
 
 
 
