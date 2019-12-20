@@ -84,7 +84,6 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-  alert(String(array))
   return array;
 }
 
