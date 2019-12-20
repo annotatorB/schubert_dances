@@ -84,6 +84,7 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
+  alert(String(array))
   return array;
 }
 
@@ -108,7 +109,7 @@ var rightAnswers = 0;
 var selectedAnswer = false;
 
 var audioElement=document.getElementById('dance');
-audioElement.src= path + '/' + randDances[roundCount] + '';
+audioElement.src= path + '/' + randDances[roundCount-1] + '';
 
 function reset() {
 	randWalzer = getRandom(walzer);
@@ -181,12 +182,12 @@ function nextRound() {
 	}
 	else {
 		if (roundCount < maxRounds) {
-			
+			roundCount++
 			var audioElement=document.getElementById('dance');
 			audioElement.src= path + '/' + randDances[roundCount-1] + '';
 			
 			document.getElementById("answer").textContent="\n";
-			roundCount++
+			
 			if (roundCount==maxRounds) {
 				document.getElementById('nextRound').textContent = "Finish"
 			}
