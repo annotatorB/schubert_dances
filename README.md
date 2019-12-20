@@ -2,17 +2,13 @@
 Use this link to view the notebook with interactive plots or clone the repo to run it.
 
 ## Secondary notebooks for Milestone 3:
-1. For DataStory sections 1.3.3 - 2.2.2: [jh.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/jh.ipynb?flush_cache=true)
-1. For DataStory section 2.3: [sebastien.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/sebastien.ipynb?flush_cache=true)
-1. For DataStory section 3.1: [schubert_project.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/schubert_project.ipynb?flush_cache=true)
-1. For DataStory section 3.1.2.3: [Mode Trajectory Visualization](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/Mode%20Trajectory%20Visualization.ipynb?flush_cache=true)
-1. For DataStory section 3.2: [Classification.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/Classification.ipynb?flush_cache=true)
-1. For DataStory section 3.3: [Quiz.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/Quiz.ipynb?flush_cache=true)
-    
-
-# Milestone 2: [schubert_project.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/schubert_project.ipynb?flush_cache=true)
-Use this link to view the notebook with interactive plots or clone the repo to run it.
-
+1. For DataStory sections 1.3.3 - 2.2.2 (JH): [jh.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/jh.ipynb?flush_cache=true)
+1. For DataStory section 2.3 (SR): [sebastien.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/sebastien.ipynb?flush_cache=true)
+1. For DataStory section 3.1 (GC): [schubert_project.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/schubert_project.ipynb?flush_cache=true)
+1. For DataStory section 3.1.2.3 (JR): [Mode Trajectory Visualization](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/Mode%20Trajectory%20Visualization.ipynb?flush_cache=true)
+1. For DataStory section 3.2 (GC & JR): [Classification.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/Classification.ipynb?flush_cache=true)
+1. For DataStory section 3.3 (JR): [Quiz.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/Quiz.ipynb?flush_cache=true)
+ 
 
 # Prerequisites to run the notebook
 This is a tested setup using a new conda environment but of course you can install everything in your root/base environment.
