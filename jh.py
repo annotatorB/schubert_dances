@@ -4,6 +4,59 @@ import numpy as np
 from collections import defaultdict
 from fractions import Fraction as frac
 
+EXACT_CHORD_MAP = {
+('M3',): 'M3',
+('m3',): 'm3',
+('m2',): 'unison',
+('P4',): 'P4',
+('m6',): 'm6',
+('M6',): 'M6',
+('M7',): 'M7',
+('M2',): 'M2',
+('P5',): 'P5',
+('D3',): 'D3',
+}
+FILTERING_CHORD_MAP = {
+('M3', 'P5', 'm7'): 'dominant7',
+('m3', 'D5', 'm6'): 'dominant65',
+('m3', 'P4', 'M6'): 'dominant43',
+('M2', 'A4', 'M6'): 'dominant2',
+('M3', 'm7'): 'dominant7',
+('D5', 'm6'): 'dominant65',
+('m3', 'M6'): 'dominant43',
+('M2', 'A4'): 'dominant2',
+('m3', 'D5', 'D7'): 'diminished7',
+('m3', 'D5', 'M6'): 'diminished65',
+('m3', 'A4', 'M6'): 'diminished43',
+('A2', 'A4', 'M6'): 'diminished2',
+('m3', 'D7'): 'diminished7',
+('m3', 'P5', 'm7'): 'minor7',
+('m3', 'm7'): 'minor7',
+('M3', 'P5'): 'major',
+('m3', 'P5'): 'minor',
+('m3', 'D5'): 'diminished',
+('m3', 'm6'): 'major6',
+('M3', 'M6'): 'minor6',
+('P4', 'M6'): 'major64',
+('P4', 'm6'): 'minor64',
+('A4', 'M6'): 'diminished64',
+('M2', 'P4', 'M6'): 'suspension',
+('P4', 'M7'): 'suspension',
+('P4', 'P5'): 'suspension',
+('M2', 'P5'): 'suspension',
+('M3', 'A4'): 'suspension',
+('M2', 'M7'): 'suspension',
+('M3', 'M7'): 'M3',
+('P5', 'M6'): 'ambiguous',
+('M3', 'P4'): 'M3',
+('M2', 'm3'): 'm3',
+('M3',): 'M3',
+('m3',): 'm3',
+('P5',): 'P5',
+('D5',): 'D5',
+}
+
+
 PITCH_NAMES = {0: 'F',
                1: 'C',
                2: 'G',
@@ -94,6 +147,58 @@ def all_chord_notes(chord_list, note_list, by='chord_id', multiple_pieces=False)
 
 
 
+def add_previous_ix(df, col='prev', inplace=True):
+    if not inplace:
+        df = df.copy()
+    ix = df.index
+    names = ix.names
+    prev = pd.Series(df.reset_index()[df.index.names].itertuples(index=False, name=None)).shift()
+    prev.index = ix
+    df[col] = prev
+    return df
+
+
+
+def add_previous_vals(df, prev_ix_col='prev', col_map={'intervals': 'prev_ints'}, inplace=True):
+    if not inplace:
+        df = df.copy()
+    if prev_ix_col not in df.columns:
+        add_previous_ix(df, prev_ix_col)
+    for col, new_col in col_map.items():
+        prev_vals = df.loc[df.loc[df[prev_ix_col].notna(), prev_ix_col], col]
+        ix = df[df[prev_ix_col].notna()].index
+        prev_vals.index = ix
+        df.loc[df[prev_ix_col].notna(), new_col] = prev_vals
+    return df
+
+
+
+def add_following_ix(df, col='next', inplace=True):
+    if not inplace:
+        df = df.copy()
+    ix = df.index
+    names = ix.names
+    prev = pd.Series(df.reset_index()[df.index.names].itertuples(index=False, name=None)).shift(-1)
+    prev.index = ix
+    df[col] = prev
+    return df
+
+
+
+def add_following_vals(df, next_ix_col='next', col_map={'intervals': 'next_ints'}, inplace=True):
+    if not inplace:
+        df = df.copy()
+    if next_ix_col not in df.columns:
+        add_following_ix(df, next_ix_col)
+    for col, new_col in col_map.items():
+        next_vals = df.loc[df.loc[df[next_ix_col].notna(), next_ix_col], col]
+        ix = df[df[next_ix_col].notna()].index
+        next_vals.index = ix
+        df.loc[df[next_ix_col].notna(), new_col] = next_vals
+    return df
+
+
+
 def apply_function(f, val, *args, **kwargs):
     """Applies function f to a collection."""
     if val.__class__ == float and isnan(val):
@@ -180,6 +285,16 @@ def compute_beat_column(note_list, measure_list, inplace=False):
     note_list['beatsize'] = note_list['timesig']
     beatsizedict = {k: frac(v) for k, v in TIMESIG_BEAT.items()}
     note_list['beatsize'].replace(beatsizedict, inplace=True)
+
+
+
+def count_accidentals(l):
+    L = len(l)
+    res = pd.Series()
+    res['sharps'] = sum((e.count('#') for e in l)) / L
+    res['flats']  = sum((e.count('b') for e in l)) / L
+    res['sum'] = res['sharps'] + res['flats']
+    return res
 
 
 
@@ -335,26 +450,36 @@ def get_onset_distance(a, b, lengths=None):
 
 
 
-def get_pattern_list(onset_patterns, n_most_frequent=None, occurring_in_min=None, normalize=False, round=3):
+def get_pattern_list(onset_patterns, n_most_frequent=None, occurring_in_min=None, normalize=False, round=3, counts_only=False):
     """Summarize all patterns occurring in at least `occurring_in_min` pieces."""
+    onset_patterns.name=None
     pattern_list = pd.DataFrame(onset_patterns.value_counts(), columns=['counts'])
-
     def count_pieces(onset_patterns, pattern=None):
         if pattern is None:
             return len(onset_patterns.groupby('id').count())
         return len(onset_patterns[onset_patterns == pattern].groupby('id').count())
-
-    pattern_list['n_pieces'] = pattern_list.index.map(lambda i: count_pieces(onset_patterns, i)).to_list()
+    if not counts_only:
+        pattern_list['n_pieces'] = pattern_list.index.map(lambda i: count_pieces(onset_patterns, i)).to_list()
     if n_most_frequent is not None:
         res = pattern_list.iloc[:n_most_frequent]
     elif occurring_in_min is not None:
-        res = pattern_list[pattern_list.n_pieces >= occurring_in_min]
+        if counts_only:
+            logging.warning('Parameter occurring_in_min ignored.')
+        else:
+            res = pattern_list[pattern_list.n_pieces >= occurring_in_min]
     else:
         res = pattern_list
     if normalize:
         res.counts = res.counts / pattern_list.counts.sum()
-        res.n_pieces = res.n_pieces / count_pieces(onset_patterns)
+        if not counts_only:
+            res.n_pieces = res.n_pieces / count_pieces(onset_patterns)
     return res.round(round)
+
+
+
+def isnan(num):
+    """Return True if `num` is numpy.nan (not a number)"""
+    return num != num
 
 
 
@@ -455,6 +580,38 @@ def read_note_list(file, index_col=[0,1], converters={}, dtypes={}):
     return pd.read_csv(file, sep='\t', index_col=index_col,
                                 dtype=types,
                                 converters=conv)
+
+
+
+
+
+def recognize_chord(interval_tuple):
+    if interval_tuple == ():
+        return 'unison'
+    for t, label in EXACT_CHORD_MAP.items():
+        if interval_tuple == t:
+            return label
+    for t, label in FILTERING_CHORD_MAP.items():
+        t_set = set(t)
+        if set(interval_tuple).intersection(t_set) == t_set:
+            return label
+    return 'ambiguous'
+
+
+
+def remove_duplicates(l):
+    L = len(l)
+    if L > 0:
+        prev = l[0]
+        res = [prev]
+    else:
+        return l
+    if L > 1:
+        for e in l[1:]:
+            if e != prev:
+                res.append(e)
+                prev = e
+    return res
 
 
 parse_lists = lambda l: [int(mc) for mc in l.strip('[]').split(', ') if mc != '']
