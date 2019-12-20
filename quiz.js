@@ -83,7 +83,6 @@ function shuffle(array) {
     temporaryValue = array[currentIndex];
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
-	var test = 0;
   }
   return array;
 }
@@ -182,15 +181,14 @@ function nextRound() {
 	}
 	else {
 		if (roundCount < maxRounds) {
+			if (roundCount==maxRounds) {
+				document.getElementById('nextRound').textContent = "Finish"
+			}
 			roundCount++
 			var audioElement=document.getElementById('dance');
 			audioElement.src= path + '/' + randDances[roundCount-1] + '';
 			
 			document.getElementById("answer").textContent="\n";
-			
-			if (roundCount==maxRounds) {
-				document.getElementById('nextRound').textContent = "Finish"
-			}
 			document.getElementById("round").textContent = "Round "+String(roundCount)+"/"+String(maxRounds);			
 		}
 		else {
