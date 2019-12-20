@@ -437,7 +437,7 @@ def read_measure_list(file, index_col=[0]):
                                    converters={'duration': frac,
                                                'act_dur': frac,
                                                'offset': frac,
-                                               'next': lambda l: [int(mc) for mc in l.strip('[]').split(', ') if mc != '']})
+                                               'next': parse_lists})
 
 
 
@@ -455,6 +455,10 @@ def read_note_list(file, index_col=[0,1], converters={}, dtypes={}):
     return pd.read_csv(file, sep='\t', index_col=index_col,
                                 dtype=types,
                                 converters=conv)
+
+
+parse_lists = lambda l: [int(mc) for mc in l.strip('[]').split(', ') if mc != '']
+parse_tuples = lambda t: tuple(i.strip("\',") for i in t.strip("() ").split(", ") if i != '')
 
 
 
@@ -536,67 +540,3 @@ def tpc2pc(tpc):
         return apply_function(tpc2pc, tpc)
 
     return 7 * tpc % 12
-
-
-
-# def summarize(chord_segment, col='note_names'):
-#     """"""
-#     notes = chord_segment[col].values
-#     bass = notes[0]
-#     chord_notes = set(notes[1:]) if len(notes) > 1 else {}
-#     if bass in chord_notes:
-#         chord_notes -= {bass}
-#     return bass, tuple(sorted(chord_notes))
-#
-#
-#
-# def add_previous_ix(df, col='prev'):
-#     ix = df.index
-#     names = ix.names
-#     prev = pd.Series(df.reset_index()[df.index.names].itertuples(index=False)).shift()
-#     prev.index = ix
-#     df[col] = prev
-#     return df
-#
-# def add_previous_vals(df, prev_ix_col='prev', col_map={'intervals': 'prev_ints'}):
-#     for col, new_col in col_map.items():
-#         prev_vals = df.loc[df.loc[df[prev_ix_col].notna(), prev_ix_col], col]
-#         ix = df[df[prev_ix_col].notna()].index
-#         prev_vals.index = ix
-#         df.loc[df[prev_ix_col].notna(), new_col] = prev_vals
-#     return df
-#
-#
-#
-#
-# def get_intervals(chord_segment, col='note_names'):
-#     """"""
-#     bass_name = chord_segment[col].values[0]
-#     bass_tpc =  chord_segment.tpc.values[0]
-#     ints = (chord_segment.tpc[chord_segment.tpc != bass_tpc] - bass_tpc).values
-#     return pd.Series({'bass': bass_name, 'intervals': tuple(sorted(tpc2int(set(ints)))) })
-#
-#
-# def summarize_ints(chord_segment, col='note_names'):
-#     """"""
-#     bass_note = chord_segment.iloc[0]
-#     bass_name = bass_note[col]
-#     bass_tpc =  bass_note.tpc
-#     chord_notes = chord_segment[(chord_segment.tpc != bass_tpc) & chord_segment.gracenote.isna()].copy()
-#     chord_notes['intervals'] = tpc2int(chord_notes.tpc - bass_tpc)
-#     intervals = tuple(sorted(set(chord_notes.intervals.values)))
-#     res = pd.Series({'bass': bass_name, 'intervals': intervals})
-#     total_duration = chord_notes.duration.sum()
-#     if len(intervals) == 0 or total_duration == 0:
-#         return res
-#     for iv in intervals:
-#         sel = chord_notes[(chord_notes.intervals == iv)]
-#         tot = len(sel)
-#         try:
-#             res[iv+'_duration'] = sel.duration.sum() / total_duration
-#         except:
-#             print(chord_notes)
-#         onbeat = (sel.subbeat == 0) & ~sel.overlapping.isin([0, -1])
-#         res[iv+'_oncount'] = len(sel[onbeat]) / tot
-#         res[iv+'_offcount'] = len(sel[~onbeat]) / tot
-#     return res
