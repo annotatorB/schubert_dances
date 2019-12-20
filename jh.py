@@ -1,4 +1,4 @@
-import os
+import os, re
 import pandas as pd
 import numpy as np
 from collections import defaultdict
@@ -56,6 +56,13 @@ FILTERING_CHORD_MAP = {
 ('D5',): 'D5',
 }
 
+NAME_TPCS = {'C': 0,
+             'D': 2,
+             'E': 4,
+             'F': -1,
+             'G': 1,
+             'A': 3,
+             'B': 5}
 
 PITCH_NAMES = {0: 'F',
                1: 'C',
@@ -64,6 +71,21 @@ PITCH_NAMES = {0: 'F',
                4: 'A',
                5: 'E',
                6: 'B'}
+
+TPC_MAJ_RN =  {0: 'IV',
+               1: 'I',
+               2: 'V',
+               3: 'II',
+               4: 'VI',
+               5: 'III',
+               6: 'VII'}
+TPC_MIN_RN =  {0: 'VI',
+               1: 'III',
+               2: 'VII',
+               3: 'IV',
+               4: 'I',
+               5: 'V',
+               6: 'II'}
 
 SYLLABLES = defaultdict(lambda: 'no')
 SYLLABLES.update({ # https://www.epos.uni-osnabrueck.de/books/l/lehs007/pages/189.htm Lehmann, Silke: Bewegung und Sprache als Wege zum musikalischen Rhythmus
@@ -541,6 +563,31 @@ def midi2octave(val):
 
 
 
+def name2rn(nn, key=0, minor=False):
+    if nn.__class__ == float and isnan(nn):
+        return nn
+    try:
+        nn.upper()
+    except:
+        return apply_function(name2rn, nn, key=key, minor=minor)
+    tpc = name2tpc(nn)
+    return tpc2rn(tpc, key, minor)
+
+
+
+def name2tpc(nn):
+    if nn.__class__ == float and isnan(nn):
+        return nn
+    try:
+        nn_step, nn_acc = split_note_name(nn)
+        nn_step = nn_step.upper()
+    except:
+        return apply_function(name2tpc, nn)
+    step_tpc = NAME_TPCS[nn_step]
+    return step_tpc + 7 * nn_acc.count('#') - 7 * nn_acc.count('b')
+
+
+
 def os_pattern(note_list):
     """Turn the onsets of a note list into rhythmical language."""
     note_list = note_list.drop_duplicates(subset='onset').sort_values('onset')
@@ -551,6 +598,15 @@ def os_pattern(note_list):
     durations = tuple(sum(t) for t in zip((-e for e in onsets_end), onsets_end[1:]))
     name = ''.join(SYLLABLES[t] for t in zip((e  % frac(1/4) for e in onsets), durations))
     return name
+
+
+
+def read_chord_profiles(file, index_col=[0,1]):
+    return pd.read_csv(file, sep='\t', index_col=index_col,
+            converters={'intervals': parse_tuples,
+                        'onbeat': parse_tuples,
+                        'offbeat': parse_tuples,
+                        'next': parse_tuples,})
 
 
 
@@ -627,6 +683,14 @@ def split_beats(S):
 
 
 
+def split_note_name(nn):
+    nn = str(nn)
+    m = re.match("^([A-G]|[a-g])(#*|b*)$", nn)
+    assert m is not None, nn + " is not a valid note name."
+    return m.group(1), m.group(2)
+
+
+
 def transpose_to_C(note_list, measure_list=None):
     """ Either `note_list` needs column `keysig` or you need to pass `measure_list` with `keysig`"""
     if not 'keysig' in note_list.columns:
@@ -697,3 +761,26 @@ def tpc2pc(tpc):
         return apply_function(tpc2pc, tpc)
 
     return 7 * tpc % 12
+
+
+
+def tpc2rn(tpc, key=0, minor=False):
+    """Return scale degree of a tonal pitch class where
+       0 = I, -1 = IV, -2 = bVII, 1 = V etc.
+    """
+    try:
+        tpc = int(tpc)
+    except:
+        return apply_function(tpc2rn, tpc, key=0, minor=False)
+
+    tpc -= key - 1
+
+    if tpc < 0:
+        acc = abs(tpc // 7) * 'b'
+    else:
+        acc = tpc // 7 * '#'
+
+    if minor:
+        return acc + TPC_MIN_RN[tpc % 7]
+    else:
+        return acc + TPC_MAJ_RN[tpc % 7]
