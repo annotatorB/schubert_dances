@@ -1,4 +1,4 @@
-# Milestone 3: [DataStory.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/master/DataStory.ipynb?flush_cache=true)
+# Milestone 3: [DataStory.ipynb](https://nbviewer.jupyter.org/github/DCMLab/schubert_dances/blob/ada-project/DataStory.ipynb)
 Use this link to view the notebook with interactive plots or clone the repo to run it.
 
 ## Secondary notebooks for Milestone 3:
