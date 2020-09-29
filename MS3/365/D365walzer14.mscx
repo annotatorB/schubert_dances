@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.01">
-  <programVersion>3.3.0</programVersion>
-  <programRevision>4761df6</programRevision>
+  <programVersion>3.5.0</programVersion>
+  <programRevision>43c5553</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -1060,8 +1060,8 @@
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
+              <pitch>75</pitch>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           </voice>
@@ -1070,8 +1070,8 @@
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
-              <pitch>77</pitch>
-              <tpc>13</tpc>
+              <pitch>75</pitch>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           <Chord>
