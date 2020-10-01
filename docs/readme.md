@@ -25,6 +25,8 @@ To change the structure of the startpage, edit the docs/source/index.rst file. G
 
 Create docs/ folder, go in and run `sphinx-quickstart`.
 
+Add an empty file called .nojekyll to docs/ (otherwise the HTML won't work correctly on GitHub Pages).
+
 Go to `docs/source/conf.py` and uncomment the three lines
     import os
     import sys
