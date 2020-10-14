@@ -57,7 +57,7 @@ Set system variable to avoid "JavaScript heap out of memory" errors during exten
 Then, run the following commands:
 
     # only if nodejs is missing
-    conda -c conda-forge nodejs
+    conda install -c conda-forge nodejs
     
     jupyter labextension install @jupyter-widgets/jupyterlab-manager@1.1 --no-build
     jupyter labextension install jupyterlab-plotly@1.3.0 --no-build
