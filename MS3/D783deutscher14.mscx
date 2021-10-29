@@ -148,16 +148,12 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
-    <metaTag name="Deutsch">783</metaTag>
-    <metaTag name="Unnamed: 0">357</metaTag>
     <metaTag name="arranger"></metaTag>
-    <metaTag name="composer">Franz Schubert</metaTag>
+    <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2019-08-09</metaTag>
-    <metaTag name="dance">deutscher</metaTag>
-    <metaTag name="goldenberg_id">351.0</metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="movementNumber">14</metaTag>
+    <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="originalFormat">xml</metaTag>
@@ -165,8 +161,8 @@
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
-    <metaTag name="workNumber">op. 33</metaTag>
-    <metaTag name="workTitle">16 Deutsche Tänze op. 33 D 783</metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
