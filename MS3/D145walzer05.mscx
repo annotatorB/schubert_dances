@@ -150,20 +150,23 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="Deutsch">145</metaTag>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Franz Schubert</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2019-08-01</metaTag>
+    <metaTag name="dance">walzer</metaTag>
+    <metaTag name="goldenberg_id">65.0</metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="movementNumber"></metaTag>
-    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="movementNumber">5</metaTag>
+    <metaTag name="movementTitle">Menuett Nr. 1</metaTag>
     <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
-    <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Menuett Nr. 1</metaTag>
+    <metaTag name="workNumber">op. 18</metaTag>
+    <metaTag name="workTitle">12 Walzer op. 18 D 145</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">

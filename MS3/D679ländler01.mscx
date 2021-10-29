@@ -144,20 +144,22 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="Deutsch">679</metaTag>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Franz Schubert</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2019-09-10</metaTag>
+    <metaTag name="dance">ländler</metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="movementNumber"></metaTag>
-    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="movementNumber">1</metaTag>
+    <metaTag name="movementTitle">Ländler Nr. 1</metaTag>
     <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Ländler Nr. 1</metaTag>
+    <metaTag name="workTitle">2 Ländler D 679 (980B)</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">

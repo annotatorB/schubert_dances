@@ -18,7 +18,6 @@ The `metadata.tsv` includes the IDs used by Yosef Goldenberg in the column `gold
 # Overview
 |         file_name          |measures|labels|standard|annotators|reviewers|
 |----------------------------|-------:|-----:|--------|----------|---------|
-|walzer                      |      24|     0|        |          |         |
 |D041menuett01a              |      16|     0|        |          |         |
 |D041menuett02a              |      16|     0|        |          |         |
 |D041menuett03a              |      16|     0|        |          |         |
