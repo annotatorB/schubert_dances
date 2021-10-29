@@ -144,20 +144,24 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="Deutsch">783</metaTag>
+    <metaTag name="Unnamed: 0">345</metaTag>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Franz Schubert</metaTag>
     <metaTag name="copyright">Public Domain (PianoXML typeset)</metaTag>
     <metaTag name="creationDate">2018-12-30</metaTag>
+    <metaTag name="dance">deutscher</metaTag>
+    <metaTag name="goldenberg_id">339.0</metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="movementNumber"></metaTag>
-    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="movementNumber">2</metaTag>
+    <metaTag name="movementTitle">German Dance</metaTag>
     <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source">http://musescore.com/user/9292486/scores/5373072</metaTag>
     <metaTag name="translator"></metaTag>
-    <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">German Dance</metaTag>
+    <metaTag name="workNumber">op. 33</metaTag>
+    <metaTag name="workTitle">16 Deutsche Tänze op. 33 D 783</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">

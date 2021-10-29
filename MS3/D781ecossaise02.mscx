@@ -147,20 +147,24 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="Deutsch">781</metaTag>
+    <metaTag name="Unnamed: 0">333</metaTag>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Franz Schubert</metaTag>
     <metaTag name="copyright">Public Domain (PianoXML typeset) | 11 Ecossaise D.781 (1823)</metaTag>
     <metaTag name="creationDate">2017-05-05</metaTag>
+    <metaTag name="dance">ecossaise</metaTag>
+    <metaTag name="goldenberg_id">327.0</metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="movementNumber"></metaTag>
-    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="movementNumber">2</metaTag>
+    <metaTag name="movementTitle">Ecossaise No 2</metaTag>
     <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Ecossaise No 2</metaTag>
+    <metaTag name="workTitle">11 Ecossaisen D 781</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">

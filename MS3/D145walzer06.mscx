@@ -173,21 +173,25 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
+    <metaTag name="Deutsch">145</metaTag>
+    <metaTag name="Unnamed: 0">93</metaTag>
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Franz Schubert</metaTag>
     <metaTag name="copyright">Public Domain (PianoXML typeset)</metaTag>
     <metaTag name="creationDate">2019-08-09</metaTag>
+    <metaTag name="dance">walzer</metaTag>
+    <metaTag name="goldenberg_id">66.0</metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="movementNumber"></metaTag>
-    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="movementNumber">6</metaTag>
+    <metaTag name="movementTitle">Waltz in b minor</metaTag>
     <metaTag name="mscVersion">3.02</metaTag>
     <metaTag name="originalFormat">mxl</metaTag>
     <metaTag name="platform">Linux</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source">http://musescore.com/user/9292486/scores/5375226</metaTag>
     <metaTag name="translator"></metaTag>
-    <metaTag name="workNumber">Op. 18 (D.145)</metaTag>
-    <metaTag name="workTitle">Waltz in b minor</metaTag>
+    <metaTag name="workNumber">op. 18</metaTag>
+    <metaTag name="workTitle">12 Walzer op. 18 D 145</metaTag>
     <Part>
       <Staff id="1">
         <StaffType group="pitched">
