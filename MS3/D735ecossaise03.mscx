@@ -959,6 +959,7 @@
           </voice>
         </Measure>
       <Measure>
+        <endRepeat>2</endRepeat>
         <voice>
           <Chord>
             <durationType>eighth</durationType>
@@ -991,9 +992,6 @@
           <Rest>
             <durationType>eighth</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         <voice>
           <Chord>
@@ -1489,9 +1487,6 @@
           <Rest>
             <durationType>eighth</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

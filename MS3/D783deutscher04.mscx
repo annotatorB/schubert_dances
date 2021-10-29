@@ -1478,6 +1478,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <endRepeat>2</endRepeat>
         <voice>
           <Chord>
             <durationType>half</durationType>

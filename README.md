@@ -151,7 +151,7 @@ The `metadata.tsv` includes the IDs used by Yosef Goldenberg in the column `gold
 |D146walzer19                |      24|     0|        |          |         |
 |D146walzer20a               |      16|     0|        |          |         |
 |D158ecossaise01             |      16|     0|        |          |         |
-|D299ecossaise01             |      17|     0|        |          |         |
+|D299ecossaise01             |      16|     0|        |          |         |
 |D299ecossaise02             |      16|     0|        |          |         |
 |D299ecossaise03             |      16|     0|        |          |         |
 |D299ecossaise04             |      16|     0|        |          |         |

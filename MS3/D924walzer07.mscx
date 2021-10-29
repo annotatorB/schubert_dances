@@ -1435,7 +1435,7 @@
           </voice>
         </Measure>
       <Measure>
-        <irregular>1</irregular>
+        <noOffset>-2</noOffset>
         <voice>
           <Dynamic>
             <subtype>ff</subtype>
@@ -1519,7 +1519,6 @@
           </voice>
         </Measure>
       <Measure len="2/4">
-        <irregular>1</irregular>
         <voice>
           <Chord>
             <durationType>half</durationType>

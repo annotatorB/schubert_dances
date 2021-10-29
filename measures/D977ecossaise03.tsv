@@ -14,4 +14,4 @@ mc	mn	keysig	timesig	act_dur	mc_offset	volta	numbering_offset	dont_count	barline
 13	13	-4	2/4	1/2	0							14
 14	14	-4	2/4	1/2	0							15
 15	15	-4	2/4	1/2	0							16
-16	16	-4	2/4	1/2	0				end	line	lastMeasure	9, -1
+16	16	-4	2/4	1/2	0					line	end	9, -1

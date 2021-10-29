@@ -634,6 +634,7 @@ D779 Nr. 15</text>
           </voice>
         </Measure>
       <Measure len="1/4">
+        <startRepeat/>
         <irregular>1</irregular>
         <voice>
           <Dynamic>

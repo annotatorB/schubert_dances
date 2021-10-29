@@ -3184,7 +3184,7 @@ D779 Nr. 13</text>
           </voice>
         </Measure>
       <Measure>
-        <irregular>1</irregular>
+        <noOffset>-2</noOffset>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -3263,7 +3263,6 @@ D779 Nr. 13</text>
           </voice>
         </Measure>
       <Measure>
-        <irregular>1</irregular>
         <voice>
           <Chord>
             <durationType>quarter</durationType>

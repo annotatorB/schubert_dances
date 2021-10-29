@@ -184,11 +184,11 @@
         <renderFunction>:a m:0.5:0 :n</renderFunction>
         <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
         <chord id="1">
-          <name/>
-          <name/>
+          <name></name>
+          <name></name>
           <xml>major</xml>
           <voicing>C E G</voicing>
-          <render/>
+          <render></render>
           </chord>
         <chord id="2">
           <name>Maj</name>
@@ -1580,10 +1580,10 @@
       <trackName>Piano</trackName>
       <Instrument id="piano">
         <longName>
-          <font face="Times New Roman"/>
+          <font face="Times New Roman"></font>
           </longName>
         <shortName>
-          <font face="Times New Roman"/>
+          <font face="Times New Roman"></font>
           </shortName>
         <trackName>Piano</trackName>
         <minPitchP>21</minPitchP>
@@ -2742,6 +2742,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <endRepeat>2</endRepeat>
         <voice>
           <Chord>
             <durationType>half</durationType>

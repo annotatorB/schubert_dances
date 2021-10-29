@@ -236,6 +236,7 @@
           <Tempo>
             <tempo>1.4166700000000001</tempo>
             <followText>1</followText>
+            <visible>0</visible>
             <text><sym>metNoteQuarterUp</sym> = 85</text>
             </Tempo>
           <Dynamic>
@@ -989,7 +990,7 @@
           </voice>
         </Measure>
       <Measure>
-        <irregular>1</irregular>
+        <noOffset>-3</noOffset>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -1073,7 +1074,6 @@
           </voice>
         </Measure>
       <Measure>
-        <irregular>1</irregular>
         <voice>
           <Beam>
             </Beam>
@@ -1121,7 +1121,6 @@
           </voice>
         </Measure>
       <Measure>
-        <irregular>1</irregular>
         <voice>
           <Chord>
             <durationType>quarter</durationType>

@@ -57,4 +57,4 @@ mc	mn	keysig	timesig	act_dur	mc_offset	volta	numbering_offset	dont_count	barline
 56	55	0	3/4	3/4	0							57
 57	56	0	3/4	3/4	0							58
 58	57	0	3/4	3/4	0							59
-59	58	0	3/4	3/4	0				end		lastMeasure	22, -1
+59	58	0	3/4	3/4	0						end	22, -1

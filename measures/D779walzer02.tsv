@@ -8,7 +8,7 @@ mc	mn	keysig	timesig	act_dur	mc_offset	volta	numbering_offset	dont_count	barline
 7	6	0	3/4	3/4	0							8
 8	7	0	3/4	3/4	0							9
 9	8	0	3/4	7/16	0						end	1, 10
-10	8	0	3/4	5/16	7/16			1				11
+10	8	0	3/4	5/16	7/16			1			start	11
 11	9	0	3/4	3/4	0							12
 12	10	0	3/4	3/4	0					line		13
 13	11	0	3/4	3/4	0							14

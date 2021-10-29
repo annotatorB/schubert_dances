@@ -7,4 +7,4 @@ mc	mn	keysig	timesig	act_dur	mc_offset	volta	numbering_offset	dont_count	barline
 6	5	2	2/4	1/2	0				start-repeat		start	7
 7	6	2	2/4	1/2	0							8
 8	7	2	2/4	1/2	0							9
-9	8	2	2/4	1/2	0				end		lastMeasure	6, -1
+9	8	2	2/4	1/2	0						end	6, -1

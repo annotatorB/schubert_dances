@@ -995,7 +995,8 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure len="4/8">
+      <Measure>
+        <endRepeat>2</endRepeat>
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -1007,9 +1008,9 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>
@@ -1582,7 +1583,7 @@
             </Chord>
           </voice>
         </Measure>
-      <Measure len="4/8">
+      <Measure>
         <voice>
           <Chord>
             <durationType>quarter</durationType>
@@ -1602,9 +1603,9 @@
               <tpc>10</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       </Staff>

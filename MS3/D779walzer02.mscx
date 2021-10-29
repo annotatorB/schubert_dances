@@ -949,6 +949,7 @@ D 779 Nr.2</text>
           </voice>
         </Measure>
       <Measure len="5/16">
+        <startRepeat/>
         <irregular>1</irregular>
         <voice>
           <Dynamic>

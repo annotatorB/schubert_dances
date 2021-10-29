@@ -1252,6 +1252,7 @@
           </voice>
         </Measure>
       <Measure len="2/4">
+        <endRepeat>2</endRepeat>
         <voice>
           <Chord>
             <durationType>half</durationType>
@@ -1261,9 +1262,6 @@
               <tpc>11</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -1809,9 +1807,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
