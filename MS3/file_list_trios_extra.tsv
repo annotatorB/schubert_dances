@@ -1,4 +1,5 @@
 D	ix	dance	full_title	count	title	opus	no	path
+128	0	introduzione	1 Introduzione D 128	1	Introduzione		1	D128introduzione.mscx
 128	0	deutscher	12 Wiener Deutsche D 128	12	Wiener Deutsche		1	D128deutscher01.mscx
 128	1	deutscher	12 Wiener Deutsche D 128	12	Wiener Deutsche		2	D128deutscher02.mscx
 128	2	deutscher	12 Wiener Deutsche D 128	12	Wiener Deutsche		3	D128deutscher03.mscx
@@ -11,7 +12,8 @@ D	ix	dance	full_title	count	title	opus	no	path
 128	9	deutscher	12 Wiener Deutsche D 128	12	Wiener Deutsche		10	D128deutscher10.mscx
 128	10	deutscher	12 Wiener Deutsche D 128	12	Wiener Deutsche		11	D128deutscher11.mscx
 128	11	deutscher	12 Wiener Deutsche D 128	12	Wiener Deutsche		12	D128deutscher12.mscx
-139	0	deutscher	Deutscher D 139	1	Deutscher		1	D139deutscher01.mscx
+139	0	deutscher	Deutscher D 139	1	Deutscher		1	D139deutscher01a.mscx
+139	1	trio	1 Trio D 139	1	Trio		1	D139trio01b.mscx
 145	0	walzer	12 Walzer op. 18 D 145	12	Walzer	op. 18	1	D145walzer01.mscx
 145	0	ländler	17 Ländler op. 18 D 145	17	Ländler	op. 18	1	D145ländler01.mscx
 145	0	ecossaise	9 Ecossaisen op. 18 D 145	9	Ecossaisen	op. 18	1	D145ecossaise01.mscx
@@ -35,7 +37,8 @@ D	ix	dance	full_title	count	title	opus	no	path
 145	6	ecossaise	9 Ecossaisen op. 18 D 145	9	Ecossaisen	op. 18	7	D145ecossaise07.mscx
 145	7	walzer	12 Walzer op. 18 D 145	12	Walzer	op. 18	8	D145walzer08.mscx
 145	7	ländler	17 Ländler op. 18 D 145	17	Ländler	op. 18	8	D145ländler08.mscx
-145	7	ecossaise	9 Ecossaisen op. 18 D 145	9	Ecossaisen	op. 18	8	D145ecossaise08.mscx
+145	7	ecossaise	9 Ecossaisen op. 18 D 145	9	Ecossaisen	op. 18	8a	D145ecossaise08.mscx
+145	7	ecossaise	9 Ecossaisen op. 18 D 145	9	Ecossaisen	op. 18	8b	D145ecossaise08andereFassung.mscx
 145	8	walzer	12 Walzer op. 18 D 145	12	Walzer	op. 18	9	D145walzer09.mscx
 145	8	ländler	17 Ländler op. 18 D 145	17	Ländler	op. 18	9	D145ländler09.mscx
 145	8	ecossaise	9 Ecossaisen op. 18 D 145	9	Ecossaisen	op. 18	9	D145ecossaise09.mscx
@@ -277,7 +280,8 @@ D	ix	dance	full_title	count	title	opus	no	path
 734	14	ländler	16 Ländler op. 67 D 734	16	Ländler	op. 67	15	D734ländler15.mscx
 734	15	ländler	16 Ländler op. 67 D 734	16	Ländler	op. 67	16	D734ländler16.mscx
 735	0	ecossaise	8 Ecossaisen op. 49 D 735	8	Ecossaisen	op. 49	1	D735ecossaise01.mscx
-735	0	galopp	Galopp op. 49 D 735	1	Galopp	op. 49	1	D735galopp01.mscx
+735	0	galopp	Galopp op. 49 D 735	1	Galopp	op. 49	1	D735galopp01a.mscx
+735	0	trio	1 Trio D 735	1	Trio	op. 49	1	D735trio01b.mscx
 735	1	ecossaise	8 Ecossaisen op. 49 D 735	8	Ecossaisen	op. 49	2	D735ecossaise02.mscx
 735	2	ecossaise	8 Ecossaisen op. 49 D 735	8	Ecossaisen	op. 49	3	D735ecossaise03.mscx
 735	3	ecossaise	8 Ecossaisen op. 49 D 735	8	Ecossaisen	op. 49	4	D735ecossaise04.mscx
