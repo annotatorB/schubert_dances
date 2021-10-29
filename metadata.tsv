@@ -1,0 +1,446 @@
+rel_paths	fnames	last_mc	last_mn	KeySig	TimeSig	label_count	composer	workTitle	movementNumber	movementTitle	workNumber	poet	lyricist	arranger	copyright	creationDate	platform	source	translator	musescore	ambitus	originalFormat	staff_1_ambitus	staff_1_instrument	staff_2_ambitus	staff_2_instrument
+MS3	D041menuett01a	18	16	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.4	36-84 (C2-C6)		57-84 (A3-C6)	Piano	36-60 (C2-C4)	Piano
+MS3	D041menuett02a	18	16	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 2								2019-08-01	Linux			3.3.0	31-86 (G1-D6)		64-86 (E4-D6)	Piano	31-60 (G1-C4)	Piano
+MS3	D041menuett03a	18	16	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 3								2019-08-01	Linux			3.3.0	33-84 (A1-C6)		57-84 (A3-C6)	Piano	33-60 (A1-C4)	Piano
+MS3	D041menuett04a	22	20	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 4								2019-08-01	Linux			3.3.0	36-88 (C2-E6)		55-88 (G3-E6)	Piano	36-65 (C2-F4)	Piano
+MS3	D041menuett05a	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 5								2019-08-01	Linux			3.3.0	39-86 (Eb2-D6)		65-86 (F4-D6)	Piano	39-65 (Eb2-F4)	Piano
+MS3	D041menuett06a	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 6								2019-08-01	Linux			3.3.0	29-89 (F1-F6)		53-89 (F3-F6)	Piano	29-60 (F1-C4)	Piano
+MS3	D041menuett07a	22	20	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 7								2019-08-01	Linux			3.3.0	35-84 (B1-C6)		57-84 (A3-C6)	Piano	35-70 (B1-Bb4)	Piano
+MS3	D041menuett08a	18	16	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 8								2019-08-01	Linux			3.3.0	36-86 (C2-D6)		67-86 (G4-D6)	Piano	36-68 (C2-Ab4)	Piano
+MS3	D041menuett09a	22	20	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 9								2019-08-02	Linux			3.3.0	36-86 (C2-D6)		60-86 (C4-D6)	Piano	36-69 (C2-A4)	Piano
+MS3	D041menuett10a	24	22	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 10								2019-08-02	Linux			3.3.0	34-86 (Bb1-D6)		62-86 (D4-D6)	Piano	34-70 (Bb1-Bb4)	Piano
+MS3	D041menuett11a	22	20	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 11								2019-08-02	Linux			3.3.0	38-86 (D2-D6)		57-86 (A3-D6)	Piano	38-64 (D2-E4)	Piano
+MS3	D041menuett12a	22	20	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 12								2019-08-02	Linux			3.3.0	42-86 (F#2-D6)		62-86 (D4-D6)	Piano	42-74 (F#2-D5)	Piano
+MS3	D041menuett13a	19	17	1: 2	1: 3/4	0	F. Schubert	Menuett nr. 13								2019-10-26	Apple Macintosh			3.3.0	38-86 (D2-D6)		64-86 (E4-D6)	Piano	38-69 (D2-A4)	Piano
+MS3	D041menuett14a	18	16	1: 2	1: 3/4	0	F. Schubert	Menuett nr. 14								2019-10-26	Apple Macintosh			3.3.0	33-88 (A1-E6)		57-88 (A3-E6)	Piano	33-64 (A1-E4)	Piano
+MS3	D041menuett15a	18	16	1: 2	1: 3/4	0	F. Schubert	Menuett nr. 15								2019-10-26	Apple Macintosh			3.3.0	38-86 (D2-D6)		59-86 (B3-D6)	Piano	38-67 (D2-G4)	Piano
+MS3	D041menuett16a	18	16	1: 1	1: 3/4	0	F. Schubert	Menuett nr. 16								2019-11-02	Apple Macintosh			3.3.0	40-88 (E2-E6)		71-88 (B4-E6)	Piano	40-65 (E2-F4)	Piano
+MS3	D041menuett17a	18	16	1: 0	1: 3/4	0	F. Schubert	Menuett nr. 17								2019-11-02	Apple Macintosh			3.3.0	40-88 (E2-E6)		69-88 (A4-E6)	Piano	40-64 (E2-E4)	Piano
+MS3	D041menuett18a	18	16	1: -1	1: 3/4	0	F. Schubert	Menuett nr. 18								2019-11-02	Apple Macintosh			3.3.0	36-84 (C2-C6)		62-84 (D4-C6)	Piano	36-67 (C2-G4)	Piano
+MS3	D041menuett19a	18	16	1: -2	1: 3/4	0	F. Schubert	Menuett nr. 19								2019-11-02	Apple Macintosh			3.3.0	34-82 (Bb1-Bb5)		69-82 (A4-Bb5)	Piano	34-67 (Bb1-G4)	Piano
+MS3	D041menuett20a	18	16	1: 1	1: 3/4	0	F. Schubert	Menuett nr. 20								2019-11-02	Apple Macintosh			3.3.0	31-88 (G1-E6)		69-88 (A4-E6)	Piano	31-62 (G1-D4)	Piano
+MS3	D041trio01b	24	22	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	36-84 (C2-C6)		64-84 (E4-C6)	Piano	36-65 (C2-F4)	Piano
+MS3	D041trio02b	22	20	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 2								2019-08-01	Linux			3.3.0	43-83 (G2-B5)		67-83 (G4-B5)	Piano	43-65 (G2-F4)	Piano
+MS3	D041trio03b	18	16	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 3								2019-08-01	Linux			3.3.0	36-84 (C2-C6)		69-84 (A4-C6)	Piano	36-60 (C2-C4)	Piano
+MS3	D041trio04b	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 4								2019-08-01	Linux			3.3.0	40-83 (E2-B5)		64-83 (E4-B5)	Piano	40-66 (E2-F#4)	Piano
+MS3	D041trio05b	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 5								2019-08-01	Linux			3.3.0	41-86 (F2-D6)		69-86 (A4-D6)	Piano	41-67 (F2-G4)	Piano
+MS3	D041trio06b	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 6								2019-08-01	Linux			3.3.0	41-81 (F2-A5)		65-81 (F4-A5)	Piano	41-65 (F2-F4)	Piano
+MS3	D041trio07b	26	24	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 7								2019-08-01	Linux			3.3.0	41-88 (F2-E6)		57-88 (A3-E6)	Piano	41-72 (F2-C5)	Piano
+MS3	D041trio08b	18	16	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 8								2019-08-01	Linux			3.3.0	45-88 (A2-E6)		75-88 (D#5-E6)	Piano	45-64 (A2-E4)	Piano
+MS3	D041trio09b	34	32	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 9								2019-08-02	Linux			3.3.0	45-88 (A2-E6)		65-88 (F4-E6)	Piano	45-72 (A2-C5)	Piano
+MS3	D041trio10b	20	18	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 10								2019-08-02	Linux			3.3.0	46-82 (Bb2-Bb5)		67-82 (G4-Bb5)	Piano	46-65 (Bb2-F4)	Piano
+MS3	D041trio11b	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 11								2019-08-02	Linux			3.3.0	50-81 (D3-A5)		69-81 (A4-A5)	Piano	50-72 (D3-C5)	Piano
+MS3	D041trio12b	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 12								2019-08-02	Linux			3.3.0	47-81 (B2-A5)		66-81 (F#4-A5)	Piano	47-69 (B2-A4)	Piano
+MS3	D041trio13b	18	16	1: 2	1: 3/4	0	F. Schubert	Menuett nr. 13								2019-10-26	Apple Macintosh			3.3.0	50-86 (D3-D6)		73-86 (C#5-D6)	Piano	50-74 (D3-D5)	Piano
+MS3	D041trio14b	18	16	1: 2	1: 3/4	0	F. Schubert	Menuett nr. 14								2019-10-26	Apple Macintosh			3.3.0	49-86 (C#3-D6)		68-86 (G#4-D6)	Piano	49-67 (C#3-G4)	Piano
+MS3	D041trio15b	18	16	1: 2	1: 3/4	0	F. Schubert	Menuett nr. 15								2019-10-26	Apple Macintosh			3.3.0	50-88 (D3-E6)		64-88 (E4-E6)	Piano	50-69 (D3-A4)	Piano
+MS3	D041trio16b	18	16	1: 1	1: 3/4	0	F. Schubert	Menuett nr. 16								2019-11-02	Apple Macintosh			3.3.0	43-86 (G2-D6)		66-86 (F#4-D6)	Piano	43-71 (G2-B4)	Piano
+MS3	D041trio17b	18	16	1: 0	1: 3/4	0	F. Schubert	Menuett nr. 17								2019-11-02	Apple Macintosh			3.3.0	49-81 (C#3-A5)		61-81 (C#4-A5)	Piano	49-65 (C#3-F4)	Piano
+MS3	D041trio18b	17	15	1: -1	1: 3/4	0	F. Schubert	Menuett nr. 18								2019-11-02	Apple Macintosh			3.3.0	48-88 (C3-E6)		64-88 (E4-E6)	Piano	48-70 (C3-Bb4)	Piano
+MS3	D041trio19b	18	16	1: -2	1: 3/4	0	F. Schubert	Menuett nr. 19								2019-11-02	Apple Macintosh			3.3.0	46-89 (Bb2-F6)		76-89 (E5-F6)	Piano	46-70 (Bb2-Bb4)	Piano
+MS3	D041trio20b	18	16	1: 1	1: 3/4	0	F. Schubert	Menuett nr. 20								2019-11-02	Apple Macintosh			3.3.0	43-88 (G2-E6)		66-88 (F#4-E6)	Piano	43-64 (G2-E4)	Piano
+MS3	D091menuett01a	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	35-86 (B1-D6)		64-86 (E4-D6)	Piano	35-69 (B1-A4)	Piano
+MS3	D091menuett02a	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-85 (D2-C#6)		61-85 (C#4-C#6)	Piano	38-64 (D2-E4)	Piano
+MS3	D091trioI01b	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-88 (A2-E6)		59-88 (B3-E6)	Piano	45-69 (A2-A4)	Piano
+MS3	D091trioI02b	18	15	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.2.3	49-81 (C#3-A5)		64-81 (E4-A5)	Piano	49-64 (C#3-E4)	Piano
+MS3	D091trioII01c	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-88 (A2-E6)		68-88 (G#4-E6)	Piano	45-66 (A2-F#4)	Piano
+MS3	D091trioII02c	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	50-88 (D3-E6)		68-88 (G#4-E6)	Piano	50-69 (D3-A4)	Piano
+MS3	D128deutscher01	23	20	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-88 (F2-E6)		71-88 (B4-E6)	Piano	41-70 (F2-Bb4)	Piano
+MS3	D128deutscher02	32	32	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	48-89 (C3-F6)		71-89 (B4-F6)	Piano	48-81 (C3-A5)	Piano
+MS3	D128deutscher03	36	36	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-89 (Eb2-F6)		68-89 (Ab4-F6)	Piano	39-75 (Eb2-Eb5)	Piano
+MS3	D128deutscher04	28	28	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-89 (A1-F6)		64-89 (E4-F6)	Piano	33-71 (A1-B4)	Piano
+MS3	D128deutscher05	32	32	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	36-89 (C2-F6)		67-89 (G4-F6)	Piano	36-77 (C2-F5)	Piano
+MS3	D128deutscher06	36	36	1: -3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	36-87 (C2-Eb6)		53-87 (F3-Eb6)	Piano	36-67 (C2-G4)	Piano
+MS3	D128deutscher07	24	24	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	36-89 (C2-F6)		65-89 (F4-F6)	Piano	36-65 (C2-F4)	Piano
+MS3	D128deutscher08	27	24	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	46-87 (Bb2-Eb6)		69-87 (A4-Eb6)	Piano	46-65 (Bb2-F4)	Piano
+MS3	D128deutscher09	22	20	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-89 (D2-F6)		61-89 (C#4-F6)	Piano	38-74 (D2-D5)	Piano
+MS3	D128deutscher10	38	36	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-88 (F#2-E6)		66-88 (F#4-E6)	Piano	42-79 (F#2-G5)	Piano
+MS3	D128deutscher11	26	24	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-88 (A1-E6)		57-88 (A3-E6)	Piano	33-69 (A1-A4)	Piano
+MS3	D128deutscher12	22	20	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	31-89 (G1-F6)		65-89 (F4-F6)	Piano	31-60 (G1-C4)	Piano
+MS3	D128introduzione	11	11	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-86 (F2-D6)		58-86 (Bb3-D6)	Piano	41-60 (F2-C4)	Piano
+MS3	D139deutscher01a	50	48	1: 7	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	30-94 (F#1-A#6)		56-94 (G#3-A#6)	Piano	30-49 (F#1-C#3)	Piano
+MS3	D139trio01b	26	24	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-88 (A1-E6)		52-88 (E3-E6)	Piano	33-60 (A1-C4)	Piano
+MS3	D145ecossaise01	16	16	1: -4	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	27-87 (Eb1-Eb6)		69-87 (A4-Eb6)	Piano	27-65 (Eb1-F4)	Piano
+MS3	D145ecossaise02	16	16	1: -4	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	49-89 (Db3-F6)		72-89 (C5-F6)	Piano	49-68 (Db3-Ab4)	Piano
+MS3	D145ecossaise03	18	16	1: 2	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-86 (D2-D6)		62-86 (D4-D6)	Piano	38-62 (D2-D4)	Piano
+MS3	D145ecossaise04	16	16	1: 1	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	50-86 (D3-D6)		67-86 (G4-D6)	Piano	50-69 (D3-A4)	Piano
+MS3	D145ecossaise05	16	16	1: 5	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	35-92 (B1-G#6)		58-92 (A#3-G#6)	Piano	35-64 (B1-E4)	Piano
+MS3	D145ecossaise06	16	16	1: -4	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-87 (A1-Eb6)		58-87 (Bb3-Eb6)	Piano	33-61 (A1-Db4)	Piano
+MS3	D145ecossaise07	8	8	1: 5	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-89 (E2-F6)		66-89 (F#4-F6)	Piano	40-63 (E2-D#4)	Piano
+MS3	D145ecossaise08	8	8	1: 2	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-90 (A1-F#6)		62-90 (D4-F#6)	Piano	33-62 (A1-D4)	Piano
+MS3	D145ecossaise08andereFassung	16	16	1: 5	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	30-87 (F#1-D#6)		59-87 (B3-D#6)	Piano	30-59 (F#1-B3)	Piano
+MS3	D145ecossaise09	8	8	1: 1	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-88 (D2-E6)		71-88 (B4-E6)	Piano	38-67 (D2-G4)	Piano
+MS3	D145ländler01	18	16	1: -3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	34-87 (Bb1-Eb6)		58-87 (Bb3-Eb6)	Piano	34-68 (Bb1-Ab4)	Piano
+MS3	D145ländler02	24	24	1: -3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-89 (F2-F6)		67-89 (G4-F6)	Piano	41-65 (F2-F4)	Piano
+MS3	D145ländler03	16	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-87 (Eb2-Eb6)		67-87 (G4-Eb6)	Piano	39-65 (Eb2-F4)	Piano
+MS3	D145ländler04	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-94 (Ab2-Bb6)		68-94 (Ab4-Bb6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D145ländler05	16	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-92 (Ab2-Ab6)		65-92 (F4-Ab6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D145ländler06	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-94 (Ab2-Bb6)		65-94 (F4-Bb6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D145ländler07	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-87 (Ab2-Eb6)		68-87 (Ab4-Eb6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D145ländler08	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-89 (F2-F6)		65-89 (F4-F6)	Piano	41-66 (F2-Gb4)	Piano
+MS3	D145ländler09	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-94 (Ab2-Bb6)		65-94 (F4-Bb6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D145ländler10	16	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-90 (Ab2-Gb6)		65-90 (F4-Gb6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D145ländler11	16	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-94 (Gb2-Bb6)		65-94 (F4-Bb6)	Piano	42-66 (Gb2-Gb4)	Piano
+MS3	D145ländler12	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	34-94 (Bb1-Bb6)		77-94 (F5-Bb6)	Piano	34-66 (Bb1-Gb4)	Piano
+MS3	D145ländler13	16	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-88 (E2-E6)		64-88 (E4-E6)	Piano	40-74 (E2-D5)	Piano
+MS3	D145ländler14	16	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-95 (A2-B6)		73-95 (C#5-B6)	Piano	45-67 (A2-G4)	Piano
+MS3	D145ländler15	16	16	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-86 (D2-D6)		62-86 (D4-D6)	Piano	38-67 (D2-G4)	Piano
+MS3	D145ländler16	16	16	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	50-88 (D3-E6)		71-88 (B4-E6)	Piano	50-72 (D3-C5)	Piano
+MS3	D145ländler17	16	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	43-95 (G2-B6)		66-95 (F#4-B6)	Piano	43-67 (G2-G4)	Piano
+MS3	D145walzer01	34	32	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	32-95 (G#1-B6)		58-95 (A#3-B6)	Piano	32-69 (G#1-A4)	Piano
+MS3	D145walzer02	24	24	1: 5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-80 (F#2-G#5)		63-80 (D#4-G#5)	Piano	42-63 (F#2-D#4)	Piano
+MS3	D145walzer03	50	48	1: 0, 35: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	28-96 (E1-C7)		56-96 (G#3-C7)	Piano	28-65 (E1-F4)	Piano
+MS3	D145walzer04	17	16	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	32-92 (G#1-G#6)		64-92 (E4-G#6)	Piano	32-66 (G#1-F#4)	Piano
+MS3	D145walzer05	16	16	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-91 (B2-G6)		67-91 (G4-G6)	Piano	47-69 (B2-A4)	Piano
+MS3	D145walzer06	33	32	1: 2	1: 3/4	0	Franz Schubert	Waltz in b minor			Op. 18 (D.145)				Public Domain (PianoXML typeset)	2019-08-09	Linux	http://musescore.com/user/9292486/scores/5375226		3.3.0	42-87 (F#2-D#6)	mxl	70-87 (A#4-D#6)	Piano	42-64 (F#2-E4)	Piano
+MS3	D145walzer07	24	24	1: -3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	48-94 (C3-Bb6)		65-94 (F4-Bb6)	Piano	48-68 (C3-Ab4)	Piano
+MS3	D145walzer08	16	16	1: -6	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	37-85 (Db2-Db6)		61-85 (Db4-Db6)	Piano	37-71 (Db2-Cb5)	Piano
+MS3	D145walzer09	26	24	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-90 (F#2-F#6)		42-90 (F#2-F#6)	Piano	49-76 (C#3-E5)	Piano
+MS3	D145walzer10	16	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-78 (A2-F#5)		57-78 (A3-F#5)	Piano	45-60 (A2-C4)	Piano
+MS3	D145walzer11	26	24	1: 5	1: 3/4	0	Franz Schubert	Walzer Nr. 11								2019-07-17	Linux			3.3.0	36-90 (B#1-F#6)		58-90 (A#3-F#6)	Piano	36-64 (B#1-E4)	Piano
+MS3	D145walzer12	34	32	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	28-95 (E1-B6)		63-95 (D#4-B6)	Piano	28-64 (E1-E4)	Piano
+MS3	D146alternative_trio03b	26	24	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	35-90 (B1-F#6)		59-90 (B3-F#6)	Piano	35-76 (B1-E5)	Piano
+MS3	D146trio01b	26	24	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	43-86 (G2-D6)		43-86 (G2-D6)	Piano	48-71 (C3-B4)	Piano
+MS3	D146trio03b	30	26	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	28-86 (E1-D6)		52-86 (E3-D6)	Piano	28-64 (E1-E4)	Piano
+MS3	D146trio04b	26	24	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-90 (E2-F#6)		64-90 (E4-F#6)	Piano	40-66 (E2-F#4)	Piano
+MS3	D146trio05b	46	44	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-89 (Ab2-F6)		60-89 (C4-F6)	Piano	44-75 (Ab2-Eb5)	Piano
+MS3	D146trio06b	26	24	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	31-88 (G1-E6)		56-88 (G#3-E6)	Piano	31-64 (G1-E4)	Piano
+MS3	D146trio07b	26	24	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	48-88 (C3-E6)		62-88 (D4-E6)	Piano	48-67 (C3-G4)	Piano
+MS3	D146trio08b	26	24	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-86 (B2-D6)		62-86 (D4-D6)	Piano	47-62 (B2-D4)	Piano
+MS3	D146trio09b	18	16	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	48-76 (C3-E5)		64-76 (E4-E5)	Piano	48-60 (C3-C4)	Piano
+MS3	D146trio10b	26	24	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	53-89 (F3-F6)		70-89 (Bb4-F6)	Piano	53-71 (F3-Cb5)	Piano
+MS3	D146trio11b	30	28	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	34-89 (Bb1-F6)		34-89 (Bb1-F6)	Piano	48-67 (C3-G4)	Piano
+MS3	D146trio20b	26	24	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-84 (A2-C6)		66-84 (F#4-C6)	Piano	45-69 (A2-A4)	Piano
+MS3	D146walzer01a	26	24	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-86 (D2-D6)		50-86 (D3-D6)	Piano	38-59 (D2-B3)	Piano
+MS3	D146walzer02	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-88 (A1-E6)		66-88 (F#4-E6)	Piano	33-71 (A1-B4)	Piano
+MS3	D146walzer03a	26	24	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	32-88 (G#1-E6)		63-88 (D#4-E6)	Piano	32-69 (G#1-A4)	Piano
+MS3	D146walzer04a	42	40	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	30-88 (F#1-E6)		61-88 (C#4-E6)	Piano	30-62 (F#1-D4)	Piano
+MS3	D146walzer05a	46	44	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	29-93 (F1-A6)		53-93 (F3-A6)	Piano	29-77 (F1-F5)	Piano
+MS3	D146walzer06a	34	32	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-88 (A1-E6)		54-88 (F#3-E6)	Piano	33-64 (A1-E4)	Piano
+MS3	D146walzer07a	26	24	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-83 (F#2-B5)		57-83 (A3-B5)	Piano	42-55 (F#2-G3)	Piano
+MS3	D146walzer08a	26	24	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	43-90 (G2-F#6)		66-90 (F#4-F#6)	Piano	43-69 (G2-A4)	Piano
+MS3	D146walzer09a	34	32	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	43-93 (G2-A6)		55-93 (G3-A6)	Piano	43-60 (G2-C4)	Piano
+MS3	D146walzer10a	41	38	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	31-89 (G1-F6)		57-89 (A3-F6)	Piano	31-61 (G1-Db4)	Piano
+MS3	D146walzer11a	26	24	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	29-87 (F1-Eb6)		53-87 (F3-Eb6)	Piano	29-58 (F1-Bb3)	Piano
+MS3	D146walzer12	26	24	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	34-88 (Bb1-E6)		61-88 (C#4-E6)	Piano	34-72 (Bb1-C5)	Piano
+MS3	D146walzer13	16	16	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	29-84 (F1-C6)		64-84 (E4-C6)	Piano	29-65 (F1-F4)	Piano
+MS3	D146walzer14	26	24	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-88 (A2-E6)		66-88 (F#4-E6)	Piano	45-69 (A2-A4)	Piano
+MS3	D146walzer15	17	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-82 (F2-Bb5)		65-82 (F4-Bb5)	Piano	41-63 (F2-Eb4)	Piano
+MS3	D146walzer16	18	16	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	29-81 (F1-A5)		57-81 (A3-A5)	Piano	29-67 (F1-G4)	Piano
+MS3	D146walzer17	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-82 (F2-Bb5)		58-82 (Bb3-Bb5)	Piano	41-63 (F2-Eb4)	Piano
+MS3	D146walzer18	16	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-75 (E2-Eb5)		60-75 (C4-Eb5)	Piano	40-60 (E2-C4)	Piano
+MS3	D146walzer19	26	24	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-93 (A1-A6)		67-93 (G4-A6)	Piano	33-67 (A1-G4)	Piano
+MS3	D146walzer20a	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-90 (F#2-F#6)		62-90 (D4-F#6)	Piano	42-67 (F#2-G4)	Piano
+MS3	D158ecossaise01	16	16	1: -1	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	29-81 (F1-A5)		57-81 (A3-A5)	Piano	29-57 (F1-A3)	Piano
+MS3	D299ecossaise01	17	17	1: -4	1: 2/4	0										2019-08-03	Linux			3.3.0	27-87 (Eb1-Eb6)	xml	69-87 (A4-Eb6)	Midi_1	27-65 (Eb1-F4)	Midi_1
+MS3	D299ecossaise02	17	16	1: -3	1: 2/4	0										2019-08-03	Linux			3.3.0	55-89 (G3-F6)	xml	70-89 (Bb4-F6)	Midi_1	55-75 (G3-Eb5)	Midi_1
+MS3	D299ecossaise03	16	16	1: 4	1: 2/4	0										2019-08-03	Linux			3.3.0	40-85 (E2-C#6)	xml	68-85 (G#4-C#6)	Midi_1	40-71 (E2-B4)	Midi_1
+MS3	D299ecossaise04	16	16	1: 3	1: 2/4	0										2019-08-03	Linux			3.3.0	45-88 (A2-E6)	xml	68-88 (G#4-E6)	Midi_1	45-69 (A2-A4)	Midi_1
+MS3	D299ecossaise05	16	16	1: -5	1: 2/4	0										2019-08-03	Linux			3.3.0	37-82 (Db2-Bb5)	xml	60-82 (C4-Bb5)	Midi_1	37-65 (Db2-F4)	Midi_1
+MS3	D299ecossaise06	16	16	1: -4	1: 2/4	0										2019-08-03	Linux			3.3.0	43-87 (G2-Eb6)	xml	56-87 (Ab3-Eb6)	Midi_1	43-70 (G2-Bb4)	Midi_1
+MS3	D299ecossaise07	16	16	1: 4	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-88 (B2-E6)		64-88 (E4-E6)	Piano	47-69 (B2-A4)	Piano
+MS3	D299ecossaise08	16	16	1: 0	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-88 (A2-E6)		67-88 (G4-E6)	Piano	45-76 (A2-E5)	Piano
+MS3	D299ecossaise09	17	16	1: -1	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	48-89 (C3-F6)		60-89 (C4-F6)	Piano	48-72 (C3-C5)	Piano
+MS3	D299ecossaise10	16	16	1: -2	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	46-89 (Bb2-F6)		65-89 (F4-F6)	Piano	46-65 (Bb2-F4)	Piano
+MS3	D299ecossaise11	16	16	1: -4	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	37-89 (Db2-F6)		55-89 (G3-F6)	Piano	37-65 (Db2-F4)	Piano
+MS3	D299ecossaise12	16	16	1: -4	1: 2/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	53-87 (F3-Eb6)		68-87 (Ab4-Eb6)	Piano	53-73 (F3-Db5)	Piano
+MS3	D334menuett01a	38	36	1: 3	1: 3/4	0										2019-08-08	Linux			3.3.0	47-85 (B2-C#6)	cap	62-85 (D4-C#6)	unbenannt2	47-64 (B2-E4)	unbenannt2
+MS3	D334trio01b	51	50	1: 4	1: 3/4	0										2019-08-08	Linux			3.3.0	52-88 (E3-E6)	cap	52-88 (E3-E6)	unbenannt2	57-76 (A3-E5)	unbenannt2
+MS3	D335menuett01a	28	26	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	37-85 (C#2-C#6)		63-85 (D#4-C#6)	Piano	37-78 (C#2-F#5)	Piano
+MS3	D335trioI01b	27	25	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-83 (B2-B5)		64-83 (E4-B5)	Piano	47-71 (B2-B4)	Piano
+MS3	D335trioII01c	26	24	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	52-88 (E3-E6)		71-88 (B4-E6)	Piano	52-73 (E3-C#5)	Piano
+MS3	D336menuett01a	32	32	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-90 (D2-F#6)		61-90 (C#4-F#6)	Piano	38-69 (D2-A4)	Piano
+MS3	D336trio01b	24	24	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-86 (E#2-D6)		65-86 (E#4-D6)	Piano	41-69 (E#2-A4)	Piano
+MS3	D365walzer01	18	16	1: -4	1: 3/4	0										2019-08-08	Linux			3.3.0	39-87 (Eb2-Eb6)	xml	67-87 (G4-Eb6)	Midi_1	39-70 (Eb2-Bb4)	Midi_1
+MS3	D365walzer02	18	16	1: -4	1: 3/4	0										2019-08-08	Linux			3.3.0	37-80 (Db2-Ab5)	xml	56-80 (Ab3-Ab5)	Midi_1	37-80 (Db2-Ab5)	Midi_1
+MS3	D365walzer03	18	16	1: -4	1: 3/4	0										2019-08-08	Linux			3.3.0	34-89 (Bb1-F6)	xml	60-89 (C4-F6)	Midi_1	34-63 (Bb1-Eb4)	Midi_1
+MS3	D365walzer04	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	51-87 (Eb3-Eb6)		67-87 (G4-Eb6)	Piano	51-68 (Eb3-Ab4)	Piano
+MS3	D365walzer05	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-87 (Eb2-Eb6)		60-87 (C4-Eb6)	Piano	39-75 (Eb2-Eb5)	Piano
+MS3	D365walzer06	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-84 (Ab2-C6)		67-84 (G4-C6)	Piano	44-65 (Ab2-F4)	Piano
+MS3	D365walzer07	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-87 (Eb2-Eb6)		63-87 (Eb4-Eb6)	Piano	39-65 (Eb2-F4)	Piano
+MS3	D365walzer08	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-87 (Ab2-Eb6)		67-87 (G4-Eb6)	Piano	44-65 (Ab2-F4)	Piano
+MS3	D365walzer09	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	51-85 (Eb3-Db6)		70-85 (Bb4-Db6)	Piano	51-68 (Eb3-Ab4)	Piano
+MS3	D365walzer10	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	32-85 (Ab1-Db6)		60-85 (C4-Db6)	Piano	32-65 (Ab1-F4)	Piano
+MS3	D365walzer11	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-89 (Ab2-F6)		68-89 (Ab4-F6)	Piano	44-63 (Ab2-Eb4)	Piano
+MS3	D365walzer12	16	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-89 (Ab2-F6)		67-89 (G4-F6)	Piano	44-65 (Ab2-F4)	Piano
+MS3	D365walzer13	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-92 (Eb2-Ab6)		63-92 (Eb4-Ab6)	Piano	39-65 (Eb2-F4)	Piano
+MS3	D365walzer14	26	24	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.5.0	39-81 (Eb2-A5)		63-81 (Eb4-A5)	Piano	39-66 (Eb2-F#4)	Piano
+MS3	D365walzer15	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	37-80 (Db2-Ab5)		65-80 (F4-Ab5)	Piano	37-68 (Db2-Ab4)	Piano
+MS3	D365walzer16	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-83 (F#2-B5)		62-83 (D4-B5)	Piano	42-64 (F#2-E4)	Piano
+MS3	D365walzer17	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-81 (E2-A5)		61-81 (C#4-A5)	Piano	40-64 (E2-E4)	Piano
+MS3	D365walzer18	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	52-93 (E3-A6)		68-93 (G#4-A6)	Piano	52-64 (E3-E4)	Piano
+MS3	D365walzer19	18	16	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-86 (D2-D6)		62-86 (D4-D6)	Piano	38-69 (D2-A4)	Piano
+MS3	D365walzer20	18	16	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	31-83 (G1-B5)		62-83 (D4-B5)	Piano	31-62 (G1-D4)	Piano
+MS3	D365walzer21	18	16	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-91 (D2-G6)		71-91 (B4-G6)	Piano	38-67 (D2-G4)	Piano
+MS3	D365walzer22	18	16	1: 5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-88 (F#2-E6)		58-88 (A#3-E6)	Piano	42-64 (F#2-E4)	Piano
+MS3	D365walzer23	16	16	1: 5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	42-85 (F#2-C#6)		61-85 (C#4-C#6)	Piano	42-71 (F#2-B4)	Piano
+MS3	D365walzer24	16	16	1: 5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-83 (D#2-B5)		63-83 (D#4-B5)	Piano	39-64 (D#2-E4)	Piano
+MS3	D365walzer25	18	16	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-95 (B2-B6)		71-95 (B4-B6)	Piano	47-64 (B2-E4)	Piano
+MS3	D365walzer26	18	16	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-95 (B2-B6)		69-95 (A4-B6)	Piano	47-64 (B2-E4)	Piano
+MS3	D365walzer27	16	16	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-95 (G#2-B6)		64-95 (E4-B6)	Piano	44-66 (G#2-F#4)	Piano
+MS3	D365walzer28	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	52-93 (E3-A6)		64-93 (E4-A6)	Piano	52-64 (E3-E4)	Piano
+MS3	D365walzer29	26	24	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	30-95 (F#1-B6)		61-95 (C#4-B6)	Piano	30-67 (F#1-G4)	Piano
+MS3	D365walzer30	17	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	51-95 (D#3-B6)		68-95 (G#4-B6)	Piano	51-71 (D#3-B4)	Piano
+MS3	D365walzer31	19	18	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	31-91 (G1-G6)		67-91 (G4-G6)	Piano	31-67 (G1-G4)	Piano
+MS3	D365walzer32	24	24	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-89 (Ab2-F6)		65-89 (F4-F6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D365walzer33	32	32	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	36-82 (C2-Bb5)		57-82 (A3-Bb5)	Piano	36-61 (C2-Db4)	Piano
+MS3	D365walzer34	18	18	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-89 (B2-F6)		69-89 (A4-F6)	Piano	47-70 (B2-Bb4)	Piano
+MS3	D365walzer35	16	16	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	29-74 (F1-D5)		57-74 (A3-D5)	Piano	29-58 (F1-Bb3)	Piano
+MS3	D365walzer36	16	16	1: -1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-74 (E2-D5)		57-74 (A3-D5)	Piano	40-58 (E2-Bb3)	Piano
+MS3	D366ländler01	17	16	1: 3	1: 3/4	0										2015-08-05	Microsoft Windows			3.3.0	40-90 (E2-F#6)		71-90 (B4-F#6)	Piano	40-66 (E2-F#4)	Piano
+MS3	D366ländler02	16	16	1: 3	1: 3/4	0										2015-08-05	Microsoft Windows			3.3.0	44-85 (G#2-C#6)		58-85 (A#3-C#6)	Piano	44-61 (G#2-C#4)	Piano
+MS3	D366ländler03	18	16	1: 0	1: 3/4	0										2015-08-05	Microsoft Windows			3.3.0	40-76 (E2-E5)		59-76 (B3-E5)	Piano	40-60 (E2-C4)	Piano
+MS3	D366ländler04	18	16	1: 0	1: 3/4	0										2015-08-05	Microsoft Windows			3.3.0	48-81 (C3-A5)		64-81 (E4-A5)	Piano	48-66 (C3-F#4)	Piano
+MS3	D366ländler05	18	16	1: 0	1: 3/4	0										2015-08-05	Microsoft Windows			3.3.0	31-76 (G1-E5)		60-76 (C4-E5)	Piano	31-60 (G1-C4)	Piano
+MS3	D366ländler06	26	24	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-77 (D2-F5)		62-77 (D4-F5)	Piano	38-62 (D2-D4)	Piano
+MS3	D366ländler07	18	16	1: 1	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-91 (D2-G6)		62-91 (D4-G6)	Piano	38-67 (D2-G4)	Piano
+MS3	D366ländler08	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	38-74 (D2-D5)		56-74 (G#3-D5)	Piano	38-57 (D2-A3)	Piano
+MS3	D366ländler09	16	16	1: 5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	35-86 (B1-D6)		63-86 (D#4-D6)	Piano	35-66 (B1-F#4)	Piano
+MS3	D366ländler10	16	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	30-95 (F#1-B6)		62-95 (D4-B6)	Piano	30-64 (F#1-E4)	Piano
+MS3	D366ländler11	26	24	1: 5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-87 (D#2-D#6)		59-87 (B3-D#6)	Piano	39-64 (D#2-E4)	Piano
+MS3	D366ländler12	16	16	1: -6	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	46-80 (Bb2-Ab5)		63-80 (Eb4-Ab5)	Piano	46-66 (Bb2-Gb4)	Piano
+MS3	D366ländler13	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-77 (Eb2-F5)		62-77 (D4-F5)	Piano	39-65 (Eb2-F4)	Piano
+MS3	D366ländler14	19	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-89 (Eb2-F6)		63-89 (Eb4-F6)	Piano	39-66 (Eb2-Gb4)	Piano
+MS3	D366ländler15	18	16	1: -5	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	43-85 (G2-Db6)		56-85 (Ab3-Db6)	Piano	43-65 (G2-F4)	Piano
+MS3	D366ländler16	18	16	1: -4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	39-82 (Eb2-Bb5)		60-82 (C4-Bb5)	Piano	39-63 (Eb2-Eb4)	Piano
+MS3	D366ländler17	18	16	1: -3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	44-80 (Ab2-Ab5)		62-80 (D4-Ab5)	Piano	44-67 (Ab2-G4)	Piano
+MS3	D378ländler01	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	53-86 (F3-D6)		72-86 (C5-D6)	Piano	53-65 (F3-F4)	Piano
+MS3	D378ländler02	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	53-87 (F3-Eb6)		69-87 (A4-Eb6)	Piano	53-65 (F3-F4)	Piano
+MS3	D378ländler03	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	51-82 (Eb3-Bb5)		69-82 (A4-Bb5)	Piano	51-67 (Eb3-G4)	Piano
+MS3	D378ländler04	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	41-86 (F2-D6)		65-86 (F4-D6)	Piano	41-65 (F2-F4)	Piano
+MS3	D378ländler05	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	50-82 (D3-Bb5)		65-82 (F4-Bb5)	Piano	50-65 (D3-F4)	Piano
+MS3	D378ländler06	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	46-82 (Bb2-Bb5)		62-82 (D4-Bb5)	Piano	46-65 (Bb2-F4)	Piano
+MS3	D378ländler07	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	46-84 (Bb2-C6)		62-84 (D4-C6)	Piano	46-63 (Bb2-Eb4)	Piano
+MS3	D378ländler08	18	16	1: -2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	34-82 (Bb1-Bb5)		60-82 (C4-Bb5)	Piano	34-67 (Bb1-G4)	Piano
+MS3	D380menuett01a	18	16	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	35-87 (B1-D#6)		56-87 (G#3-D#6)	Piano	35-73 (B1-C#5)	Piano
+MS3	D380menuett02a	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-88 (A1-E6)		57-88 (A3-E6)	Piano	33-69 (A1-A4)	Piano
+MS3	D380menuett03	20	16	1: 0	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-88 (A1-E6)		60-88 (C4-E6)	Piano	33-69 (A1-A4)	Piano
+MS3	D380trioI01b	22	20	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-88 (B2-E6)		71-88 (B4-E6)	Piano	47-76 (B2-E5)	Piano
+MS3	D380trioI02b	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-88 (A2-E6)		68-88 (G#4-E6)	Piano	45-69 (A2-A4)	Piano
+MS3	D380trioII01c	17	15	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-85 (E2-C#6)		59-85 (B3-C#6)	Piano	40-71 (E2-B4)	Piano
+MS3	D380trioII02c	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-86 (B2-D6)		66-86 (F#4-D6)	Piano	47-67 (B2-G4)	Piano
+MS3	D420deutscher01	26	24	1: 2	1: 3/4	0	Franz Schubert	German Dance No. 1							Public Domain (PianoXML typeset) | 12 German Dances D.420 (1817)	2017-05-14	Apple Macintosh			3.3.0	42-86 (F#2-D6)		66-86 (F#4-D6)	Piano	42-64 (F#2-E4)	Piano
+MS3	D420deutscher02	18	16	1: 3	1: 3/4	0	Franz Schubert	German Dance No 2							Public Domain (PianoXML typeset) | 12 German Dances D.420 (1817)	2017-05-14	Apple Macintosh			3.3.0	49-81 (C#3-A5)		68-81 (G#4-A5)	Piano	49-64 (C#3-E4)	Piano
+MS3	D420deutscher03	18	16	1: 2	1: 3/4	0	Franz Schubert	German Dance No. 3							Public Domain (PianoXML typeset) | 12 German Dances D.420 - 1817	2017-05-14	Apple Macintosh	https://musescore.com/score/3912856		3.3.0	50-93 (D3-A6)		61-93 (C#4-A6)	Piano	50-67 (D3-G4)	Piano
+MS3	D420deutscher04	16	16	1: 3	1: 3/4	0	Franz Schubert	German Dance No. 4							Public Domain (PianoXML typeset) | 12 German Dances D.420 - 1817	2017-05-19	Apple Macintosh			3.3.0	47-88 (B2-E6)		68-88 (G#4-E6)	Piano	47-69 (B2-A4)	Piano
+MS3	D420deutscher05	18	16	1: 2	1: 3/4	0	Franz Schubert	German Dance No. 5							Public Domain (PianoXML typeset) | 12 German Dances D.420 - 1817	2017-05-19	Apple Macintosh			3.3.0	45-86 (A2-D6)		69-86 (A4-D6)	Piano	45-69 (A2-A4)	Piano
+MS3	D420deutscher06	25	24	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-90 (E2-F#6)		69-90 (A4-F#6)	Piano	40-71 (E2-B4)	Piano
+MS3	D420deutscher07	18	16	1: 4	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	47-87 (B2-D#6)		71-87 (B4-D#6)	Piano	47-64 (B2-E4)	Piano
+MS3	D420deutscher08	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	33-83 (A1-B5)		64-83 (E4-B5)	Piano	33-64 (A1-E4)	Piano
+MS3	D420deutscher09	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	40-83 (E2-B5)		61-83 (C#4-B5)	Piano	40-67 (E2-G4)	Piano
+MS3	D420deutscher10	18	16	1: 3	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	45-88 (A2-E6)		68-88 (G#4-E6)	Piano	45-64 (A2-E4)	Piano
+MS3	D420deutscher11	18	16	1: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	50-88 (D3-E6)		70-88 (A#4-E6)	Piano	50-74 (D3-D5)	Piano
+MS3	D420deutscher12	95	88	1: 3, 28: 2	1: 3/4	0	Franz Schubert	Menuett Nr. 1								2019-08-01	Linux			3.3.0	30-93 (F#1-A6)		55-93 (G3-A6)	Piano	30-69 (F#1-A4)	Piano
+MS3	D421ecossaise01	16	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	32-87 (Ab1-Eb6)	xml	55-87 (G3-Eb6)	Midi_1	32-63 (Ab1-Eb4)	Midi_1
+MS3	D421ecossaise02	16	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	39-78 (Eb2-Gb5)	xml	60-78 (C4-Gb5)	Midi_1	39-61 (Eb2-Db4)	Midi_1
+MS3	D421ecossaise03	16	16	1: -3	1: 2/4	0										2019-08-08	Linux			3.3.0	46-89 (Bb2-F6)	xml	68-89 (Ab4-F6)	Midi_1	46-68 (Bb2-Ab4)	Midi_1
+MS3	D421ecossaise04	16	16	1: -2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 4								2019-09-08	Linux			3.3.0	43-89 (G2-F6)		62-89 (D4-F6)	Piano	43-62 (G2-D4)	Piano
+MS3	D421ecossaise05	16	16	1: -3	1: 2/4	0	Franz Schubert	Ecossaise Nr. 5								2019-09-08	Linux			3.3.0	51-89 (Eb3-F6)		70-89 (Bb4-F6)	Piano	51-68 (Eb3-Ab4)	Piano
+MS3	D421ecossaise06	16	16	1: -4	1: 2/4	0	Franz Schubert	Ecossaise Nr. 6								2019-09-08	Linux			3.3.0	44-89 (Ab2-F6)		68-89 (Ab4-F6)	Piano	44-63 (Ab2-Eb4)	Piano
+MS3	D511ecossaise01	16	16	1: -3	1: 2/4	0	Franz Schubert	Ecossaise								2019-09-08	Linux			3.3.0	46-96 (Bb2-C7)		70-96 (Bb4-C7)	Piano	46-71 (Bb2-Cb5)	Piano
+MS3	D529ecossaise01	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 1								2019-09-08	Linux			3.3.0	38-83 (D2-B5)		66-83 (F#4-B5)	Piano	38-69 (D2-A4)	Piano
+MS3	D529ecossaise02	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 2								2019-09-08	Linux			3.3.0	38-86 (D2-D6)		69-86 (A4-D6)	Piano	38-67 (D2-G4)	Piano
+MS3	D529ecossaise03	16	16	1: 1	1: 2/4	0	Franz Schubert	Ecossaise Nr. 3								2019-09-08	Linux			3.3.0	50-86 (D3-D6)		67-86 (G4-D6)	Piano	50-69 (D3-A4)	Piano
+MS3	D529ecossaise04	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 4								2019-09-08	Linux			3.3.0	33-93 (A1-A6)		62-93 (D4-A6)	Piano	33-67 (A1-G4)	Piano
+MS3	D529ecossaise05	24	24	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 5								2019-09-08	Linux			3.3.0	38-83 (D2-B5)		66-83 (F#4-B5)	Piano	38-69 (D2-A4)	Piano
+MS3	D529ecossaise06	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 6								2019-09-08	Linux			3.3.0	31-86 (G1-D6)		69-86 (A4-D6)	Piano	31-67 (G1-G4)	Piano
+MS3	D529ecossaise07	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 7								2019-09-08	Linux			3.3.0	33-81 (A1-A5)		66-81 (F#4-A5)	Piano	33-67 (A1-G4)	Piano
+MS3	D529ecossaise08	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 8								2019-09-08	Linux			3.3.0	38-86 (D2-D6)		69-86 (A4-D6)	Piano	38-67 (D2-G4)	Piano
+MS3	D600menuett01	30	30	1: 4	1: 3/4	0	Franz Schubert	Menuett								2019-09-08	Linux			3.3.0	30-81 (F#1-A5)		60-81 (B#3-A5)	Piano	30-61 (F#1-C#4)	Piano
+MS3	D610trio01	33	32	1: 4	1: 3/4	0	Franz Schubert	Trio								2019-09-08	Linux			3.3.0	54-88 (F#3-E6)		70-88 (A#4-E6)	Piano	54-76 (F#3-E5)	Piano
+MS3	D643deutscher01	17	16	1: 4	1: 3/4	0	Franz Schubert	Deutscher								2019-09-09	Linux			3.3.0	32-85 (G#1-C#6)		60-85 (B#3-C#6)	Piano	32-66 (G#1-F#4)	Piano
+MS3	D643ecossaise01	16	16	1: -5	1: 2/4	0	Franz Schubert	Ecossaise								2019-09-09	Linux			3.3.0	37-92 (Db2-Ab6)		53-92 (F3-Ab6)	Piano	37-68 (Db2-Ab4)	Piano
+MS3	D679ländler01	18	16	1: -3	1: 3/4	0	Franz Schubert	Ländler Nr. 1								2019-09-10	Linux			3.3.0	46-87 (Bb2-Eb6)		74-87 (D5-Eb6)	Piano	46-70 (Bb2-Bb4)	Piano
+MS3	D679ländler02	18	16	1: -3	1: 3/4	0	Franz Schubert	Ländler Nr. 2								2019-09-10	Linux			3.3.0	46-84 (Bb2-C6)		67-84 (G4-C6)	Piano	46-68 (Bb2-Ab4)	Piano
+MS3	D681ländler01	18	16	1: -3	1: 3/4	0	F. Schubert	Ländler nr. 1								2019-09-12	Apple Macintosh			3.3.0	46-87 (Bb2-Eb6)		62-87 (D4-Eb6)	Piano	46-70 (Bb2-Bb4)	Piano
+MS3	D681ländler02	18	16	1: -2	1: 3/4	0	F. Schubert	Ländler nr. 2								2019-09-12	Apple Macintosh			3.3.0	53-89 (F3-F6)		60-89 (C4-F6)	Piano	53-77 (F3-F5)	Piano
+MS3	D681ländler03	18	16	1: -3	1: 3/4	0	F. Schubert	Ländler nr. 3								2019-09-16	Apple Macintosh			3.3.0	51-84 (Eb3-C6)		69-84 (A4-C6)	Piano	51-68 (Eb3-Ab4)	Piano
+MS3	D681ländler04	18	16	1: -4	1: 3/4	0	F. Schubert	Ländler nr. 4								2019-09-16	Apple Macintosh			3.3.0	44-80 (Ab2-Ab5)		60-80 (C4-Ab5)	Piano	44-63 (Ab2-Eb4)	Piano
+MS3	D681ländler05	18	16	1: -4	1: 3/4	0	F. Schubert	Ländler nr. 5								2019-09-16	Apple Macintosh			3.3.0	51-89 (Eb3-F6)		64-89 (E4-F6)	Piano	51-72 (Eb3-C5)	Piano
+MS3	D681ländler06	18	16	1: -4	1: 3/4	0	F. Schubert	Ländler nr. 6								2019-09-17	Apple Macintosh			3.3.0	51-89 (Eb3-F6)		67-89 (G4-F6)	Piano	51-65 (Eb3-F4)	Piano
+MS3	D681ländler07	18	16	1: -3	1: 3/4	0	F. Schubert	Ländler nr. 7								2019-09-17	Apple Macintosh			3.3.0	51-84 (Eb3-C6)		69-84 (A4-C6)	Piano	51-67 (Eb3-G4)	Piano
+MS3	D681ländler08	18	16	1: -2	1: 3/4	0	F. Schubert	Ländler nr. 8								2019-09-17	Apple Macintosh			3.3.0	53-91 (F3-G6)		74-91 (D5-G6)	Piano	53-70 (F3-Bb4)	Piano
+MS3	D697ecossaise01	16	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	39-92 (Eb2-Ab6)	xml	60-92 (C4-Ab6)	Midi_1	39-65 (Eb2-F4)	Midi_1
+MS3	D697ecossaise02	16	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	39-96 (Eb2-C7)	xml	63-96 (Eb4-C7)	Midi_1	39-77 (Eb2-F5)	Midi_1
+MS3	D697ecossaise03	16	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	39-94 (Eb2-Bb6)	xml	67-94 (G4-Bb6)	Midi_1	39-65 (Eb2-F4)	Midi_1
+MS3	D697ecossaise04	16	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	32-87 (Ab1-Eb6)	xml	60-87 (C4-Eb6)	Midi_1	32-70 (Ab1-Bb4)	Midi_1
+MS3	D697ecossaise05	17	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	32-92 (Ab1-Ab6)	xml	58-92 (Bb3-Ab6)	Midi_1	32-72 (Ab1-C5)	Midi_1
+MS3	D718walzer01	34	32	1: -3	1: 3/4	0										2019-08-08	Linux			3.3.0	43-89 (G2-F6)	xml	63-89 (Eb4-F6)	Midi_1	43-73 (G2-Db5)	Midi_1
+MS3	D722deutscher01	28	28	1: -6	1: 3/4	0	F. Schubert	Deutsche Tanz								2019-09-12	Apple Macintosh			3.3.0	30-90 (Gb1-Gb6)		58-90 (Bb3-Gb6)	Piano	30-66 (Gb1-Gb4)	Piano
+MS3	D734ecossaise01	16	16	1: 0	1: 2/4	0	F. Schubert	Ecossaise nr. 1								2019-09-25	Apple Macintosh			3.3.0	36-88 (C2-E6)		64-88 (E4-E6)	Piano	36-62 (C2-D4)	Piano
+MS3	D734ecossaise02	16	16	1: 3	1: 2/4	0	F. Schubert	Ecossaise nr. 2								2019-09-25	Apple Macintosh			3.3.0	35-100 (B1-E7)		61-100 (C#4-E7)	Piano	35-71 (B1-B4)	Piano
+MS3	D734ländler01	26	24	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 1								2019-09-22	Apple Macintosh			3.3.0	40-100 (E2-E7)		59-100 (B3-E7)	Piano	40-60 (E2-C4)	Piano
+MS3	D734ländler02	18	16	1: 2	1: 3/4	0	F. Schubert	Ländler nr. 2								2019-09-22	Apple Macintosh			3.3.0	45-78 (A2-F#5)		62-78 (D4-F#5)	Piano	45-62 (A2-D4)	Piano
+MS3	D734ländler03	26	24	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 3								2019-09-22	Apple Macintosh			3.3.0	45-86 (A2-D6)		64-86 (E4-D6)	Piano	45-69 (A2-A4)	Piano
+MS3	D734ländler04	27	24	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 4								2019-09-22	Apple Macintosh			3.3.0	38-83 (D2-B5)		66-83 (F#4-B5)	Piano	38-64 (D2-E4)	Piano
+MS3	D734ländler05	18	16	1: 2	1: 3/4	0	F. Schubert	Ländler nr. 5								2019-09-22	Apple Macintosh			3.3.0	33-71 (A1-B4)		54-71 (F#3-B4)	Piano	33-50 (A1-D3)	Piano
+MS3	D734ländler06	25	24	1: 3	1: 3/4	0	F. Schubert	Ländler nr. 6								2019-09-22	Apple Macintosh			3.3.0	48-86 (C3-D6)		69-86 (A4-D6)	Piano	48-71 (C3-B4)	Piano
+MS3	D734ländler07	22	20	1: 4	1: 3/4	0	F. Schubert	Ländler nr. 7								2019-09-22	Apple Macintosh			3.3.0	45-85 (A2-C#6)		66-85 (F#4-C#6)	Piano	45-66 (A2-F#4)	Piano
+MS3	D734ländler08	26	24	1: 0	1: 3/4	0	F. Schubert	Ländler nr. 8								2019-09-23	Apple Macintosh			3.3.0	31-77 (G1-F5)		59-77 (B3-F5)	Piano	31-61 (G1-Db4)	Piano
+MS3	D734ländler09	18	16	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 9								2019-09-24	Apple Macintosh			3.3.0	38-91 (D2-G6)		62-91 (D4-G6)	Piano	38-60 (D2-C4)	Piano
+MS3	D734ländler10	18	16	1: 0	1: 3/4	0	F. Schubert	Ländler nr. 10								2019-09-24	Apple Macintosh			3.3.0	43-88 (G2-E6)		64-88 (E4-E6)	Piano	43-69 (G2-A4)	Piano
+MS3	D734ländler11	26	24	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 11								2019-09-24	Apple Macintosh			3.3.0	38-93 (D2-A6)		69-93 (A4-A6)	Piano	38-69 (D2-A4)	Piano
+MS3	D734ländler12	18	16	1: -2	1: 3/4	0	F. Schubert	Ländler nr. 12								2019-09-25	Apple Macintosh			3.3.0	41-86 (F2-D6)		65-86 (F4-D6)	Piano	41-70 (F2-Bb4)	Piano
+MS3	D734ländler13	18	16	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 13								2019-09-25	Apple Macintosh			3.3.0	35-86 (B1-D6)		59-86 (B3-D6)	Piano	35-69 (B1-A4)	Piano
+MS3	D734ländler14	19	16	1: 5	1: 3/4	0	F. Schubert	Ländler nr. 14								2019-09-11	Apple Macintosh			3.3.0	42-76 (F#2-E5)		59-76 (B3-E5)	Piano	42-57 (F#2-A3)	Piano
+MS3	D734ländler15	21	18	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 15								2019-09-25	Apple Macintosh			3.3.0	48-84 (C3-C6)		66-84 (F#4-C6)	Piano	48-69 (C3-A4)	Piano
+MS3	D734ländler16	18	16	1: 1	1: 3/4	0	F. Schubert	Ländler nr. 16								2019-09-25	Apple Macintosh			3.3.0	38-91 (D2-G6)		66-91 (F#4-G6)	Piano	38-64 (D2-E4)	Piano
+MS3	D735ecossaise01	8	8	1: 1	1: 2/4	0	F. Schubert	Ecossaise nr. 1								2019-09-25	Apple Macintosh			3.3.0	38-93 (D2-A6)		67-93 (G4-A6)	Piano	38-67 (D2-G4)	Piano
+MS3	D735ecossaise02	8	8	1: 1	1: 2/4	0	F. Schubert	Ecossaise nr. 2								2019-09-25	Apple Macintosh			3.3.0	45-95 (A2-B6)		67-95 (G4-B6)	Piano	45-76 (A2-E5)	Piano
+MS3	D735ecossaise03	9	8	1: 2	1: 2/4	0	F. Schubert	Ecossaise nr. 3								2019-09-25	Apple Macintosh			3.3.0	38-90 (D2-F#6)		66-90 (F#4-F#6)	Piano	38-69 (D2-A4)	Piano
+MS3	D735ecossaise04	8	8	1: -2	1: 2/4	0	F. Schubert	Ecossaise nr. 4								2019-09-25	Apple Macintosh			3.3.0	46-89 (Bb2-F6)		65-89 (F4-F6)	Piano	46-65 (Bb2-F4)	Piano
+MS3	D735ecossaise05	8	8	1: -3	1: 2/4	0	F. Schubert	Ecossaise nr. 6								2019-09-25	Apple Macintosh			3.3.0	43-89 (G2-F6)		65-89 (F4-F6)	Piano	43-68 (G2-Ab4)	Piano
+MS3	D735ecossaise06	8	8	1: -3	1: 2/4	0	F. Schubert	Ecossaise nr. 6								2019-09-25	Apple Macintosh			3.3.0	46-94 (Bb2-Bb6)		67-94 (G4-Bb6)	Piano	46-68 (Bb2-Ab4)	Piano
+MS3	D735ecossaise07	12	12	1: -3	1: 2/4	0	F. Schubert	Ecossaise nr. 7								2019-09-25	Apple Macintosh			3.3.0	31-99 (G1-Eb7)		67-99 (G4-Eb7)	Piano	31-68 (G1-Ab4)	Piano
+MS3	D735ecossaise08	8	8	1: -4	1: 2/4	0	F. Schubert	Ecossaise nr. 8								2019-09-25	Apple Macintosh			3.3.0	39-92 (Eb2-Ab6)		60-92 (C4-Ab6)	Piano	39-64 (Eb2-E4)	Piano
+MS3	D735galopp01a	19	16	1: 1	1: 2/4	0	F. Schubert	Galopp								2019-09-25	Apple Macintosh			3.3.0	40-95 (E2-B6)		71-95 (B4-B6)	Piano	40-72 (E2-C5)	Piano
+MS3	D735trio01b	16	16	1: 0	1: 2/4	0	F. Schubert	Galopp								2019-09-25	Apple Macintosh			3.3.0	43-95 (G2-B6)		76-95 (E5-B6)	Piano	43-71 (G2-B4)	Piano
+MS3	D769deutscher01	18	16	1: 3	1: 3/4	0	F. Schubert	Deutsche Tanz								2019-09-30	Apple Macintosh			3.3.0	40-83 (E2-B5)		62-83 (D4-B5)	Piano	40-59 (E2-B3)	Piano
+MS3	D769deutscher02	18	16	1: 2	1: 3/4	0	F. Schubert	Deutscher Tanz nr. 2								2019-09-30	Apple Macintosh			3.3.0	45-93 (A2-A6)		69-93 (A4-A6)	Piano	45-73 (A2-C#5)	Piano
+MS3	D779walzer01	18	16	1: 0	1: 3/4	0										2019-08-08	Linux			3.3.0	43-84 (G2-C6)	xml	48-84 (C3-C6)	Midi_1	43-68 (G2-G#4)	Midi_1
+MS3	D779walzer02	26	24	1: 0	1: 3/4	0										2019-08-08	Linux			3.3.0	38-89 (D2-F6)	xml	46-89 (Bb2-F6)	Midi_1	38-68 (D2-Ab4)	Midi_1
+MS3	D779walzer03	26	24	1: 1	1: 3/4	0										2019-08-08	Linux			3.3.0	45-93 (A2-A6)	xml	69-93 (A4-A6)	Midi_1	45-72 (A2-C5)	Midi_1
+MS3	D779walzer04	18	16	1: 1	1: 3/4	0										2019-08-08	Linux			3.3.0	43-96 (G2-C7)	xml	66-96 (F#4-C7)	Midi_1	43-72 (G2-C5)	Midi_1
+MS3	D779walzer05	26	24	1: -2	1: 3/4	0										2019-08-08	Linux			3.3.0	41-89 (F2-F6)	xml	65-89 (F4-F6)	Midi_1	41-67 (F2-G4)	Midi_1
+MS3	D779walzer06	18	16	1: -2	1: 3/4	0										2019-08-08	Linux			3.3.0	41-89 (F2-F6)	xml	64-89 (E4-F6)	Midi_1	41-63 (F2-Eb4)	Midi_1
+MS3	D779walzer07	18	16	1: -2	1: 3/4	0										2019-08-08	Linux			3.3.0	41-94 (F2-Bb6)	xml	70-94 (Bb4-Bb6)	Midi_1	41-67 (F2-G4)	Midi_1
+MS3	D779walzer08	18	16	1: 2	1: 3/4	0										2019-08-08	Linux			3.3.0	30-88 (F#1-E6)	xml	66-88 (F#4-E6)	Midi_1	30-59 (F#1-B3)	Midi_1
+MS3	D779walzer09	18	16	1: 2	1: 3/4	0										2019-08-08	Linux			3.3.0	45-95 (A2-B6)	xml	68-95 (G#4-B6)	Midi_1	45-69 (A2-A4)	Midi_1
+MS3	D779walzer10	18	16	1: 1	1: 3/4	0										2019-08-08	Linux			3.3.0	38-93 (D2-A6)	xml	67-93 (G4-A6)	Midi_1	38-60 (D2-C4)	Midi_1
+MS3	D779walzer11	18	16	1: 1	1: 3/4	0										2019-08-08	Linux			3.3.0	36-91 (C2-G6)	xml	67-91 (G4-G6)	Midi_1	36-66 (C2-F#4)	Midi_1
+MS3	D779walzer12	26	24	1: 2	1: 3/4	0										2019-08-08	Linux			3.3.0	42-86 (F#2-D6)	xml	66-86 (F#4-D6)	Midi_1	42-69 (F#2-A4)	Midi_1
+MS3	D779walzer13	40	38	1: 3	1: 3/4	0										2019-08-08	Linux			3.3.0	44-93 (G#2-A6)	xml	66-93 (F#4-A6)	Midi_1	44-66 (G#2-F#4)	Midi_1
+MS3	D779walzer14	18	16	1: 2	1: 3/4	0										2019-08-08	Linux			3.3.0	45-95 (A2-B6)	xml	66-95 (F#4-B6)	Midi_1	45-69 (A2-A4)	Midi_1
+MS3	D779walzer15	26	24	1: -1	1: 3/4	0										2019-08-08	Linux			3.3.0	48-89 (C3-F6)	xml	69-89 (A4-F6)	Midi_1	48-67 (C3-G4)	Midi_1
+MS3	D779walzer16	18	16	1: 0	1: 3/4	0										2019-08-08	Linux			3.3.0	32-89 (Ab1-F6)	xml	66-89 (F#4-F6)	Midi_1	32-67 (Ab1-G4)	Midi_1
+MS3	D779walzer17	27	24	1: 0	1: 3/4	0										2019-08-08	Linux			3.3.0	43-88 (G2-E6)	xml	67-88 (G4-E6)	Midi_1	43-72 (G2-C5)	Midi_1
+MS3	D779walzer18	19	16	1: -4	1: 3/4	0										2019-08-08	Linux			3.3.0	39-92 (Eb2-Ab6)	xml	63-92 (Eb4-Ab6)	Midi_1	39-65 (Eb2-F4)	Midi_1
+MS3	D779walzer19	18	16	1: -4	1: 3/4	0										2019-08-08	Linux			3.3.0	39-87 (Eb2-Eb6)	xml	63-87 (Eb4-Eb6)	Midi_1	39-66 (Eb2-Gb4)	Midi_1
+MS3	D779walzer20	18	16	1: -4	1: 3/4	0	F. Schubert	Walzer nr. 20								2019-11-02	Apple Macintosh			3.3.0	51-94 (Eb3-Bb6)		67-94 (G4-Bb6)	Piano	51-68 (Eb3-Ab4)	Piano
+MS3	D779walzer21	18	16	1: -3	1: 3/4	0	F. Schubert	Walzer nr. 21								2019-11-02	Apple Macintosh			3.3.0	46-94 (Bb2-Bb6)		67-94 (G4-Bb6)	Piano	46-68 (Bb2-Ab4)	Piano
+MS3	D779walzer22	26	24	1: -3	1: 3/4	0	F. Schubert	Walzer nr. 21								2019-11-02	Apple Macintosh			3.3.0	44-99 (Ab2-Eb7)		65-99 (F4-Eb7)	Piano	44-68 (Ab2-Ab4)	Piano
+MS3	D779walzer23	18	16	1: -3	1: 3/4	0	F. Schubert	Walzer nr. 23								2019-11-02	Apple Macintosh			3.3.0	44-91 (Ab2-G6)		74-91 (D5-G6)	Piano	44-69 (Ab2-A4)	Piano
+MS3	D779walzer24	18	16	1: -2	1: 3/4	0	F. Schubert	Walzer nr. 24								2019-11-02	Apple Macintosh			3.3.0	41-91 (F2-G6)		65-91 (F4-G6)	Piano	41-67 (F2-G4)	Piano
+MS3	D779walzer25	26	24	1: 1	1: 3/4	0	F. Schubert	Menuett nr. 25								2019-11-03	Apple Macintosh			3.3.0	38-88 (D2-E6)		71-88 (B4-E6)	Piano	38-69 (D2-A4)	Piano
+MS3	D779walzer26	18	16	1: 0	1: 3/4	0	F. Schubert	Walzer nr. 26								2019-11-03	Apple Macintosh			3.3.0	41-86 (F2-D6)		67-86 (G4-D6)	Piano	41-67 (F2-G4)	Piano
+MS3	D779walzer27	26	24	1: -3	1: 3/4	0	F. Schubert	Walzer nr. 27								2019-11-03	Apple Macintosh			3.3.0	43-91 (G2-G6)		70-91 (Bb4-G6)	Piano	43-68 (G2-Ab4)	Piano
+MS3	D779walzer28	18	16	1: -3	1: 3/4	0	F. Schubert	Walzer nr. 28								2019-11-03	Apple Macintosh			3.3.0	46-99 (Bb2-Eb7)		75-99 (Eb5-Eb7)	Piano	46-68 (Bb2-Ab4)	Piano
+MS3	D779walzer29	26	24	1: -3	1: 3/4	0	F. Schubert	Walzer nr. 29								2019-11-03	Apple Macintosh			3.3.0	46-86 (Bb2-D6)		62-86 (D4-D6)	Piano	46-67 (Bb2-G4)	Piano
+MS3	D779walzer30	18	16	1: 0	1: 3/4	0	F. Schubert	Walzer nr. 30								2019-11-03	Apple Macintosh			3.3.0	41-86 (F2-D6)		55-86 (G3-D6)	Piano	41-65 (F2-F4)	Piano
+MS3	D779walzer31	18	16	1: 0	1: 3/4	0	F. Schubert	Walzer nr. 31								2019-11-03	Apple Macintosh			3.3.0	40-93 (E2-A6)		66-93 (F#4-A6)	Piano	40-65 (E2-F4)	Piano
+MS3	D779walzer32	26	24	1: 0	1: 3/4	0	F. Schubert	Walzer nr. 32								2019-11-03	Apple Macintosh			3.3.0	43-91 (G2-G6)		67-91 (G4-G6)	Piano	43-69 (G2-A4)	Piano
+MS3	D779walzer33	18	16	1: -4	1: 3/4	0	F. Schubert	Walzer nr. 33								2019-11-03	Apple Macintosh			3.3.0	39-85 (Eb2-Db6)		63-85 (Eb4-Db6)	Piano	39-73 (Eb2-Db5)	Piano
+MS3	D779walzer34	18	16	1: -4	1: 3/4	0	F. Schubert	Walzer nr. 34								2019-11-03	Apple Macintosh			3.3.0	36-80 (C2-Ab5)		56-80 (Ab3-Ab5)	Piano	36-58 (C2-Bb3)	Piano
+MS3	D781ecossaise01	16	16	1: -6	1: 2/4	0										2019-08-09	Linux			3.3.0	30-71 (Gb1-Cb5)	xml	58-71 (Bb3-Cb5)	Midi_1	30-54 (Gb1-Gb3)	Midi_1
+MS3	D781ecossaise02	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise No 2							Public Domain (PianoXML typeset) | 11 Ecossaise D.781 (1823)	2017-05-05	Apple Macintosh			3.3.0	42-95 (F#2-B6)		69-95 (A4-B6)	Piano	42-64 (F#2-E4)	Piano
+MS3	D781ecossaise03	18	16	1: -6	1: 2/4	0										2019-08-09	Linux			3.3.0	37-90 (Db2-Gb6)	xml	58-90 (Bb3-Gb6)	Midi_1	37-68 (Db2-Ab4)	Midi_1
+MS3	D781ecossaise04	16	16	1: -3	1: 2/4	0										2019-08-09	Linux			3.3.0	39-89 (Eb2-F6)	xml	58-89 (Bb3-F6)	Midi_1	39-68 (Eb2-Ab4)	Midi_1
+MS3	D781ecossaise05	16	16	1: -4	1: 2/4	0										2019-08-09	Linux			3.3.0	29-89 (F1-F6)	xml	60-89 (C4-F6)	Midi_1	29-61 (F1-Db4)	Midi_1
+MS3	D781ecossaise06	16	16	1: -6	1: 2/4	0										2019-08-09	Linux			3.3.0	30-85 (Gb1-Db6)	xml	63-85 (Eb4-Db6)	Midi_1	30-58 (Gb1-Bb3)	Midi_1
+MS3	D781ecossaise07	19	16	1: 2	1: 2/4	0										2019-08-09	Linux			3.3.0	35-95 (B1-B6)	xml	66-95 (F#4-B6)	Midi_1	35-66 (B1-F#4)	Midi_1
+MS3	D781ecossaise08	18	16	1: 2	1: 2/4	0										2019-08-09	Linux			3.3.0	33-90 (A1-F#6)	xml	66-90 (F#4-F#6)	Midi_1	33-64 (A1-E4)	Midi_1
+MS3	D781ecossaise09	16	16	1: 5	1: 2/4	0										2019-08-09	Linux			3.3.0	39-83 (D#2-B5)	xml	63-83 (D#4-B5)	Midi_1	39-64 (D#2-E4)	Midi_1
+MS3	D781ecossaise10	16	16	1: 5	1: 2/4	0										2019-08-09	Linux			3.3.0	35-92 (B1-G#6)	xml	71-92 (B4-G#6)	Midi_1	35-69 (B1-A4)	Midi_1
+MS3	D781ecossaise11	16	16	1: 2	1: 2/4	0										2019-08-09	Linux			3.3.0	30-93 (F#1-A6)	xml	59-93 (B3-A6)	Midi_1	30-57 (F#1-A3)	Midi_1
+MS3	D782ecossaise01	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise								2019-10-11	Linux			3.3.0	33-81 (A1-A5)		62-81 (D4-A5)	Piano	33-67 (A1-G4)	Piano
+MS3	D783deutscher01	25	24	1: 3	1: 3/4	0	"Franz Schubert
+
+"	Deutscher			Opus 33, D 783									3.3.0	29-86 (E#1-D6)		57-86 (A3-D6)	Piano (2)	29-62 (E#1-D4)	Piano (2)
+MS3	D783deutscher02	18	16	1: 2	1: 3/4	0	Franz Schubert	German Dance							Public Domain (PianoXML typeset)	2018-12-30	Linux	http://musescore.com/user/9292486/scores/5373072		3.3.0	45-78 (A2-F#5)		57-78 (A3-F#5)	Piano	45-57 (A2-A3)	Piano
+MS3	D783deutscher03	18	16	1: -2	1: 3/4	0										2019-08-09	Linux			3.3.0	29-89 (F1-F6)	xml	62-89 (D4-F6)	Instrument 1	29-60 (F1-C4)	Instrument 1
+MS3	D783deutscher04	18	16	1: 1	1: 3/4	0										2019-08-09	Linux			3.3.0	36-95 (C2-B6)	xml	62-95 (D4-B6)	Instrument 1	36-79 (C2-G5)	Instrument 1
+MS3	D783deutscher05	18	16	1: 2	1: 3/4	0										2019-08-09	Linux			3.3.0	42-86 (F#2-D6)	xml	62-86 (D4-D6)	Instrument 1	42-71 (F#2-B4)	Instrument 1
+MS3	D783deutscher06	18	16	1: -2	1: 3/4	0										2019-08-09	Linux			3.3.0	34-86 (Bb1-D6)	xml	63-86 (Eb4-D6)	Instrument 1	34-70 (Bb1-Bb4)	Instrument 1
+MS3	D783deutscher07	18	16	1: -2	1: 3/4	0										2019-08-09	Linux			3.3.0	34-77 (Bb1-F5)	xml	62-77 (D4-F5)	Instrument 1	34-65 (Bb1-F4)	Instrument 1
+MS3	D783deutscher08	18	16	1: -3	1: 3/4	0										2019-08-09	Linux			3.3.0	46-87 (Bb2-Eb6)	xml	62-87 (D4-Eb6)	Instrument 1	46-68 (Bb2-Ab4)	Instrument 1
+MS3	D783deutscher09	18	16	1: 0	1: 3/4	0										2019-08-09	Linux			3.3.0	31-89 (G1-F6)	xml	59-89 (B3-F6)	Instrument 1	31-62 (G1-D4)	Instrument 1
+MS3	D783deutscher10	26	24	1: 0	1: 3/4	0										2019-08-09	Linux			3.3.0	34-81 (Bb1-A5)	xml	62-81 (D4-A5)	Instrument 1	34-68 (Bb1-G#4)	Instrument 1
+MS3	D783deutscher11	18	16	1: 1	1: 3/4	0										2019-08-09	Linux			3.3.0	38-91 (D2-G6)	xml	62-91 (D4-G6)	Instrument 1	38-72 (D2-C5)	Instrument 1
+MS3	D783deutscher12	17	16	1: 0	1: 3/4	0										2019-08-09	Linux			3.3.0	43-77 (G2-F5)	xml	59-77 (B3-F5)	Instrument 1	43-60 (G2-C4)	Instrument 1
+MS3	D783deutscher13	18	16	1: 0	1: 3/4	0										2019-08-09	Linux			3.3.0	48-88 (C3-E6)	xml	64-88 (E4-E6)	Instrument 1	48-65 (C3-F4)	Instrument 1
+MS3	D783deutscher14	18	16	1: -4, 10: -1	1: 3/4	0										2019-08-09	Linux			3.3.0	39-86 (Eb2-D6)	xml	67-86 (G4-D6)	Instrument 1	39-67 (Eb2-G4)	Instrument 1
+MS3	D783deutscher15	18	16	1: -4	1: 3/4	0										2019-08-09	Linux			3.3.0	36-77 (C2-F5)	xml	60-77 (C4-F5)	Instrument 1	36-65 (C2-F4)	Instrument 1
+MS3	D783deutscher16	18	16	1: -1	1: 3/4	0										2019-08-09	Linux			3.3.0	32-81 (Ab1-A5)	xml	60-81 (C4-A5)	Instrument 1	32-61 (Ab1-Db4)	Instrument 1
+MS3	D783ecossaise01	16	16	1: 2	1: 2/4	0	Franz Schubert	2 Ecossaises							Public Domain (PianoXML typeset) | 18 German Dances and Ecossaises Op. 33 (D.783) - 1824	2017-05-13	Apple Macintosh			3.3.0	31-86 (G1-D6)		62-86 (D4-D6)	Piano	31-66 (G1-F#4)	Piano
+MS3	D783ecossaise02	16	16	1: 2	1: 2/4	0	Franz Schubert	2 Ecossaises							Public Domain (PianoXML typeset) | 18 German Dances and Ecossaises Op. 33 (D.783) - 1824	2017-05-13	Apple Macintosh			3.3.0	42-83 (F#2-B5)		57-83 (A3-B5)	Piano	42-69 (F#2-A4)	Piano
+MS3	D790ländler01	53	52	1: 2	1: 3/4	0										2019-08-09	Linux			3.3.0	29-78 (F1-F#5)	xml	54-78 (F#3-F#5)	Midi_1	29-64 (F1-E4)	Midi_1
+MS3	D790ländler02	24	24	1: 3	1: 3/4	0										2019-08-09	Linux			3.3.0	29-86 (E#1-D6)	xml	57-86 (A3-D6)	Midi_1	29-62 (E#1-D4)	Midi_1
+MS3	D790ländler03	18	16	1: 2	1: 3/4	0										2019-08-09	Linux			3.3.0	45-85 (A2-C#6)	xml	66-85 (F#4-C#6)	Midi_1	45-73 (A2-C#5)	Midi_1
+MS3	D790ländler04	18	16	1: 2	1: 3/4	0										2019-08-09	Linux			3.3.0	42-83 (F#2-B5)	xml	61-83 (C#4-B5)	Midi_1	42-71 (F#2-B4)	Midi_1
+MS3	D790ländler05	26	24	1: 2	1: 3/4	0										2019-08-09	Linux			3.3.0	37-81 (C#2-A5)	xml	61-81 (C#4-A5)	Midi_1	37-62 (C#2-D4)	Midi_1
+MS3	D790ländler06	26	24	1: 5	1: 3/4	0										2019-08-09	Linux			3.3.0	30-88 (F#1-E6)	xml	59-88 (B3-E6)	Midi_1	30-64 (F#1-E4)	Midi_1
+MS3	D790ländler07	34	32	1: -4	1: 3/4	0										2019-08-09	Linux			3.3.0	29-80 (F1-Ab5)	xml	51-80 (Eb3-Ab5)	Midi_1	29-61 (F1-Db4)	Midi_1
+MS3	D790ländler08	34	32	1: -7	1: 3/4	0										2019-08-09	Linux			3.3.0	33-80 (Bbb1-Ab5)	xml	61-80 (Db4-Ab5)	Midi_1	33-68 (Bbb1-Ab4)	Midi_1
+MS3	D790ländler09	18	16	1: 5	1: 3/4	0										2019-08-09	Linux			3.3.0	42-92 (F#2-G#6)	xml	69-92 (G##4-G#6)	Midi_1	42-71 (F#2-B4)	Midi_1
+MS3	D790ländler10	18	16	1: 5	1: 3/4	0										2019-08-09	Linux			3.3.0	39-87 (D#2-D#6)	xml	66-87 (F#4-D#6)	Midi_1	39-64 (D#2-E4)	Midi_1
+MS3	D790ländler11	18	16	1: -4	1: 3/4	0										2019-08-09	Linux			3.3.0	44-82 (Ab2-Bb5)	xml	65-82 (F4-Bb5)	Midi_1	44-65 (Ab2-F4)	Midi_1
+MS3	D790ländler12	24	22	1: 4	1: 3/4	0										2019-08-09	Linux			3.3.0	35-73 (B1-C#5)	xml	56-73 (G#3-C#5)	Midi_1	35-49 (B1-C#3)	Midi_1
+MS3	D816ecossaise01	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 1								2019-10-11	Linux			3.3.0	33-86 (A1-D6)		61-86 (C#4-D6)	Piano	33-64 (A1-E4)	Piano
+MS3	D816ecossaise02	16	16	1: 2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 2								2019-10-11	Linux			3.3.0	45-93 (A2-A6)		61-93 (C#4-A6)	Piano	45-67 (A2-G4)	Piano
+MS3	D816ecossaise03	16	16	1: -2	1: 2/4	0	Franz Schubert	Ecossaise Nr. 3								2019-10-11	Linux			3.3.0	29-79 (F1-G5)		58-79 (Bb3-G5)	Piano	29-58 (F1-Bb3)	Piano
+MS3	D820deutscher01	18	16	1: -4	1: 3/4	0	Franz Schubert	Deutscher Nr. 1								2019-10-11	Linux			3.3.0	51-95 (Eb3-Cb7)		67-95 (G4-Cb7)	Piano	51-71 (Eb3-Cb5)	Piano
+MS3	D820deutscher02	35	32	1: -4	1: 3/4	0	Franz Schubert	Deutscher Nr. 2								2019-10-12	Linux			3.3.0	46-95 (Bb2-Cb7)		65-95 (F4-Cb7)	Piano	46-71 (Bb2-Cb5)	Piano
+MS3	D820deutscher03	35	32	1: -4	1: 3/4	0	Franz Schubert	Deutscher Nr. 3								2019-10-12	Linux			3.3.0	49-95 (Db3-Cb7)		67-95 (G4-Cb7)	Piano	49-71 (Db3-Cb5)	Piano
+MS3	D820deutscher04	26	24	1: -2	1: 3/4	0	Franz Schubert	Deutscher Nr. 4								2019-10-12	Linux			3.3.0	29-79 (F1-G5)		53-79 (F3-G5)	Piano	29-63 (F1-Eb4)	Piano
+MS3	D820deutscher05	43	40	1: -2	1: 3/4	0	Franz Schubert	Deutscher Nr. 5								2019-10-12	Linux			3.3.0	29-91 (F1-G6)		53-91 (F3-G6)	Piano	29-63 (F1-Eb4)	Piano
+MS3	D820deutscher06	51	48	1: -2	1: 3/4	0	Franz Schubert	Deutscher Nr. 6								2019-10-12	Linux			3.3.0	29-79 (F1-G5)		53-79 (F3-G5)	Piano	29-63 (F1-Eb4)	Piano
+MS3	D841deutscher01	18	16	1: -1	1: 3/4	0	Franz Schubert	Deutscher Tanz Nr. 1								2019-10-13	Linux			3.3.0	36-77 (C2-F5)		57-77 (A3-F5)	Piano	36-60 (C2-C4)	Piano
+MS3	D841deutscher02	18	16	1: 1	1: 3/4	0	Franz Schubert	Deutscher Tanz Nr. 2								2019-10-13	Linux			3.3.0	33-79 (A1-G5)		54-79 (F#3-G5)	Piano	33-50 (A1-D3)	Piano
+MS3	D844walzer01	18	16	1: 1	1: 3/4	0	Franz Schubert	Walzer								2019-10-13	Linux			3.3.0	38-76 (D2-E5)		58-76 (A#3-E5)	Piano	38-59 (D2-B3)	Piano
+MS3	D924walzer01	25	24	1: 4	1: 3/4	0	Franz Schubert	Walzer Nr. 1								2019-10-13	Linux			3.3.0	45-95 (A2-B6)		71-95 (B4-B6)	Piano	45-69 (A2-A4)	Piano
+MS3	D924walzer02	18	16	1: 4	1: 3/4	0	Franz Schubert	Walzer Nr. 2								2019-10-13	Linux			3.3.0	47-92 (B2-G#6)		66-92 (F#4-G#6)	Piano	47-69 (B2-A4)	Piano
+MS3	D924walzer03	18	16	1: 4	1: 3/4	0	Franz Schubert	Walzer Nr. 3								2019-10-13	Linux			3.3.0	42-95 (F#2-B6)		68-95 (G#4-B6)	Piano	42-69 (F#2-A4)	Piano
+MS3	D924walzer04	26	24	1: 3	1: 3/4	0	Franz Schubert	Walzer Nr. 4								2019-10-13	Linux			3.3.0	40-93 (E2-A6)		61-93 (C#4-A6)	Piano	40-71 (E2-B4)	Piano
+MS3	D924walzer05	18	16	1: 3	1: 3/4	0	Franz Schubert	Walzer Nr. 5								2019-10-13	Linux			3.3.0	50-95 (D3-B6)		69-95 (A4-B6)	Piano	50-71 (D3-B4)	Piano
+MS3	D924walzer06	16	16	1: 3	1: 3/4	0	Franz Schubert	Walzer Nr. 6								2019-10-13	Linux			3.3.0	49-90 (C#3-F#6)		72-90 (B#4-F#6)	Piano	49-71 (C#3-B4)	Piano
+MS3	D924walzer07	20	16	1: 0	1: 3/4	0	Franz Schubert	Walzer Nr. 7								2019-10-13	Linux			3.3.0	40-93 (E2-A6)		64-93 (E4-A6)	Piano	40-65 (E2-F4)	Piano
+MS3	D924walzer08	24	24	1: 3	1: 3/4	0	Franz Schubert	Walzer Nr. 8								2019-10-13	Linux			3.3.0	38-93 (D2-A6)		69-93 (A4-A6)	Piano	38-71 (D2-B4)	Piano
+MS3	D924walzer09	16	16	1: 0	1: 3/4	0	Franz Schubert	Waltz in A Minor							Public Domain (PianoXML typeset)	2019-08-09	Linux			3.3.0	40-93 (E2-A6)	mxl	64-93 (E4-A6)	Piano	40-65 (E2-F4)	Piano
+MS3	D924walzer10	44	44	1: 3	1: 3/4	0	Franz Schubert	Walzer Nr. 10								2019-10-13	Linux			3.3.0	45-95 (A2-B6)		67-95 (G4-B6)	Piano	45-74 (A2-D5)	Piano
+MS3	D924walzer11	24	24	1: 1	1: 3/4	0	Franz Schubert	Walzer Nr. 11								2019-10-13	Linux			3.3.0	50-96 (D3-C7)		71-96 (B4-C7)	Piano	50-74 (D3-D5)	Piano
+MS3	D924walzer12	48	48	1: 4	1: 3/4	0	Franz Schubert	Grazer Walzer Nr. 12								2019-10-01	Linux			3.3.0	42-95 (F#2-B6)		68-95 (G#4-B6)	Piano	42-69 (F#2-A4)	Piano
+MS3	D925galopp01a	26	24	1: 0	1: 2/4	0	Franz Schubert	Grazer Galopp								2019-10-01	Linux			3.3.0	43-86 (G2-D6)		64-86 (E4-D6)	Piano	43-67 (G2-G4)	Piano
+MS3	D925trio01b	51	48	1: 1, 27: 0	1: 2/4	0	Franz Schubert	Grazer Galopp								2019-10-01	Linux			3.3.0	43-91 (G2-G6)		64-91 (E4-G6)	Piano	43-69 (G2-A4)	Piano
+MS3	D969walzer01	18	16	1: 0	1: 3/4	0	Franz Schubert	Walzer Nr. 1								2019-09-22	Linux			3.3.0	31-89 (G1-F6)		60-89 (C4-F6)	Piano	31-67 (G1-G4)	Piano
+MS3	D969walzer02	19	16	1: 3	1: 3/4	0	Franz Schubert	Walzer Nr. 2								2019-09-22	Linux			3.3.0	40-93 (E2-A6)		61-93 (C#4-A6)	Piano	40-62 (E2-D4)	Piano
+MS3	D969walzer03	59	58	1: 0	1: 3/4	0	Franz Schubert	Walzer Nr. 3								2019-09-21	Linux			3.3.0	29-93 (F1-A6)		59-93 (B3-A6)	Piano	29-60 (F1-C4)	Piano
+MS3	D969walzer04	26	24	1: 1	1: 3/4	0	Franz Schubert	Walzer Nr. 4								2019-09-21	Linux			3.3.0	45-95 (A2-B6)		66-95 (F#4-B6)	Piano	45-69 (A2-A4)	Piano
+MS3	D969walzer05	34	32	1: 0	1: 3/4	0	Franz Schubert	Walzer Nr. 5								2019-09-21	Linux			3.3.0	31-91 (G1-G6)		56-91 (G#3-G6)	Piano	31-67 (G1-G4)	Piano
+MS3	D969walzer06	18	16	1: 0	1: 3/4	0	Franz Schubert	Walzer Nr. 6								2019-09-21	Linux			3.3.0	43-79 (G2-G5)		64-79 (E4-G5)	Piano	43-62 (G2-D4)	Piano
+MS3	D969walzer07	26	24	1: 4	1: 3/4	0	Franz Schubert	Walzer Nr. 7								2019-09-21	Linux			3.3.0	30-95 (F#1-B6)		64-95 (E4-B6)	Piano	30-64 (F#1-E4)	Piano
+MS3	D969walzer08	26	24	1: 3	1: 3/4	0	Franz Schubert	Walzer Nr. 8								2019-09-21	Linux			3.3.0	40-95 (E2-B6)		61-95 (C#4-B6)	Piano	40-66 (E2-F#4)	Piano
+MS3	D969walzer09	37	36	1: 0	1: 3/4	0										2019-08-04	Linux			3.3.0	29-93 (F1-A6)		57-93 (A3-A6)	Piano	29-65 (F1-F4)	Piano
+MS3	D969walzer10	18	16	1: -1	1: 3/4	0	Franz Schubert	Walzer Nr. 10								2019-09-21	Linux			3.3.0	43-84 (G2-C6)		64-84 (E4-C6)	Piano	43-69 (G2-A4)	Piano
+MS3	D969walzer11	18	16	1: 0	1: 3/4	0	Franz Schubert	Walzer Nr. 11								2019-09-15	Linux			3.3.0	41-84 (F2-C6)		64-84 (E4-C6)	Piano	41-67 (F2-G4)	Piano
+MS3	D969walzer12	38	36	1: 0	1: 3/4	0	Franz Schubert	Walzer Nr. 12								2019-09-14	Linux			3.3.0	31-93 (G1-A6)		55-93 (G3-A6)	Piano	31-67 (G1-G4)	Piano
+MS3	D970deutscher01	18	16	1: -3	1: 3/4	0	Franz Schubert	Deutscher Nr. 1								2019-09-14	Linux			3.3.0	43-94 (G2-Bb6)		67-94 (G4-Bb6)	Piano	43-68 (G2-Ab4)	Piano
+MS3	D970deutscher02	18	16	1: -3	1: 3/4	0	Franz Schubert	Deutscher Nr. 2								2019-09-14	Linux			3.3.0	48-94 (C3-Bb6)		65-94 (F4-Bb6)	Piano	48-68 (C3-Ab4)	Piano
+MS3	D970deutscher03	16	16	1: -4	1: 3/4	0	Franz Schubert	Deutscher Nr. 3								2019-09-14	Linux			3.3.0	44-92 (Ab2-Ab6)		68-92 (Ab4-Ab6)	Piano	44-68 (Ab2-Ab4)	Piano
+MS3	D970deutscher04	16	16	1: -4	1: 3/4	0	Franz Schubert	Deutscher Nr. 4								2019-09-14	Linux			3.3.0	39-87 (Eb2-Eb6)		67-87 (G4-Eb6)	Piano	39-65 (Eb2-F4)	Piano
+MS3	D970deutscher05	16	16	1: -5	1: 3/4	0	Franz Schubert	Deutscher Nr. 5								2019-09-14	Linux			3.3.0	44-92 (Ab2-Ab6)		68-92 (Ab4-Ab6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D970deutscher06	16	16	1: -5	1: 3/4	0	Franz Schubert	Deutscher Nr. 6								2019-09-14	Linux			3.3.0	44-92 (Ab2-Ab6)		65-92 (F4-Ab6)	Piano	44-66 (Ab2-Gb4)	Piano
+MS3	D971deutscher01	17	16	1: 0	1: 3/4	0	Franz Schubert	Deutscher Nr. 1								2019-09-11	Linux			3.3.0	32-89 (G#1-F6)		60-89 (C4-F6)	Piano	32-55 (G#1-G3)	Piano
+MS3	D971deutscher02	26	24	1: 3	1: 3/4	0	Franz Schubert	Deutscher Nr. 2								2019-09-11	Linux			3.3.0	40-93 (E2-A6)		68-93 (G#4-A6)	Piano	40-66 (E2-F#4)	Piano
+MS3	D971deutscher03	25	24	1: 4	1: 3/4	0	Franz Schubert	Deutscher Nr 3								2019-09-11	Linux			3.3.0	32-95 (G#1-B6)		60-95 (B#3-B6)	Piano	32-71 (G#1-B4)	Piano
+MS3	D972deutscher01	18	16	1: -5	1: 3/4	0	Franz Schubert	Deutscher Nr. 1								2019-09-11	Linux			3.3.0	32-85 (Ab1-Db6)		63-85 (Eb4-Db6)	Piano	32-65 (Ab1-F4)	Piano
+MS3	D972deutscher02	17	16	1: -4	1: 3/4	0	Franz Schubert	Deutscher Nr. 2								2019-09-11	Linux			3.3.0	36-77 (C2-F5)		60-77 (C4-F5)	Piano	36-61 (C2-Db4)	Piano
+MS3	D972deutscher03	18	16	1: 3	1: 3/4	0	Franz Schubert	Deutscher Nr. 3								2019-09-11	Linux			3.3.0	45-83 (A2-B5)		68-83 (G#4-B5)	Piano	45-64 (A2-E4)	Piano
+MS3	D973deutscher01	18	16	1: 4	1: 3/4	0	Franz Schubert	Deutscher Nr. 1								2019-09-11	Linux			3.3.0	30-83 (F#1-B5)		58-83 (A#3-B5)	Piano	30-69 (F#1-A4)	Piano
+MS3	D973deutscher02	18	16	1: 4	1: 3/4	0	Franz Schubert	Deutscher Nr. 2								2019-09-11	Linux			3.3.0	32-88 (G#1-E6)		56-88 (G#3-E6)	Piano	32-68 (G#1-G#4)	Piano
+MS3	D973deutscher03	18	16	1: -4	1: 3/4	0	Franz Schubert	Deutscher Nr. 3								2019-09-11	Linux			3.3.0	44-76 (Ab2-Fb5)		60-76 (C4-Fb5)	Piano	44-64 (Ab2-Fb4)	Piano
+MS3	D974deutscher01	16	16	1: -5	1: 3/4	0	Franz Schubert	Deutscher Nr. 1								2019-09-11	Linux			3.3.0	29-99 (F1-Eb7)		61-99 (Db4-Eb7)	Piano	29-66 (F1-Gb4)	Piano
+MS3	D974deutscher02	16	16	1: -5	1: 3/4	0	Franz Schubert	Deutscher Nr. 2								2019-09-11	Linux			3.3.0	37-90 (Db2-Gb6)		60-90 (C4-Gb6)	Piano	37-66 (Db2-Gb4)	Piano
+MS3	D975deutscher01	18	16	1: 2	1: 3/4	0	Franz Schubert	Deutscher Tanz								2019-09-11	Linux			3.3.0	38-81 (D2-A5)		61-81 (C#4-A5)	Piano	38-64 (D2-E4)	Piano
+MS3	D976cotillon01	26	24	1: -3	1: 3/4	0	Franz Schubert	Cotillon								2019-09-11	Linux			3.3.0	41-94 (F2-Bb6)		67-94 (G4-Bb6)	Piano	41-68 (F2-Ab4)	Piano
+MS3	D977ecossaise01	16	16	1: -5	1: 2/4	0										2019-08-08	Linux			3.3.0	44-85 (Ab2-Db6)	xml	65-85 (F4-Db6)	Midi_1	44-66 (Ab2-Gb4)	Midi_1
+MS3	D977ecossaise02	16	16	1: -5	1: 2/4	0										2019-08-08	Linux			3.3.0	39-82 (Eb2-Bb5)	xml	63-82 (Eb4-Bb5)	Midi_1	39-63 (Eb2-Eb4)	Midi_1
+MS3	D977ecossaise03	16	16	1: -4	1: 2/4	0										2019-08-08	Linux			3.3.0	39-89 (Eb2-F6)	xml	63-89 (Eb4-F6)	Midi_1	39-75 (Eb2-Eb5)	Midi_1
+MS3	D977ecossaise04	16	16	1: 5	1: 2/4	0										2019-08-08	Linux			3.3.0	35-88 (B1-E6)	xml	71-88 (B4-E6)	Midi_1	35-75 (B1-D#5)	Midi_1
+MS3	D977ecossaise05	16	16	1: 2	1: 2/4	0										2019-08-08	Linux			3.3.0	42-86 (F#2-D6)	xml	69-86 (A4-D6)	Midi_1	42-64 (F#2-E4)	Midi_1
+MS3	D977ecossaise06	16	16	1: 2	1: 2/4	0										2019-08-08	Linux			3.3.0	57-88 (A3-E6)	xml	71-88 (B4-E6)	Midi_1	57-74 (A3-D5)	Midi_1
+MS3	D977ecossaise07	16	16	1: -2	1: 2/4	0										2019-08-08	Linux			3.3.0	46-91 (Bb2-G6)	xml	69-91 (A4-G6)	Midi_1	46-74 (Bb2-D5)	Midi_1
+MS3	D977ecossaise08	19	16	1: -1	1: 2/4	0										2019-08-08	Linux			3.3.0	41-84 (F2-C6)	xml	64-84 (E4-C6)	Midi_1	41-65 (F2-F4)	Midi_1
+MS3	D978walzer01	30	26	1: -4	1: 3/4	0	Franz Schubert	Walzer								2019-09-11	Linux			3.3.0	31-80 (G1-Ab5)		60-80 (C4-Ab5)	Piano	31-61 (G1-Db4)	Piano
+MS3	D979walzer01	18	16	1: 1	1: 3/4	0	Franz Schubert	Walzer								2019-09-11	Linux			3.3.0	36-93 (C2-A6)		66-93 (F#4-A6)	Piano	36-60 (C2-C4)	Piano
+MS3	D980walzer01	26	24	1: 1	1: 3/4	0	Franz Schubert	Walzer Nr. 1								2019-09-11	Linux			3.3.0	38-83 (D2-B5)		62-83 (D4-B5)	Piano	38-67 (D2-G4)	Piano
+MS3	D980walzer02	18	16	1: 2	1: 3/4	0	Franz Schubert	Walzer Nr. 2								2019-09-11	Linux			3.3.0	30-86 (F#1-D6)		62-86 (D4-D6)	Piano	30-69 (F#1-A4)	Piano
