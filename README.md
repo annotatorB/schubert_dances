@@ -14,6 +14,10 @@ The `metadata.tsv` includes the IDs used by Yosef Goldenberg in the column `gold
 * D 977 Ecossaise No. 1 = #287, D.735 Ecossaise no.6
 * D 980b/679 Ländler No. 1  = #227, D.420 German dance no.10
 
+# Trios
+
+The mentioned IDs identify Trios as individual movements although they can be considered as belonging to the preceding movement that is played _da capo_ after the Trio. As a result, there are scores that have only a _Fine_ or only a _D.C._ without the other. They can be matched with corresponding movement through their filenames; for example, `D041trio01b` belongs to `D041menuett01a` because of the correspondence of `D. 41, no. 1`. However, the same irregularity of individual _Fine_ and _D.C._ markers also appears "regularly" in D. 299 between subsequent Ecossaises: Every even number (e.g. `D299ecossaise02`) is followed by the previous one (e.g. `D299ecossaise01`) _da capo_.
+
 
 # Overview
 |         file_name          |measures|labels|standard|annotators|reviewers|
