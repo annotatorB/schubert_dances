@@ -89,7 +89,7 @@ The mentioned IDs identify Trios as individual movements although they can be co
 |D145ecossaise04             |      16|     0|        |          |         |
 |D145ecossaise05             |      16|     0|        |          |         |
 |D145ecossaise06             |      16|     0|        |          |         |
-|D145ecossaise07             |       8|     0|        |          |         |
+|D145ecossaise07             |       8|    17|2.3.0   |JH        |MN       |
 |D145ecossaise08             |       8|     0|        |          |         |
 |D145ecossaise08andereFassung|      16|     0|        |          |         |
 |D145ecossaise09             |       8|     0|        |          |         |
@@ -175,7 +175,7 @@ The mentioned IDs identify Trios as individual movements although they can be co
 |D336menuett01a              |      32|     0|        |          |         |
 |D336trio01b                 |      24|     0|        |          |         |
 |D365walzer01                |      16|     0|        |          |         |
-|D365walzer02                |      16|     0|        |          |         |
+|D365walzer02                |      16|    33|2.3.0   |MN        |JH       |
 |D365walzer03                |      16|     0|        |          |         |
 |D365walzer04                |      16|     0|        |          |         |
 |D365walzer05                |      16|     0|        |          |         |

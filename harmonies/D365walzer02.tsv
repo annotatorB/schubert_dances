@@ -1,0 +1,34 @@
+mc	mn	mc_onset	mn_onset	timesig	staff	voice	volta	label	globalkey	localkey	pedal	chord	special	numeral	form	figbass	changes	relativeroot	cadence	phraseend	chord_type	globalkey_is_minor	localkey_is_minor	chord_tones	added_tones	root	bass_note
+1	0	0	3/8	3/4	2	1		Ab.I{	Ab	I		I		I						{	M	0	0	0, 4, 1		0	0
+2	1	1/4	1/4	3/4	2	2		V43	Ab	I		V43		V		43					Mm7	0	0	2, -1, 1, 5		1	2
+2	1	1/2	1/2	3/4	2	2		I6	Ab	I		I6		I		6					M	0	0	4, 1, 0		0	4
+3	2	0	0	3/4	2	2		IV(4)	Ab	I		IV(4)		IV			4				M	0	0	-1, 5, 0		-1	-1
+3	2	1/4	1/4	3/4	2	2		IV	Ab	I		IV		IV							M	0	0	-1, 3, 0		-1	-1
+4	3	0	0	3/4	2	2		ii	Ab	I		ii		ii							m	0	0	2, -1, 3		2	2
+4	3	1/4	1/4	3/4	2	2		V43/ii	Ab	I		V43/ii		V		43		ii			Mm7	0	0	4, 1, 3, 7		3	4
+4	3	1/2	1/2	3/4	2	2		ii6	Ab	I		ii6		ii		6					m	0	0	-1, 3, 2		2	-1
+5	4	0	0	3/4	2	2		V(4)	Ab	I		V(4)		V			4				M	0	0	1, 0, 2		1	1
+5	4	1/4	1/4	3/4	2	2		V	Ab	I		V		V							M	0	0	1, 5, 2		1	1
+6	5	0	0	3/4	2	2		V7(9)	Ab	I		V7(9)		V		7	9				Mm7	0	0	1, 5, 2, -1	3	1	1
+6	5	1/4	1/4	3/4	2	2		V7	Ab	I		V7		V		7					Mm7	0	0	1, 5, 2, -1		1	1
+7	6	0	0	3/4	2	2		I	Ab	I		I		I							M	0	0	0, 4, 1		0	0
+8	7	0	0	3/4	2	2		V7(9)	Ab	I		V7(9)		V		7	9				Mm7	0	0	1, 5, 2, -1	3	1	1
+8	7	1/4	1/4	3/4	2	2		V7	Ab	I		V7		V		7					Mm7	0	0	1, 5, 2, -1		1	1
+9	8	0	0	3/4	2	2		I|PAC}	Ab	I		I		I					PAC	}	M	0	0	0, 4, 1		0	0
+10	8	0	3/8	3/4	2	2		{	Ab	I										{		0	0				
+11	9	0	0	3/4	2	2		V7(b9)	Ab	I		V7(b9)		V		7	b9				Mm7	0	0	1, 5, 2, -1	-4	1	1
+11	9	1/4	1/4	3/4	2	2		V7	Ab	I		V7		V		7					Mm7	0	0	1, 5, 2, -1		1	1
+12	10	0	0	3/4	2	2		i(4)	Ab	I		i(4)		i			4				m	0	0	0, -1, 1		0	0
+12	10	1/4	1/4	3/4	2	2		i	Ab	I		i		i							m	0	0	0, -3, 1		0	0
+13	11	0	0	3/4	2	2		V(9)/bVI	Ab	I		V(9)/bVI		V			9	bVI			M	0	0	-3, 1, -2	-1	-3	-3
+13	11	1/4	1/4	3/4	2	2		V/bVI	Ab	I		V/bVI		V				bVI			M	0	0	-3, 1, -2		-3	-3
+13	11	1/2	1/2	3/4	2	2		V7/bVI	Ab	I		V7/bVI		V		7		bVI			Mm7	0	0	-3, 1, -2, -5		-3	-3
+14	12	0	0	3/4	2	2		bVI(4)	Ab	I		bVI(4)		bVI			4				M	0	0	-4, 2, -3		-4	-4
+14	12	1/4	1/4	3/4	2	2		bVI	Ab	I		bVI		bVI							M	0	0	-4, 0, -3		-4	-4
+15	13	0	0	3/4	2	1		viio65(6b3)/V	Ab	I		viio65(6b3)/V		vii	o	65	6b3	V			o7	0	0	-4, 2, -3, 6		6	-4
+15	13	1/4	1/4	3/4	2	1		Ger	Ab	I		Ger	Ger	vii	o	65	b3	V			Ger	0	0	-4, 0, -3, 6		6	-4
+16	14	0	0	3/4	2	1		V(7v4)	Ab	I		V(7v4)		V			7v4				M	0	0	1, 0, 2	-1	1	1
+16	14	1/4	1/4	3/4	2	1		V(64)	Ab	I		V(64)		V			64				M	0	0	1, 0, 4		1	1
+17	15	0	0	3/4	2	1		V7(9)	Ab	I		V7(9)		V		7	9				Mm7	0	0	1, 5, 2, -1	3	1	1
+17	15	1/4	1/4	3/4	2	1		V7	Ab	I		V7		V		7					Mm7	0	0	1, 5, 2, -1		1	1
+18	16	0	0	3/4	2	1		I|PAC}	Ab	I		I		I					PAC	}	M	0	0	0, 4, 1		0	0
