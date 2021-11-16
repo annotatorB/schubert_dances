@@ -351,7 +351,7 @@ def write_gantt_file(args):
 
 
 def write_stats_file(args):
-    p = corpusstats.Provider()
+    p = corpusstats.Provider(args.github, args.token)
     pie_string = ""
     pie_array = []
     for s in p.tabular_stats:
@@ -406,6 +406,18 @@ if __name__ == "__main__":
 Description goes here
 
 """,
+    )
+    parser.add_argument(
+        "-g",
+        "--github",
+        metavar="owner/repository",
+        help="If you want to generate corpusstats, you need to pass the repo in the form owner/repository_name and an access token.",
+    )
+    parser.add_argument(
+        "-t",
+        "--token",
+        metavar="ACCESS_TOKEN",
+        help="Token that grants access to the repository in question.",
     )
     parser.add_argument(
         "-d",
