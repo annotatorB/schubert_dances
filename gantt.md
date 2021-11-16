@@ -1,7 +1,2 @@
-# 1
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://raw.githubusercontent.com/DCMLab/schubert_dances/D365walzer02/gantt/D145ecossaise07.html" height="600" width="100%"></iframe>
-
-# 2
-
-<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="https://github.com/DCMLab/schubert_dances/raw/D365walzer02/gantt/D145ecossaise07.html" height="600" width="100%"></iframe>
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="gantt/D145ecossaise07.html" height="600" width="100%"></iframe>
+<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="gantt/D365walzer02.html" height="600" width="100%"></iframe>
