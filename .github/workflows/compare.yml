@@ -5,8 +5,8 @@ on: pull_request
 
 jobs:
   compare:
+    if: github.actor != 'ms3-bot'
     runs-on: ubuntu-latest
-
     steps:
       - name: Output context
         env:
