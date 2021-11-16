@@ -356,9 +356,9 @@ Description goes here
         "-o",
         "--out",
         metavar="OUT_DIR",
-        default="gantt",
+        default="tonicizations",
         type=check_and_create,
-        help="""Output directory. Defaults to 'gantt'.""",
+        help="""Output directory. Defaults to 'tonicizations'.""",
     )
     parser.add_argument(
         "-y",
