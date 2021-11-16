@@ -1,58 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
 import argparse
-import base64
-import io
 import os
 from fractions import Fraction as frac
 
-import corpusstats
 import pandas as pd
 import plotly.figure_factory as ff
-from ms3 import Parse, make_gantt_data, transform, fifths2name, midi2name, name2fifths, name2pc, resolve_dir
 from plotly.offline import plot
+from ms3 import Parse, make_gantt_data, transform, fifths2name, midi2name, name2fifths, name2pc, resolve_dir
 
-# import pandas as pd
-
-INDEX_FNAME = "index.md"
-GANTT_FNAME = "gantt.md"
-STATS_FNAME = "stats.md"
-JEKYLL_CFG_FNAME = "_config.yml"
-STYLE_FNAME = "assets/css/style.scss"
-
-INDEX_FILE = f"""
-* [Modulation plans]({GANTT_FNAME})
-* [Corpus state]({STATS_FNAME})
-"""
-
-
-def generate_stats_text(pie_string, table_string):
-    STATS_FILE = f"""
-# Corpus Status
-
-## Vital statistics
-
-{table_string}
-
-## Completion ratios
-
-{pie_string}
-"""
-    return STATS_FILE
-
-
-JEKYLL_CFG_FILE = "theme: jekyll-theme-tactile "
-
-STYLE_FILE = """---
----
-
-@import "{{ site.theme }}";
-
-.inner {
-  max-width: 95%;
-  width: 1024px;
-}
-"""
 
 
 ################################################################################
@@ -64,7 +20,7 @@ PHRASEEND_LINES = {'color':'rgb(0, 0, 0)','width': 0.2,'dash': 'longdash'}
 KEY_COLORS = {'applied':                            'rgb(228,26,28)',
               'local':                              'rgb(55,126,184)',
               'tonic of adjacent applied chord(s)': 'rgb(77,175,74)'}
-Y_AXIS = 'Tonicized keys'
+Y_AXIS = 'Tonicized keys' # axis label
 
 
 def create_modulation_plan(data, task_column='semitones', sort_and_fill=True, title='Modulation plan', globalkey=None, phraseends=None, cadences=None, colors=None):
@@ -282,13 +238,7 @@ def get_phraseends(at, column='mn_fraction'):
     return at.loc[at.phraseend.isin([r"\\", "}", "}{"]), column].to_list()
 
 
-def main(args):
-    write_gantt_charts(args)
-    write_to_file(args, INDEX_FNAME, INDEX_FILE)
-    write_to_file(args, JEKYLL_CFG_FNAME, JEKYLL_CFG_FILE)
-    write_to_file(args, STYLE_FNAME, STYLE_FILE)
-    write_gantt_file(args)
-    write_stats_file(args)
+
 
 
 def write_gantt_charts(args):
@@ -301,14 +251,15 @@ def write_gantt_charts(args):
         logger_cfg=dict(level=args.level),
     )
     p.parse_mscx()
-    gantt_path = (
-        check_and_create("gantt")
-        if args.out is None
-        else check_and_create(os.path.join(args.out, "gantt"))
-    )
-    for (key, i, _), at in p.get_lists(
-        expanded=True
-    ).items():  # at stands for annotation table, i.e. DataFrame of expanded labels
+    gantt_path = resolve_dir(args.out)
+    ats = p.get_lists(expanded=True)
+    N = len(ats)
+    if N == 0:
+        p.logger.info("None of the scores contains DCML harmony labels, no gantt charts created.")
+        return
+    else:
+        p.logger.info(f"{N} files contain DCML labels.")
+    for (key, i, _), at in ats.items():  # at stands for annotation table, i.e. DataFrame of expanded labels
         fname = p.fnames[key][i]
         score_obj = p._parsed_mscx[(key, i)]
         metadata = score_obj.mscx.metadata
@@ -325,51 +276,6 @@ def write_gantt_charts(args):
         plot(fig, filename=out_path)
         logger.debug(f"Stored as {out_path}")
 
-
-def write_to_file(args, filename, content_str):
-    path = check_dir(".") if args.out is None else args.out
-    fname = os.path.join(path, filename)
-    _ = check_and_create(
-        os.path.dirname(fname)
-    )  # in case the file name included path components
-    with open(fname, "w", encoding="utf-8") as f:
-        f.writelines(content_str)
-
-
-def write_gantt_file(args):
-    gantt_path = (
-        check_dir("gantt")
-        if args.out is None
-        else check_dir(os.path.join(args.out, "gantt"))
-    )
-    fnames = sorted(os.listdir(gantt_path))
-    file_content = "\n".join(
-        f'<iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="gantt/{f}" height="600" width="100%"></iframe>'
-        for f in fnames
-    )
-    write_to_file(args, GANTT_FNAME, file_content)
-
-
-def write_stats_file(args):
-    p = corpusstats.Provider(args.github, args.token)
-    pie_string = ""
-    pie_array = []
-    for s in p.tabular_stats:
-        plot = p.pie_chart(s)
-        img = io.BytesIO()
-        plot.savefig(img, format="png")
-        img.seek(0)
-        img = base64.encodebytes(img.getvalue()).decode("utf-8")
-        pie_array.append(
-            f'<div class="pie_container"><img class="pie" src="data:image/png;base64, {img}"/></div>'
-        )
-    pie_string = "".join(pie_array)
-
-    vital_stats = pd.DataFrame.from_dict(p.stats, orient="index")
-    vital_stats = vital_stats.iloc[0:6, 0:2]
-    vital_stats = vital_stats.to_markdown(index=False, headers=[])
-    full_text = generate_stats_text(pie_string, vital_stats)
-    write_to_file(args, STATS_FNAME, full_text)
 
 
 
@@ -392,6 +298,9 @@ def check_dir(d):
     return resolve_dir(d)
 
 
+def main(args):
+    write_gantt_charts(args)
+
 ################################################################################
 #                           COMMANDLINE INTERFACE
 ################################################################################
@@ -406,18 +315,6 @@ if __name__ == "__main__":
 Description goes here
 
 """,
-    )
-    parser.add_argument(
-        "-g",
-        "--github",
-        metavar="owner/repository",
-        help="If you want to generate corpusstats, you need to pass the repo in the form owner/repository_name and an access token.",
-    )
-    parser.add_argument(
-        "-t",
-        "--token",
-        metavar="ACCESS_TOKEN",
-        help="Token that grants access to the repository in question.",
     )
     parser.add_argument(
         "-d",
@@ -459,8 +356,9 @@ Description goes here
         "-o",
         "--out",
         metavar="OUT_DIR",
+        default="gantt",
         type=check_and_create,
-        help="""Output directory.""",
+        help="""Output directory. Defaults to 'gantt'.""",
     )
     parser.add_argument(
         "-y",
