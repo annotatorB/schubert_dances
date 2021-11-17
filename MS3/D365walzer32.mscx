@@ -1685,7 +1685,7 @@
             </TimeSig>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>F.V43/V</name>
+            <name>F.V43/V{</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -2084,7 +2084,7 @@
             </BarLine>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V7/bVI</name>
+            <name>V7/bVI{</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -2313,6 +2313,7 @@
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>bVI</name>
+            <offset x="0.364083" y="3.5"/>
             </Harmony>
           <location>
             <fractions>1/8</fractions>
@@ -2611,7 +2612,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V43/V</name>
+            <name>V43/V{</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -2766,26 +2767,29 @@
             <name>I(4)</name>
             </Harmony>
           <Chord>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
               <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>-1/8</fractions>
+            </location>
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>I</name>
             </Harmony>
-          <Rest>
-            <durationType>eighth</durationType>
-            </Rest>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>I(#2)</name>
             </Harmony>
           <Chord>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
               <pitch>57</pitch>
@@ -2800,13 +2804,16 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>-1/8</fractions>
+            </location>
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>I|IAC</name>
             </Harmony>
-          <Rest>
-            <durationType>eighth</durationType>
-            </Rest>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>}</name>
