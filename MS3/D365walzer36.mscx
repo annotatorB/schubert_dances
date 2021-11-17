@@ -1862,6 +1862,7 @@
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>}</name>
+            <offset x="0" y="3.7"/>
             </Harmony>
           </voice>
         </Measure>
@@ -1976,6 +1977,7 @@
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>iv</name>
+            <offset x="0" y="4"/>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
@@ -1983,6 +1985,7 @@
           <Harmony>
             <harmonyType>1</harmonyType>
             <name>v.iv</name>
+            <offset x="0" y="3.8"/>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
