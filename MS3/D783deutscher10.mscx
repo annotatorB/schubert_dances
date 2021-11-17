@@ -2014,11 +2014,8 @@
           <Chord>
             <durationType>quarter</durationType>
             <Note>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                </Accidental>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
               </Note>
             <Note>
               <pitch>57</pitch>
@@ -2032,8 +2029,8 @@
           <Chord>
             <durationType>quarter</durationType>
             <Note>
-              <pitch>54</pitch>
-              <tpc>20</tpc>
+              <pitch>53</pitch>
+              <tpc>13</tpc>
               </Note>
             <Note>
               <pitch>57</pitch>
