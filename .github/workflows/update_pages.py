@@ -2,6 +2,7 @@
 # coding: utf-8
 import argparse
 import os
+import sys
 import io
 import base64
 from shutil import copy
@@ -83,7 +84,11 @@ def write_gantt_file(args, gantt_path=None):
 
 
 def write_stats_file(args):
-    p = corpusstats.Provider(args.github, args.token)
+    try:
+        p = corpusstats.Provider(args.github, args.token)
+    except:
+        print(f"corpusstats failed with the following message: {sys.exc_info()[1]}")
+        return False
     pie_string = ""
     pie_array = []
     for s in p.tabular_stats:
@@ -102,6 +107,7 @@ def write_stats_file(args):
     vital_stats = vital_stats.to_markdown(index=False, headers=[])
     full_text = generate_stats_text(pie_string, vital_stats)
     write_to_file(args, STATS_FNAME, full_text)
+    return True
 
 
 
@@ -120,7 +126,8 @@ def check_dir(d):
     if not os.path.isdir(d):
         d = resolve_dir(os.path.join(os.getcwd(), d))
         if not os.path.isdir(d):
-            raise argparse.ArgumentTypeError(d + " needs to be an existing directory")
+            print(d + " needs to be an existing directory")
+            return
     return resolve_dir(d)
 
 
@@ -138,8 +145,7 @@ def main(args):
     given = sum(arg is not None for arg in (args.github, args.token))
     stats, gantt = False, False
     if given == 2:
-        write_stats_file(args)
-        stats=True
+        stats = write_stats_file(args)
     elif given == 1:
         print(f"You need to specify both a repository and a token.")
     if args.dir is not None:
@@ -152,7 +158,7 @@ def main(args):
         write_to_file(args, JEKYLL_CFG_FNAME, JEKYLL_CFG_FILE)
         write_to_file(args, STYLE_FNAME, STYLE_FILE)
     else:
-        print("Parameters don't generate any output.")
+        print("No page was generated.")
 
 
 ################################################################################
