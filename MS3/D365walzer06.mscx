@@ -1191,7 +1191,7 @@
             </TimeSig>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>{</name>
+            <name>Ab.I{</name>
             </Harmony>
           <Rest>
             <durationType>quarter</durationType>
@@ -1202,7 +1202,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>Ab.ii6(2)</name>
+            <name>ii6(2)</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
