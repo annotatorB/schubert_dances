@@ -1052,7 +1052,7 @@
             </TimeSig>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>{</name>
+            <name>Ab.I{</name>
             </Harmony>
           <Rest>
             <durationType>quarter</durationType>
@@ -1063,7 +1063,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>Ab.V</name>
+            <name>V</name>
             </Harmony>
           <Rest>
             <offset x="0" y="-1"/>
