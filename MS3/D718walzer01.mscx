@@ -3153,7 +3153,7 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>VI.#viio7/vi</name>
+            <name>iv.#viio7</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3203,7 +3203,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>vi(9)</name>
+            <name>i(9)</name>
             </Harmony>
           <Spanner type="HairPin">
             <prev>
@@ -3244,14 +3244,14 @@
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>vi</name>
+            <name>i</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>#viio7/vi</name>
+            <name>#viio7</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3310,7 +3310,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>vi(9)</name>
+            <name>i(9)</name>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -3352,14 +3352,14 @@
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>vi</name>
+            <name>i</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>viio7/V</name>
+            <name>III.viio7</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3406,7 +3406,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V(9)</name>
+            <name>I(9)</name>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -3445,14 +3445,14 @@
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V</name>
+            <name>I</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>viio7/V</name>
+            <name>viio7</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3474,7 +3474,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V(9)</name>
+            <name>I(9)</name>
             </Harmony>
           <Chord>
             <durationType>half</durationType>
@@ -3492,14 +3492,14 @@
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V</name>
+            <name>I</name>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>#viio65/ii</name>
+            <name>VI.#viio65/ii</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3751,7 +3751,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>VI.V7/IV</name>
+            <name>IV/VI.V7</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3833,7 +3833,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>IV6/IV</name>
+            <name>IV6</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3918,7 +3918,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V65(2)/IV</name>
+            <name>V65(2)</name>
             </Harmony>
           <Spanner type="HairPin">
             <HairPin>
@@ -3971,7 +3971,7 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V65/IV</name>
+            <name>V65</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
@@ -3994,7 +3994,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V65(b2)/IV</name>
+            <name>V65(b2)</name>
             </Harmony>
           <Spanner type="HairPin">
             <HairPin>
@@ -4039,7 +4039,7 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V65/IV</name>
+            <name>V65</name>
             </Harmony>
           <Chord>
             <durationType>quarter</durationType>
