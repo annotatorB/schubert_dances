@@ -1,0 +1,41 @@
+mc	mn	mc_onset	mn_onset	timesig	staff	voice	volta	label	globalkey	localkey	pedal	chord	numeral	form	figbass	changes	relativeroot	cadence	phraseend	chord_type	globalkey_is_minor	localkey_is_minor	chord_tones	added_tones	root	bass_note
+1	1	0	0	3/4	2	1		F.V43/V{	F	I		V43/V	V		43		V		{	Mm7	0	0	3, 0, 2, 6		2	3
+2	2	0	0	3/4	2	1		V(64)	F	I		V(64)	V			64				M	0	0	1, 0, 4		1	1
+3	3	0	0	3/4	2	1		V7	F	I		V7	V		7					Mm7	0	0	1, 5, 2, -1		1	1
+4	4	0	0	3/4	2	1		I(4)	F	I		I(4)	I			4				M	0	0	0, -1, 1		0	0
+4	4	1/8	1/8	3/4	2	1		I	F	I		I	I							M	0	0	0, 4, 1		0	0
+4	4	1/4	1/4	3/4	2	1		I(#2)	F	I		I(#2)	I			#2				M	0	0	0, 9, 1		0	0
+4	4	3/8	3/8	3/4	2	1		I|IAC	F	I		I	I					IAC		M	0	0	0, 4, 1		0	0
+4	4	1/2	1/2	3/4	2	1		}	F	I									}		0	0				
+6	6	0	0	3/4	2	1		V(64)	F	I		V(64)	V			64				M	0	0	1, 0, 4		1	1
+7	7	0	0	3/4	2	1		V7	F	I		V7	V		7					Mm7	0	0	1, 5, 2, -1		1	1
+8	8	0	0	3/4	2	1		I|PAC}	F	I		I	I					PAC	}	M	0	0	0, 4, 1		0	0
+9	9	0	0	3/4	2	1		V7/bVI{	F	I		V7/bVI	V		7		bVI		{	Mm7	0	0	-3, 1, -2, -5		-3	-3
+10	10	0	0	3/4	2	1		bVI	F	I		bVI	bVI							M	0	0	-4, 0, -3		-4	-4
+11	11	0	0	3/4	2	1		V7/bVI	F	I		V7/bVI	V		7		bVI			Mm7	0	0	-3, 1, -2, -5		-3	-3
+12	12	0	0	3/4	2	1		bVI(4)	F	I		bVI(4)	bVI			4				M	0	0	-4, 2, -3		-4	-4
+12	12	1/8	1/8	3/4	2	1		bVI	F	I		bVI	bVI							M	0	0	-4, 0, -3		-4	-4
+12	12	1/4	1/4	3/4	2	1		bVI(#2)	F	I		bVI(#2)	bVI			#2				M	0	0	-4, 12, -3		-4	-4
+12	12	3/8	3/8	3/4	2	1		bVI	F	I		bVI	bVI							M	0	0	-4, 0, -3		-4	-4
+13	13	0	0	3/4	2	1		V7/bVI	F	I		V7/bVI	V		7		bVI			Mm7	0	0	-3, 1, -2, -5		-3	-3
+14	14	0	0	3/4	2	1		bVI(9)	F	I		bVI(9)	bVI			9				M	0	0	-4, 0, -3	5	-4	-4
+14	14	3/8	3/8	3/4	2	1		bVI	F	I		bVI	bVI							M	0	0	-4, 0, -3		-4	-4
+15	15	0	0	3/4	2	1		V7/bVI	F	I		V7/bVI	V		7		bVI			Mm7	0	0	-3, 1, -2, -5		-3	-3
+16	16	0	0	3/4	2	1		bVI(4)	F	I		bVI(4)	bVI			4				M	0	0	-4, 2, -3		-4	-4
+16	16	1/8	1/8	3/4	2	1		bVI	F	I		bVI	bVI							M	0	0	-4, 0, -3		-4	-4
+16	16	1/4	1/4	3/4	2	1		bVI(#2)	F	I		bVI(#2)	bVI			#2				M	0	0	-4, 12, -3		-4	-4
+16	16	3/8	3/8	3/4	2	1		bVI	F	I		bVI	bVI							M	0	0	-4, 0, -3		-4	-4
+16	16	1/2	1/2	3/4	2	1		}	F	I									}		0	0				
+17	17	0	0	3/4	2	1		V43/V{	F	I		V43/V	V		43		V		{	Mm7	0	0	3, 0, 2, 6		2	3
+18	18	0	0	3/4	2	1		V(64)	F	I		V(64)	V			64				M	0	0	1, 0, 4		1	1
+19	19	0	0	3/4	2	1		V7	F	I		V7	V		7					Mm7	0	0	1, 5, 2, -1		1	1
+20	20	0	0	3/4	2	1		I(4)	F	I		I(4)	I			4				M	0	0	0, -1, 1		0	0
+20	20	1/8	1/8	3/4	2	1		I	F	I		I	I							M	0	0	0, 4, 1		0	0
+20	20	1/4	1/4	3/4	2	1		I(#2)	F	I		I(#2)	I			#2				M	0	0	0, 9, 1		0	0
+20	20	3/8	3/8	3/4	2	1		I|IAC	F	I		I	I					IAC		M	0	0	0, 4, 1		0	0
+20	20	1/2	1/2	3/4	2	1		}	F	I									}		0	0				
+21	21	0	0	3/4	2	1		V43/V	F	I		V43/V	V		43		V			Mm7	0	0	3, 0, 2, 6		2	3
+22	22	0	0	3/4	2	1		V(64)	F	I		V(64)	V			64				M	0	0	1, 0, 4		1	1
+23	23	0	0	3/4	2	1		V7	F	I		V7	V		7					Mm7	0	0	1, 5, 2, -1		1	1
+24	24	0	0	3/4	2	1		I|PAC	F	I		I	I					PAC		M	0	0	0, 4, 1		0	0
+24	24	1/4	1/4	3/4	2	1		}	F	I									}		0	0				
