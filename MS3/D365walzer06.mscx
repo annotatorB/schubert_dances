@@ -1538,7 +1538,7 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>{</name>
+            <name>I(6){</name>
             </Harmony>
           <Rest>
             <durationType>quarter</durationType>
